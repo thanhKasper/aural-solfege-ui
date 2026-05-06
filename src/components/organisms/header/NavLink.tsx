@@ -9,6 +9,7 @@ export const NavLink = styled(Link)<NavLinkProps>(({ theme, isActive }) => ({
   display: "flex",
   alignItems: "center",
   color: isActive ? "#fff" : "#000",
+  fontFamily: theme.typography.h5.fontFamily,
   textDecoration: "none",
   paddingLeft: 16,
   paddingRight: 16,

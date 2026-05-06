@@ -11,6 +11,26 @@ declare module "@mui/material/styles" {
 }
 
 const theme = createTheme({
+  typography: {
+    h1: {
+      fontFamily: "Domine, serif",
+    },
+    h2: {
+      fontFamily: "Domine, serif",
+    },
+    h3: {
+      fontFamily: "Domine, serif",
+    },
+    h4: {
+      fontFamily: "Domine, serif",
+    },
+    h5: {
+      fontFamily: "Domine, serif",
+    },
+    h6: {
+      fontFamily: "Domine, serif",
+    },
+  },
   colorSchemes: {
     light: {
       palette: {
