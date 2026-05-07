@@ -1,16 +1,30 @@
-import { Typography, useTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 
-const BrandName = () => {
-  const theme = useTheme();
+interface BrandNameProps {
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+}
+
+const fontSize = {
+  xs: 0,
+  sm: 0,
+  md: 16,
+  lg: 32,
+  xl: 40,
+};
+
+const BrandName = ({ size = "lg" }: BrandNameProps) => {
+  const currentFontSize = fontSize[size];
   return (
-    <Typography
-      sx={{
-        fontFamily: "Elsie Swash Caps, serif",
-        fontSize: theme.typography.h5.fontSize,
-      }}
-    >
-      Aural Solfege
-    </Typography>
+    currentFontSize > 0 && (
+      <Typography
+        sx={{
+          fontFamily: "Elsie Swash Caps, serif",
+          fontSize: currentFontSize,
+        }}
+      >
+        Aural Solfege
+      </Typography>
+    )
   );
 };
 
