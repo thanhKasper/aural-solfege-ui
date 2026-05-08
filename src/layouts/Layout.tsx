@@ -1,15 +1,14 @@
 import Footer from "@/components/organisms/footer";
 import Header from "@/components/organisms/header";
-import { Container, Stack } from "@mui/material";
+import { Stack, useTheme } from "@mui/material";
 import { Outlet } from "react-router";
 
 const Layout = () => {
+  const theme = useTheme();
   return (
-    <Stack>
+    <Stack sx={{ backgroundColor: theme.palette.surface["300"] }}>
       <Header />
-      <Container>
-        <Outlet />
-      </Container>
+      <Outlet />
       <Footer />
     </Stack>
   );
