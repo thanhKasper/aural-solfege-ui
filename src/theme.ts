@@ -8,9 +8,51 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     surface?: PaletteOptions["primary"];
   }
+
+  interface SimplePaletteColorOptions {
+    400?: string;
+    300?: string;
+  }
+  interface PaletteColor {
+    400?: string;
+    300?: string;
+  }
+
+  interface BreakpointOverrides {
+    xxl: true;
+  }
 }
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      xxl: 2000,
+    },
+  },
+  components: {
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: "xxl",
+        disableGutters: true,
+      },
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.up("xxl")]: {
+            maxWidth: "2000px",
+          },
+          paddingTop: 32,
+          paddingBottom: 32,
+          paddingLeft: 64,
+          paddingRight: 64,
+        }),
+      },
+    },
+  },
   typography: {
     h1: {
       fontFamily: "Domine, serif",
