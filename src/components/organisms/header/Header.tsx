@@ -1,6 +1,6 @@
 import LogoWithBrandName from "@/components/molecules/LogoWithBrandName";
 import { AppBar, Box, Stack } from "@mui/material";
-import { useState } from "react";
+import { useLocation } from "react-router";
 import { NavLink } from "./NavLink";
 
 enum NAVIGATION_ENDPOINT {
@@ -8,10 +8,18 @@ enum NAVIGATION_ENDPOINT {
   OVERVIEW = "OVERVIEW",
 }
 
+const URL_PATH = {
+  [NAVIGATION_ENDPOINT.EXERCISES]: "/exercises",
+  [NAVIGATION_ENDPOINT.OVERVIEW]: "/",
+};
+
 export const Header = () => {
-  const [activeNav, setActiveNav] = useState<NAVIGATION_ENDPOINT>(
-    NAVIGATION_ENDPOINT.EXERCISES,
-  );
+  const location = useLocation();
+
+  const isPathActive = (selectedPath: string): boolean => {
+    return (location.pathname + "/").includes(selectedPath + "/");
+  };
+
   return (
     <AppBar color="secondary" position="static">
       <Stack
@@ -34,8 +42,18 @@ export const Header = () => {
           <LogoWithBrandName size="lg" hasBrandName />
         </Box>
         <Stack direction={"row"}>
-          <NavLink isActive={false}>Overview</NavLink>
-          <NavLink isActive={true}>Exercises</NavLink>
+          <NavLink
+            isActive={isPathActive(URL_PATH[NAVIGATION_ENDPOINT.OVERVIEW])}
+            href={URL_PATH[NAVIGATION_ENDPOINT.OVERVIEW]}
+          >
+            Overview
+          </NavLink>
+          <NavLink
+            isActive={isPathActive(URL_PATH[NAVIGATION_ENDPOINT.EXERCISES])}
+            href={URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}
+          >
+            Exercises
+          </NavLink>
         </Stack>
         <Stack direction={"row"}>
           <NavLink isActive={false}>Sound Configuration</NavLink>
