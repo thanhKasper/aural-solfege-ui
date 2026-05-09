@@ -35,6 +35,11 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiContainer: {
       defaultProps: {
         maxWidth: "xxl",
