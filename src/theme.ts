@@ -23,6 +23,13 @@ declare module "@mui/material/styles" {
   }
 }
 
+declare module "@mui/material/SvgIcon" {
+  interface SvgIconPropsSizeOverrides {
+    xs: true;
+    xxs: true;
+  }
+}
+
 const theme = createTheme({
   breakpoints: {
     values: {
@@ -35,6 +42,31 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          variants: [
+            {
+              props: { fontSize: "xs" },
+              style: {
+                fontSize: "12px",
+              },
+            },
+            {
+              props: { fontSize: "xxs" },
+              style: {
+                fontSize: "8px",
+              },
+            },
+          ],
+        },
+      },
+    },
+    MuiCard: {
+      defaultProps: {
+        elevation: 0,
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
