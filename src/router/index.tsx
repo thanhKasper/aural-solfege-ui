@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout";
 import ExercisesPage from "@/pages/ExercisesPage";
 import OverviewPage from "@/pages/OverviewPage";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
+import ExerciseCreationPage from "@/pages/ExerciseCreationPage";
 
 const router = createBrowserRouter(
   [
@@ -17,6 +18,10 @@ const router = createBrowserRouter(
         {
           path: URL_PATH[NAVIGATION_ENDPOINT.EXERCISES],
           element: <ExercisesPage />,
+        },
+        {
+          path: URL_PATH[NAVIGATION_ENDPOINT.CREATE_EXERCISE],
+          element: <ExerciseCreationPage />,
         },
       ],
     },
