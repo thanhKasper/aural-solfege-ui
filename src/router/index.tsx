@@ -3,21 +3,26 @@ import Layout from "@/layouts/Layout";
 import ExercisesPage from "@/pages/ExercisesPage";
 import OverviewPage from "@/pages/OverviewPage";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <OverviewPage />,
+        },
+        {
+          path: "exercises",
+          element: <ExercisesPage />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <OverviewPage />,
-      },
-      {
-        path: "/exercises",
-        element: <ExercisesPage />,
-      },
-    ],
+    basename: import.meta.env.BASE_URL,
   },
-]);
+);
 
 export default router;

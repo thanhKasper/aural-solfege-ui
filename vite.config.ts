@@ -5,6 +5,7 @@ import path from "node:path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/aural-solfege",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
