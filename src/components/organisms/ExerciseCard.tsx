@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   styled,
   Typography,
@@ -10,6 +11,8 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import IconContent from "../molecules/IconContent";
 import RepeatIcon from "@mui/icons-material/Repeat";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
 
 const ExerciseCardContainer = styled(Card)(({ theme }) => {
   return {
@@ -63,10 +66,36 @@ export const ExerciseCard = ({
         }
       />
       <CardContent>
-        <IconContent
-          icon={<RepeatIcon fontSize="small" />}
-          content={[<Typography variant="body1">{exercise.reps}</Typography>]}
-        />
+        <Grid container spacing={2}>
+          <Grid container>
+            <Grid>
+              <IconContent
+                icon={<MusicNoteIcon fontSize="small" />}
+                content={[
+                  <Typography variant="body1">Perfect 5th</Typography>,
+                  <Typography variant="body1">Unison</Typography>,
+                  <Typography variant="body1">Major 6th</Typography>,
+                ]}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} size={12}>
+            <Grid size="auto">
+              <IconContent
+                icon={<RepeatIcon fontSize="small" />}
+                content={[
+                  <Typography variant="body1">{exercise.reps}</Typography>,
+                ]}
+              />
+            </Grid>
+            <Grid size="auto">
+              <IconContent
+                icon={<AccessTimeIcon fontSize="small" />}
+                content={[<Typography variant="body1">1h 34m</Typography>]}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
       </CardContent>
     </ExerciseCardContainer>
   );
