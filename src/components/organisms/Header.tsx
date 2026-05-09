@@ -3,16 +3,6 @@ import { AppBar, Box, Stack } from "@mui/material";
 import { useLocation } from "react-router";
 import { NavLink } from "../atoms/NavLink";
 
-enum NAVIGATION_ENDPOINT {
-  EXERCISES = "EXERCISES",
-  OVERVIEW = "OVERVIEW",
-}
-
-const URL_PATH = {
-  [NAVIGATION_ENDPOINT.EXERCISES]: "/exercises",
-  [NAVIGATION_ENDPOINT.OVERVIEW]: "/",
-};
-
 export const Header = () => {
   const location = useLocation();
 

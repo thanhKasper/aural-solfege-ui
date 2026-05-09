@@ -1,8 +1,6 @@
 import LogoWithBrandName from "@/components/molecules/LogoWithBrandName";
 import {
-  Box,
   Button,
-  Container,
   MenuItem,
   Paper,
   Select,
@@ -19,7 +17,12 @@ const FooterContainer = styled(Paper)(({ theme }) => ({
 export const Footer = () => {
   return (
     <FooterContainer
-      sx={{ paddingY: 8, display: "flex", justifyContent: "space-between", paddingX: 16 }}
+      sx={{
+        paddingY: 8,
+        display: "flex",
+        justifyContent: "space-between",
+        paddingX: 16,
+      }}
     >
       {/* Left: Logo + Language selector */}
       <Stack spacing={4}>
