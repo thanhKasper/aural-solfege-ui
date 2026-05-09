@@ -49,6 +49,7 @@ const theme = createTheme({
           paddingBottom: 32,
           paddingLeft: 64,
           paddingRight: 64,
+          flexGrow: 1,
         }),
       },
     },
