@@ -17,6 +17,9 @@ const ExerciseCardContainer = styled(Card)(({ theme }) => {
     position: "relative",
     ":hover": {
       backgroundColor: theme.palette.surface[400],
+      "& > :first-child::after": {
+        backgroundColor: "inherit",
+      },
     },
     borderRadius: 0,
     shadow: "none",
@@ -42,26 +45,27 @@ const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
 
 interface ExerciseCardProps {
   exercise: ExerciseDTO;
+  onExerciseStart?: (exercise: ExerciseDTO) => void;
 }
 
-export const ExerciseCard = ({ exercise }: ExerciseCardProps) => {
+export const ExerciseCard = ({
+  exercise,
+  onExerciseStart,
+}: ExerciseCardProps) => {
   return (
     <ExerciseCardContainer>
       <ExerciseCardHeader
         title={exercise.title}
         action={
-          <IconButton>
+          <IconButton onClick={() => onExerciseStart?.(exercise)}>
             <PlayArrowIcon />
           </IconButton>
         }
       />
       <CardContent>
         <IconContent
-          icon={<RepeatIcon />}
-          content={[
-            <Typography variant="body1">{exercise.reps}</Typography>,
-            <Typography>jkjkj</Typography>,
-          ]}
+          icon={<RepeatIcon fontSize="small" />}
+          content={[<Typography variant="body1">{exercise.reps}</Typography>]}
         />
       </CardContent>
     </ExerciseCardContainer>
