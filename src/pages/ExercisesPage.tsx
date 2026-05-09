@@ -1,17 +1,15 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-  IconButton,
-  Input,
-  Pagination,
-} from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { ExerciseCard } from "@/components/organisms/ExerciseCard";
+import { getAllExercises } from "@/providers/auralSolfege/apis";
+import { Button, Container, Grid, Input, Pagination } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 const ExercisesPage = () => {
+  const { data, isSuccess } = useQuery({
+    queryKey: ["exercises"],
+    queryFn: getAllExercises,
+  });
+
+  console.log(data);
   return (
     <Container>
       <Input size="medium" placeholder="search..." fullWidth />
@@ -21,45 +19,12 @@ const ExercisesPage = () => {
         </Grid>
         <Grid size={12}>
           <Grid container spacing={4}>
-            <Grid size={4}>
-              <Card>
-                <CardHeader
-                  title={"Exercise title"}
-                  action={
-                    <IconButton aria-label="delete">
-                      <PlayArrowIcon />
-                    </IconButton>
-                  }
-                />
-                <CardContent>Some content inside</CardContent>
-              </Card>
-            </Grid>
-            <Grid size={4}>
-              <Card>
-                <CardHeader
-                  title={"Exercise title"}
-                  action={
-                    <IconButton aria-label="delete">
-                      <PlayArrowIcon />
-                    </IconButton>
-                  }
-                />
-                <CardContent>Some content inside</CardContent>
-              </Card>
-            </Grid>
-            <Grid size={4}>
-              <Card>
-                <CardHeader
-                  title={"Exercise title"}
-                  action={
-                    <IconButton aria-label="delete">
-                      <PlayArrowIcon />
-                    </IconButton>
-                  }
-                />
-                <CardContent>Some content inside</CardContent>
-              </Card>
-            </Grid>
+            {isSuccess &&
+              data.data.map((exercise) => (
+                <Grid size={3}>
+                  <ExerciseCard exercise={exercise} />
+                </Grid>
+              ))}
           </Grid>
         </Grid>
         <Grid size="grow" sx={{ display: "flex", justifyContent: "center" }}>
