@@ -6,7 +6,9 @@ import { Outlet } from "react-router";
 const Layout = () => {
   const theme = useTheme();
   return (
-    <Stack sx={{ backgroundColor: theme.palette.surface["300"] }}>
+    <Stack
+      sx={{ backgroundColor: theme.palette.surface["300"], minHeight: "100vh" }}
+    >
       <Header />
       <Outlet />
       <Footer />
