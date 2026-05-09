@@ -6,10 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 const ExercisesPage = () => {
   const { data, isSuccess } = useQuery({
     queryKey: ["exercises"],
-    queryFn: getAllExercises,
+    queryFn: async () => await getAllExercises(),
   });
 
-  console.log(data);
   return (
     <Container>
       <Input size="medium" placeholder="search..." fullWidth />
@@ -20,7 +19,7 @@ const ExercisesPage = () => {
         <Grid size={12}>
           <Grid container spacing={4}>
             {isSuccess &&
-              data.data.map((exercise) => (
+              data.map((exercise) => (
                 <Grid size={3}>
                   <ExerciseCard exercise={exercise} />
                 </Grid>
