@@ -5,9 +5,11 @@ import {
   CardHeader,
   Container,
   Grid,
+  IconButton,
   Input,
   Pagination,
 } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 const ExercisesPage = () => {
   return (
@@ -21,19 +23,40 @@ const ExercisesPage = () => {
           <Grid container spacing={4}>
             <Grid size={4}>
               <Card>
-                <CardHeader title={"Exercise title"} />
+                <CardHeader
+                  title={"Exercise title"}
+                  action={
+                    <IconButton aria-label="delete">
+                      <PlayArrowIcon />
+                    </IconButton>
+                  }
+                />
                 <CardContent>Some content inside</CardContent>
               </Card>
             </Grid>
             <Grid size={4}>
               <Card>
-                <CardHeader title={"Exercise title"} />
+                <CardHeader
+                  title={"Exercise title"}
+                  action={
+                    <IconButton aria-label="delete">
+                      <PlayArrowIcon />
+                    </IconButton>
+                  }
+                />
                 <CardContent>Some content inside</CardContent>
               </Card>
             </Grid>
             <Grid size={4}>
               <Card>
-                <CardHeader title={"Exercise title"} />
+                <CardHeader
+                  title={"Exercise title"}
+                  action={
+                    <IconButton aria-label="delete">
+                      <PlayArrowIcon />
+                    </IconButton>
+                  }
+                />
                 <CardContent>Some content inside</CardContent>
               </Card>
             </Grid>
