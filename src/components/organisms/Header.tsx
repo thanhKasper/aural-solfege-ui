@@ -1,7 +1,7 @@
 import LogoWithBrandName from "@/components/molecules/LogoWithBrandName";
 import { AppBar, Box, Stack } from "@mui/material";
 import { useLocation } from "react-router";
-import { NavLink } from "./NavLink";
+import { NavLink } from "../atoms/NavLink";
 
 enum NAVIGATION_ENDPOINT {
   EXERCISES = "EXERCISES",
@@ -44,19 +44,21 @@ export const Header = () => {
         <Stack direction={"row"}>
           <NavLink
             isActive={isPathActive(URL_PATH[NAVIGATION_ENDPOINT.OVERVIEW])}
-            href={URL_PATH[NAVIGATION_ENDPOINT.OVERVIEW]}
+            to={URL_PATH[NAVIGATION_ENDPOINT.OVERVIEW]}
           >
             Overview
           </NavLink>
           <NavLink
             isActive={isPathActive(URL_PATH[NAVIGATION_ENDPOINT.EXERCISES])}
-            href={URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}
+            to={URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}
           >
             Exercises
           </NavLink>
         </Stack>
         <Stack direction={"row"}>
-          <NavLink isActive={false}>Sound Configuration</NavLink>
+          <NavLink isActive={false} to="#">
+            Sound Configuration
+          </NavLink>
         </Stack>
       </Stack>
     </AppBar>

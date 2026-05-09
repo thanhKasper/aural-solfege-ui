@@ -1,5 +1,5 @@
-import { Link, type LinkProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Link, type LinkProps } from "react-router";
 
 interface NavLinkProps extends LinkProps {
   isActive: boolean;
