@@ -72,23 +72,37 @@ const theme = createTheme({
         disableRipple: true,
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
     MuiContainer: {
       defaultProps: {
         maxWidth: "xxl",
         disableGutters: true,
       },
       styleOverrides: {
-        root: ({ theme }) => ({
-          [theme.breakpoints.up("xxl")]: {
-            maxWidth: "2000px",
-          },
+        root: {
           paddingTop: 32,
           paddingBottom: 32,
           paddingLeft: 64,
           paddingRight: 64,
           flexGrow: 1,
-        }),
+        },
       },
+      variants: [
+        {
+          props: {
+            maxWidth: "xxl",
+          },
+          style: {
+            minWidth: "2000px",
+          },
+        },
+      ],
     },
   },
   typography: {
