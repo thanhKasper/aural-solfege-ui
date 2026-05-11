@@ -11,7 +11,8 @@ interface ExerciseRepetitionInputProps {
   value?: string;
   onTextChange?: (value?: string) => void;
   onRepetitionChecked?: () => void;
-  variant: TextFieldProps["variant"];
+  variant?: TextFieldProps["variant"];
+  size?: TextFieldProps["size"];
 }
 
 const ExerciseRepetitionInput = ({
@@ -19,6 +20,7 @@ const ExerciseRepetitionInput = ({
   variant,
   onTextChange,
   onRepetitionChecked,
+  size,
 }: ExerciseRepetitionInputProps) => {
   const [infiniteRepetition, setInfiniteRepetition] = useState(false);
   return (
@@ -26,6 +28,7 @@ const ExerciseRepetitionInput = ({
       <TextField
         value={value}
         variant={variant}
+        size={size}
         onChange={(e) => {
           onTextChange?.(e.target.value);
         }}

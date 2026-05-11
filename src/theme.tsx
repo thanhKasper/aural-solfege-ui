@@ -79,6 +79,72 @@ const theme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      defaultProps: {
+        size: "small",
+        fullWidth: true,
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.surface[300],
+          ".Mui-disabled": {
+            backgroundColor: theme.palette.grey[100],
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.secondary.main,
+            borderWidth: 1.5,
+            borderRadius: 0,
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.secondary.dark,
+          },
+        }),
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.secondary.main,
+        }),
+      },
+      defaultProps: {
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect
+              x="1.5"
+              y="1.5"
+              width="17"
+              height="17"
+              rx="0"
+              stroke="currentColor"
+              strokeWidth="1"
+            />
+          </svg>
+        ),
+        checkedIcon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect
+              x="1.5"
+              y="1.5"
+              width="17"
+              height="17"
+              rx="0"
+              fill="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M5 10.5l3.5 3.5 6.5-7"
+              stroke="white"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
+    },
     MuiContainer: {
       defaultProps: {
         maxWidth: "xxl",
