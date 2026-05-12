@@ -13,7 +13,7 @@ const InputLabel = ({
 }: PropsWithChildren<InputLabelProps>) => {
   return (
     <>
-      <label>
+      <label style={{ width: "100%"}}>
         <Typography variant="body1" color="textDisabled">{label}</Typography>
         {children}
       </label>

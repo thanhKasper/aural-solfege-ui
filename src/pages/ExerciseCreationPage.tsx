@@ -1,5 +1,6 @@
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
+import DragAndDropContext from "@/components/organisms/DragAndDrop/DragAndDropContext";
 import { Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
@@ -62,7 +63,11 @@ const ExerciseCreationPage = () => {
             <Controller
               name="trainingPlan"
               control={control}
-              render={() => <InputLabel label="Training plan"></InputLabel>}
+              render={() => (
+                <InputLabel label="Training plan">
+                  <DragAndDropContext />
+                </InputLabel>
+              )}
             />
           </Grid>
         </Grid>
