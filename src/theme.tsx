@@ -165,7 +165,7 @@ const theme = createTheme({
             maxWidth: "xxl",
           },
           style: {
-            minWidth: "2000px",
+            maxWidth: "2000px",
           },
         },
       ],
