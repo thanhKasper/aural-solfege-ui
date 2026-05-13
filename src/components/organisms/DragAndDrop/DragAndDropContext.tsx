@@ -4,7 +4,7 @@ import SourceElement from "./SourceElement";
 
 const DragAndDropContext = () => {
   return (
-    <Stack direction={"row"} sx={{ width: "100%"}}>
+    <Stack direction={"row"} sx={{ width: "100%" }} spacing={6}>
       <div>
         <SourceElement id="element A" />
         <SourceElement id="element B" />

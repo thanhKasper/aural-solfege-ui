@@ -2,15 +2,20 @@ import {
   useCallback,
   useEffect,
   useState,
-  type MouseEventHandler,
+  type ReactNode,
   type RefObject,
 } from "react";
+import { createPortal } from "react-dom";
 
 interface GhostDragProps {
   elementRef?: RefObject<HTMLElement | null>;
+  GhostComponent: ReactNode;
 }
 
-export default function useGhostDrag({ elementRef }: GhostDragProps) {
+export default function useGhostDrag({
+  elementRef,
+  GhostComponent,
+}: GhostDragProps) {
   const [drag, setDrag] = useState<{
     x: number;
     y: number;
@@ -21,10 +26,13 @@ export default function useGhostDrag({ elementRef }: GhostDragProps) {
     (e) => {
       e.preventDefault();
       if (!elementRef?.current) return;
+      console.log("drag event");
       const rect = elementRef?.current.getBoundingClientRect();
       setDrag({ x: e.clientX, y: e.clientY, rect });
+      createPortal(GhostComponent, document.body);
+      console.log("Create ghost component");
     },
-    [elementRef],
+    [elementRef, GhostComponent],
   );
 
   useEffect(() => {
@@ -43,5 +51,23 @@ export default function useGhostDrag({ elementRef }: GhostDragProps) {
     };
   }, [drag]);
 
-  return { onMouseDown, drag };
+  const ghostPortal = drag
+    ? createPortal(
+        <div
+          style={{
+            position: "fixed",
+            left: drag.x,
+            top: drag.y,
+            pointerEvents: "none",
+            zIndex: 9999,
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          {GhostComponent}
+        </div>,
+        document.body,
+      )
+    : null;
+
+  return { onMouseDown, ghostPortal   };
 }

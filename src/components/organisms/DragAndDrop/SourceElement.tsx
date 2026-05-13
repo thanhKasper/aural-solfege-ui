@@ -4,12 +4,19 @@ import { useRef } from "react";
 
 const SourceElement = ({ id }: { id: string }) => {
   const sourceElementRef = useRef(null);
-  const { drag, onMouseDown } = useGhostDrag({ elementRef: sourceElementRef });
+  const { ghostPortal, onMouseDown } = useGhostDrag({
+    elementRef: sourceElementRef,
+    GhostComponent: <SourceElement id={id} />,
+  });
   return (
-    <Box
-      sx={{ padding: 2, border: "1px solid black" }}
-      onMouseDown={onMouseDown}
-    >{`SourceElement ${id}`}</Box>
+    <>
+      <Box
+        ref={sourceElementRef}
+        sx={{ padding: 2, border: "1px solid black" }}
+        onMouseDown={onMouseDown}
+      >{`SourceElement ${id}`}</Box>
+      {ghostPortal}
+    </>
   );
 };
 
