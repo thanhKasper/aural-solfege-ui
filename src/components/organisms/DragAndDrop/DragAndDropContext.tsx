@@ -1,20 +1,38 @@
-import { Stack } from "@mui/material";
-import DropContainer from "./DropContainer";
-import SourceElement from "./SourceElement";
+import { createContext, type RefObject } from "react";
 
-const DragAndDropContext = () => {
-  return (
-    <Stack direction={"row"} sx={{ width: "100%" }} spacing={6}>
-      <div>
-        <SourceElement id="element A" />
-        <SourceElement id="element B" />
-        <SourceElement id="element C" />
-        <SourceElement id="element D" />
-      </div>
+export interface DragState {
+  id: string;
+  x: number;
+  y: number;
+  ghostRect: DOMRect | null;
+}
 
-      <DropContainer />
-    </Stack>
-  );
-};
+export interface Observer {
+  id: string;
+  type: "drag" | "drop";
+  ref: RefObject<HTMLElement | null>;
+  callback: (dragState: DragState | null) => void;
+}
+
+export interface IDragAndDropContext {
+  dragState: DragState | null;
+  subscribe: (
+    id: string,
+    type: "drag" | "drop",
+    ref: RefObject<HTMLElement | null>,
+    callback: (dragState: DragState | null) => void
+  ) => void;
+  unsubscribe: (id: string) => void;
+  notify: (dragState: DragState | null) => void;
+  isColliding: (dropRef: RefObject<HTMLElement | null>) => boolean;
+}
+
+const DragAndDropContext = createContext<IDragAndDropContext>({
+  dragState: null,
+  subscribe: () => {},
+  unsubscribe: () => {},
+  notify: () => {},
+  isColliding: () => false,
+});
 
 export default DragAndDropContext;
