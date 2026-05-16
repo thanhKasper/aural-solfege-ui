@@ -15,14 +15,16 @@ const DropContainer = ({ id }: DropContainerProps) => {
     id,
     ref: containerRef as React.RefObject<HTMLElement | null>,
     callback: (dragState) => {
-      if (checkCollision(containerRef)) {
-        setContainerCollision(true);
-        if (dragState?.isDrop) {
-          setDraggableElements((old) => [...old, crypto.randomUUID()]);
+      if (dragState?.postAction === "create") {
+        if (checkCollision(containerRef)) {
+          setContainerCollision(true);
+          if (dragState?.isDrop) {
+            setDraggableElements((old) => [...old, crypto.randomUUID()]);
+            setContainerCollision(false);
+          }
+        } else {
           setContainerCollision(false);
         }
-      } else {
-        setContainerCollision(false);
       }
     },
   });

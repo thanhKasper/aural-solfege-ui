@@ -10,7 +10,11 @@ const SourceElement = ({
   children,
 }: PropsWithChildren<ISourceElementProps>) => {
   return (
-    <DraggableElement id={id} GhostComponent={children}>
+    <DraggableElement
+      id={id}
+      GhostComponent={children}
+      onDropActionType="create"
+    >
       {children}
     </DraggableElement>
   );

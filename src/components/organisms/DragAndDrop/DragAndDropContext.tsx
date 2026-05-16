@@ -3,6 +3,7 @@ import { createContext, type RefObject } from "react";
 export interface DragState {
   x: number;
   y: number;
+  postAction: "create" | "updatePosition";
   isDrop: boolean;
   ghostRect: DOMRect | null;
 }

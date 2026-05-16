@@ -30,6 +30,7 @@ const RelocatableElement = ({
         setShouldShowElement(false);
       }}
       GhostComponent={children}
+      onDropActionType="updatePosition"
     >
       {shouldShowElement && children}
     </DraggableElement>

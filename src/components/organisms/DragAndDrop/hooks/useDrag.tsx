@@ -8,17 +8,20 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import useNotify from "./useNotify";
+import type { DragState } from "../DragAndDropContext";
 
 interface GhostDragProps {
   id: string;
   elementRef?: RefObject<HTMLElement | null>;
   GhostComponent: ReactNode;
+  actionType: DragState["postAction"];
 }
 
 export default function useGhostDrag({
   id,
   elementRef,
   GhostComponent,
+  actionType,
 }: GhostDragProps) {
   const { notify } = useNotify();
   const ghostRef = useRef<HTMLDivElement>(null);
@@ -31,13 +34,14 @@ export default function useGhostDrag({
       const rect = elementRef.current.getBoundingClientRect();
       setIsDragging(true);
       notify({
+        postAction: actionType,
         isDrop: false,
         x: e.clientX,
         y: e.clientY,
         ghostRect: rect,
       });
     },
-    [elementRef, notify],
+    [elementRef, notify, actionType],
   );
 
   useEffect(() => {
@@ -49,6 +53,7 @@ export default function useGhostDrag({
         ghostRef.current.style.top = `${e.clientY}px`;
         const ghostRect = ghostRef.current.getBoundingClientRect();
         notify({
+          postAction: actionType,
           isDrop: false,
           x: e.clientX,
           y: e.clientY,
@@ -61,6 +66,7 @@ export default function useGhostDrag({
       if (ghostRef.current) {
         setIsDragging(false);
         notify({
+          postAction: actionType,
           isDrop: true,
           x: e.clientX,
           y: e.clientY,
@@ -75,7 +81,7 @@ export default function useGhostDrag({
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [isDragging, id, notify]);
+  }, [isDragging, id, notify, actionType]);
 
   const ghostPortal = isDragging
     ? createPortal(
