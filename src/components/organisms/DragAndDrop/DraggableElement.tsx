@@ -1,8 +1,35 @@
-import type { PropsWithChildren } from "react";
+import { useRef, type PropsWithChildren, type ReactNode } from "react";
+import useGhostDrag from "./hooks/useDrag";
 
-const DraggableElement = ({ children }: PropsWithChildren) => {
+interface IDraggableElementProps {
+  id: string;
+  onMouseDown?: (e: MouseEvent, base: (e: MouseEvent) => void) => void;
+  GhostComponent: ReactNode;
+}
+
+const DraggableElement = ({
+  id,
+  children,
+  onMouseDown = (e, base) => base(e),
+  GhostComponent,
+}: PropsWithChildren<IDraggableElementProps>) => {
+  const draggableElementRef = useRef<HTMLDivElement>(null);
+  const { ghostPortal, onMouseDown: baseMouseDown } = useGhostDrag({
+    id,
+    elementRef: draggableElementRef,
+    GhostComponent,
+  });
+
   return (
-    <div style={{ padding: 10, border: "1px solid black" }}>{children}</div>
+    <>
+      <div
+        ref={draggableElementRef}
+        onMouseDown={(e) => onMouseDown?.(e.nativeEvent, baseMouseDown)}
+      >
+        {children}
+      </div>
+      {ghostPortal}
+    </>
   );
 };
 
