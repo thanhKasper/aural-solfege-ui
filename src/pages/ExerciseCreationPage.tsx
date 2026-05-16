@@ -1,6 +1,8 @@
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
-import DragAndDropContext from "@/components/organisms/DragAndDrop/DragAndDropContext";
+import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
+import DropContainer from "@/components/organisms/DragAndDrop/DropContainer";
+import SourceElement from "@/components/organisms/DragAndDrop/SourceElement";
 import { Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
@@ -65,7 +67,12 @@ const ExerciseCreationPage = () => {
               control={control}
               render={() => (
                 <InputLabel label="Training plan">
-                  <DragAndDropContext />
+                  <DragAndDropProvider>
+                    <SourceElement id="A" />
+                    <SourceElement id="B" />
+                    <SourceElement id="C" />
+                    <DropContainer id="dropContainer1" />
+                  </DragAndDropProvider>
                 </InputLabel>
               )}
             />
