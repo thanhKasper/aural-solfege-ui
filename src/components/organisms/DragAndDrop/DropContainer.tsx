@@ -1,15 +1,16 @@
 import { Box } from "@mui/material";
 import { useRef, useState } from "react";
 import useObservant from "./hooks/useObservant";
+import DraggableElement from "./DraggableElement";
 
 interface DropContainerProps {
   id: string;
 }
 
 const DropContainer = ({ id }: DropContainerProps) => {
-  console.log("render drop container");
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
+  const [draggableElements, setDraggableElements] = useState<string[]>([]);
   const { checkCollision } = useObservant({
     id,
     ref: containerRef as React.RefObject<HTMLElement | null>,
@@ -17,7 +18,7 @@ const DropContainer = ({ id }: DropContainerProps) => {
       if (checkCollision(containerRef)) {
         setContainerCollision(true);
         if (dragState?.isDrop) {
-          alert("Element dropped inside container");
+          setDraggableElements((old) => [...old, crypto.randomUUID()]);
           setContainerCollision(false);
         }
       } else {
@@ -40,7 +41,11 @@ const DropContainer = ({ id }: DropContainerProps) => {
         borderColor: containerCollision ? "blue" : "black",
         transition: "background-color 0.2s, border-color 0.2s",
       }}
-    />
+    >
+      {draggableElements.map((value, id) => (
+        <DraggableElement key={id}>{value}</DraggableElement>
+      ))}
+    </Box>
   );
 };
 
