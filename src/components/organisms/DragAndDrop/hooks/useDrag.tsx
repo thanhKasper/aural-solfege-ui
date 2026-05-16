@@ -31,13 +31,13 @@ export default function useGhostDrag({
       const rect = elementRef.current.getBoundingClientRect();
       setIsDragging(true);
       notify({
-        id,
+        isDrop: false,
         x: e.clientX,
         y: e.clientY,
         ghostRect: rect,
       });
     },
-    [elementRef, id, notify]
+    [elementRef, notify],
   );
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function useGhostDrag({
         ghostRef.current.style.top = `${e.clientY}px`;
         const ghostRect = ghostRef.current.getBoundingClientRect();
         notify({
-          id,
+          isDrop: false,
           x: e.clientX,
           y: e.clientY,
           ghostRect,
@@ -57,16 +57,24 @@ export default function useGhostDrag({
       }
     };
 
-    const onUp = () => {
-      setIsDragging(false);
-      notify(null);
+    const onDrop = (e: MouseEvent) => {
+      if (ghostRef.current) {
+        setIsDragging(false);
+        notify({
+          isDrop: true,
+          x: e.clientX,
+          y: e.clientY,
+          ghostRect: ghostRef.current.getBoundingClientRect(),
+        });
+        // notify(null);
+      }
     };
 
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener("mouseup", onDrop);
     return () => {
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("mouseup", onDrop);
     };
   }, [isDragging, id, notify]);
 
@@ -76,8 +84,6 @@ export default function useGhostDrag({
           ref={ghostRef}
           style={{
             position: "fixed",
-            left: 0,
-            top: 0,
             pointerEvents: "none",
             zIndex: 9999,
             transform: "translate(-50%, -50%)",
@@ -85,7 +91,7 @@ export default function useGhostDrag({
         >
           {GhostComponent}
         </div>,
-        document.body
+        document.body,
       )
     : null;
 

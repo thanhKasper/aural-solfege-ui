@@ -5,7 +5,7 @@ export default function useNotify() {
   const dndCtx = useContext(DragAndDropContext);
 
   return {
-    notify: dndCtx.notify,
-    isColliding: dndCtx.isColliding,
+    notify: dndCtx.updatePosition,
+    isColliding: dndCtx.checkCollision,
   };
 }

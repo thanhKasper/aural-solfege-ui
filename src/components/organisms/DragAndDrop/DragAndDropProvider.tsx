@@ -1,7 +1,6 @@
 import {
-  useState,
-  useRef,
   useCallback,
+  useRef,
   type PropsWithChildren,
   type RefObject,
 } from "react";
@@ -20,44 +19,43 @@ function rectsOverlap(rectA: DOMRect, rectB: DOMRect): boolean {
 }
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
-  const [dragState, setDragState] = useState<DragState | null>(null);
+  // const [dragState, setDragState] = useState<DragState | null>(null);
+  const dragStateRef = useRef<DragState | null>(null);
   const observersRef = useRef<Map<string, Observer>>(new Map());
 
-  const subscribe = useCallback(
-    (
-      id: string,
-      type: "drag" | "drop",
-      ref: RefObject<HTMLElement | null>,
-      callback: (dragState: DragState | null) => void,
-    ) => {
-      observersRef.current.set(id, { id, type, ref, callback });
-    },
-    [],
-  );
+  const subscribe = useCallback(({ id, ref, callback }: Observer) => {
+    observersRef.current.set(id, { id, ref, callback });
+  }, []);
 
   const unsubscribe = useCallback((id: string) => {
     observersRef.current.delete(id);
   }, []);
 
   const notify = useCallback((newDragState: DragState | null) => {
-    setDragState(newDragState);
+    dragStateRef.current = newDragState;
     observersRef.current.forEach((observer) => {
       observer.callback(newDragState);
     });
   }, []);
 
   const isColliding = useCallback(
-    (dropRef: RefObject<HTMLElement | null>): boolean => {
-      if (!dragState?.ghostRect || !dropRef.current) return false;
-      const dropRect = dropRef.current.getBoundingClientRect();
-      return rectsOverlap(dragState.ghostRect, dropRect);
+    (observantRef: RefObject<HTMLElement | null>): boolean => {
+      if (!dragStateRef.current?.ghostRect || !observantRef.current)
+        return false;
+      const dropRect = observantRef.current.getBoundingClientRect();
+      return rectsOverlap(dragStateRef.current.ghostRect, dropRect);
     },
-    [dragState],
+    [],
   );
 
   return (
     <DragAndDropContext.Provider
-      value={{ dragState, subscribe, unsubscribe, notify, isColliding }}
+      value={{
+        subscribe,
+        unsubscribe,
+        updatePosition: notify,
+        checkCollision: isColliding,
+      }}
     >
       {children}
     </DragAndDropContext.Provider>
