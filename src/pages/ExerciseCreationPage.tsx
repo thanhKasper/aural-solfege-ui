@@ -3,7 +3,7 @@ import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionIn
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
 import DropContainer from "@/components/organisms/DragAndDrop/DropContainer";
 import SourceElement from "@/components/organisms/DragAndDrop/SourceElement";
-import { Container, Grid, TextField, Typography } from "@mui/material";
+import { Box, Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
@@ -68,9 +68,21 @@ const ExerciseCreationPage = () => {
               render={() => (
                 <InputLabel label="Training plan">
                   <DragAndDropProvider>
-                    <SourceElement id="A" />
-                    <SourceElement id="B" />
-                    <SourceElement id="C" />
+                    <SourceElement id="pitch-listening">
+                      <Box sx={{ border: "1px solid black", padding: 2 }}>
+                        <Typography>Listening pitch</Typography>
+                      </Box>
+                    </SourceElement>
+                    <SourceElement id="pitch-comparison">
+                      <Box sx={{ border: "1px solid black", padding: 2 }}>
+                        <Typography>Pitch comparison</Typography>
+                      </Box>
+                    </SourceElement>
+                    <SourceElement id="stack-detection">
+                      <Box sx={{ border: "1px solid black", padding: 2 }}>
+                        <Typography>Stack detection</Typography>
+                      </Box>
+                    </SourceElement>
                     <DropContainer id="dropContainer1" />
                   </DragAndDropProvider>
                 </InputLabel>

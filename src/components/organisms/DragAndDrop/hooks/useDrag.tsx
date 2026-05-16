@@ -24,8 +24,8 @@ export default function useGhostDrag({
   const ghostRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const onMouseDown = useCallback<React.MouseEventHandler<HTMLElement>>(
-    (e) => {
+  const onMouseDown = useCallback(
+    (e: MouseEvent) => {
       e.preventDefault();
       if (!elementRef?.current) return;
       const rect = elementRef.current.getBoundingClientRect();
@@ -66,7 +66,6 @@ export default function useGhostDrag({
           y: e.clientY,
           ghostRect: ghostRef.current.getBoundingClientRect(),
         });
-        // notify(null);
       }
     };
 

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useRef, useState } from "react";
 import useObservant from "./hooks/useObservant";
-import DraggableElement from "./DraggableElement";
+import RelocatableElement from "./RelocatableElement";
 
 interface DropContainerProps {
   id: string;
@@ -43,7 +43,9 @@ const DropContainer = ({ id }: DropContainerProps) => {
       }}
     >
       {draggableElements.map((value, id) => (
-        <DraggableElement key={id}>{value}</DraggableElement>
+        <RelocatableElement key={id} id={String(id)}>
+          {value}
+        </RelocatableElement>
       ))}
     </Box>
   );
