@@ -13,7 +13,7 @@ export default function useObservant({ id, ref, callback }: UseObservantProps) {
   const callbackRef = useRef<(dragState: DragState | null) => void>(callback);
 
   useEffect(() => {
-    subscribe({ id, ref, callback: callbackRef.current });
+    subscribe({ id, ref, callback });
     return () => {
       unsubscribe(id);
     };

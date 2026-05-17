@@ -6,6 +6,7 @@ export interface DragState {
   postAction: "create" | "updatePosition";
   isDrop: boolean;
   ghostRect: DOMRect | null;
+  sourceId?: string;
 }
 
 export interface Observer {

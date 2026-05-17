@@ -44,9 +44,10 @@ export default function useGhostDrag({
         x: e.clientX,
         y: e.clientY,
         ghostRect: rect,
+        sourceId: id,
       });
     },
-    [elementRef, notify, actionType],
+    [elementRef, notify, actionType, id],
   );
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function useGhostDrag({
           x: e.clientX,
           y: e.clientY,
           ghostRect,
+          sourceId: id,
         });
       }
     };
@@ -77,6 +79,7 @@ export default function useGhostDrag({
           x: e.clientX,
           y: e.clientY,
           ghostRect: ghostRef.current.getBoundingClientRect(),
+          sourceId: id,
         });
       }
     };
