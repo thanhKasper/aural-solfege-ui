@@ -32,70 +32,69 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   const { checkCollision } = useObservant({
     id,
     ref: containerRef as React.RefObject<HTMLElement | null>,
-    callback: (dragState) => {
-      if (dragState?.action === "create") {
-        if (checkCollision(containerRef)) {
-          setContainerCollision(true);
-          if (dragState?.isDrop) {
-            setDraggableElements((old) => [...old, crypto.randomUUID()]);
-            setContainerCollision(false);
-          }
-        } else {
+    createElement: (dragState) => {
+      if (checkCollision(containerRef)) {
+        setContainerCollision(true);
+        if (dragState?.isDrop) {
+          setDraggableElements((old) => [...old, crypto.randomUUID()]);
           setContainerCollision(false);
         }
-      } else if (dragState?.action === "updatePosition") {
-        const sourceId = dragState.sourceId;
-        if (!sourceId) return;
-
-        if (!checkCollision(containerRef)) {
-          setPlaceholderIndex(null);
-          setDraggingItem(null);
-          return;
-        }
-
-        setDraggingItem(sourceId);
-
-        const el = itemRefs.current.get(sourceId);
-        console.log(el?.getBoundingClientRect().height);
-        if (el) {
-          const elementHeight = el.getBoundingClientRect().height;
-          if (elementHeight > 0)
-            setDraggedElementHeight(el.getBoundingClientRect().height);
-        }
-
-        if (dragState.isDrop) {
-          if (placeholderIndex !== null) {
-            setDraggableElements((old) => {
-              const sourceIndex = old.indexOf(sourceId);
-              if (sourceIndex === -1) return old;
-              const adjustedIndex =
-                placeholderIndex > sourceIndex
-                  ? placeholderIndex - 1
-                  : placeholderIndex;
-              if (adjustedIndex === sourceIndex) return old;
-              const copy = [...old];
-              const [movedItem] = copy.splice(sourceIndex, 1);
-              copy.splice(adjustedIndex, 0, movedItem);
-              return copy;
-            });
-          }
-          setPlaceholderIndex(null);
-          setDraggingItem(null);
-          setDraggedElementHeight(undefined);
-          return;
-        }
-
-        let insertIndex = draggableElements.length;
-        for (let i = 0; i < draggableElements.length; i++) {
-          const itemId = draggableElements[i];
-          if (itemId === sourceId) continue;
-          if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
-            insertIndex = i;
-            break;
-          }
-        }
-        setPlaceholderIndex(insertIndex);
+      } else {
+        setContainerCollision(false);
       }
+    },
+    updatePosition: (dragState) => {
+      const sourceId = dragState?.sourceId;
+      if (!sourceId) return;
+
+      if (!checkCollision(containerRef)) {
+        setPlaceholderIndex(null);
+        setDraggingItem(null);
+        return;
+      }
+
+      setDraggingItem(sourceId);
+
+      const el = itemRefs.current.get(sourceId);
+      console.log(el?.getBoundingClientRect().height);
+      if (el) {
+        const elementHeight = el.getBoundingClientRect().height;
+        if (elementHeight > 0)
+          setDraggedElementHeight(el.getBoundingClientRect().height);
+      }
+
+      if (dragState.isDrop) {
+        if (placeholderIndex !== null) {
+          setDraggableElements((old) => {
+            const sourceIndex = old.indexOf(sourceId);
+            if (sourceIndex === -1) return old;
+            const adjustedIndex =
+              placeholderIndex > sourceIndex
+                ? placeholderIndex - 1
+                : placeholderIndex;
+            if (adjustedIndex === sourceIndex) return old;
+            const copy = [...old];
+            const [movedItem] = copy.splice(sourceIndex, 1);
+            copy.splice(adjustedIndex, 0, movedItem);
+            return copy;
+          });
+        }
+        setPlaceholderIndex(null);
+        setDraggingItem(null);
+        setDraggedElementHeight(undefined);
+        return;
+      }
+
+      let insertIndex = draggableElements.length;
+      for (let i = 0; i < draggableElements.length; i++) {
+        const itemId = draggableElements[i];
+        if (itemId === sourceId) continue;
+        if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
+          insertIndex = i;
+          break;
+        }
+      }
+      setPlaceholderIndex(insertIndex);
     },
   });
 

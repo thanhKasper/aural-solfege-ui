@@ -23,9 +23,24 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
   const dragStateRef = useRef<DragState | null>(null);
   const observersRef = useRef<Map<string, Observer>>(new Map());
 
-  const subscribe = useCallback(({ id, ref, callback }: Observer) => {
-    observersRef.current.set(id, { id, ref, callback });
-  }, []);
+  const subscribe = useCallback(
+    ({
+      id,
+      ref,
+      createRelocatableElement,
+      updateRelocatableElementPosition,
+      callback,
+    }: Observer) => {
+      observersRef.current.set(id, {
+        id,
+        ref,
+        createRelocatableElement,
+        updateRelocatableElementPosition,
+        callback,
+      });
+    },
+    [],
+  );
 
   const unsubscribe = useCallback((id: string) => {
     observersRef.current.delete(id);
@@ -33,8 +48,17 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
 
   const notify = useCallback((newDragState: DragState | null) => {
     dragStateRef.current = newDragState;
+    if (!newDragState) {
+      return;
+    }
     observersRef.current.forEach((observer) => {
-      observer.callback(newDragState);
+      if (newDragState.action === "create")
+        observer.createRelocatableElement(newDragState);
+      else if (newDragState.action === "updatePosition")
+        observer.updateRelocatableElementPosition(newDragState);
+      else {
+        observer.callback?.(newDragState);
+      }
     });
   }, []);
 

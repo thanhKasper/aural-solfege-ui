@@ -1,28 +1,46 @@
-import { useContext, useEffect, useRef, type RefObject } from "react";
+import { useContext, useEffect, type RefObject } from "react";
 import DragAndDropContext, { type DragState } from "../DragAndDropContext";
 
 interface UseObservantProps {
   id: string;
   ref: RefObject<HTMLElement | null>;
-  callback: (dragState: DragState | null) => void;
+  createElement: (dragState: DragState | null) => void;
+  updatePosition: (dragState: DragState | null) => void;
+  callback?: (dragState: DragState | null) => void;
 }
 
-export default function useObservant({ id, ref, callback }: UseObservantProps) {
+export default function useObservant({
+  id,
+  ref,
+  callback,
+  createElement,
+  updatePosition,
+}: UseObservantProps) {
   const { subscribe, unsubscribe, checkCollision } =
     useContext(DragAndDropContext);
-  const callbackRef = useRef<(dragState: DragState | null) => void>(callback);
 
   useEffect(() => {
-    subscribe({ id, ref, callback });
+    subscribe({
+      id,
+      ref,
+      callback,
+      createRelocatableElement: createElement,
+      updateRelocatableElementPosition: updatePosition,
+    });
     return () => {
       unsubscribe(id);
     };
-  }, [id, ref, subscribe, unsubscribe, callback]);
+  }, [
+    id,
+    ref,
+    subscribe,
+    unsubscribe,
+    callback,
+    createElement,
+    updatePosition,
+  ]);
 
   return {
-    setCallback: (cb: (dragState: DragState | null) => void) => {
-      callbackRef.current = cb;
-    },
     checkCollision,
   };
 }

@@ -12,8 +12,9 @@ export interface DragState {
 export interface Observer {
   id: string;
   ref: RefObject<HTMLElement | null>;
-
-  callback: (dragState: DragState | null) => void;
+  createRelocatableElement: (dragState: DragState | null) => void;
+  updateRelocatableElementPosition: (dragState: DragState | null) => void;
+  callback?: (dragState: DragState | null) => void;
 }
 
 export interface IDragAndDropContext {
