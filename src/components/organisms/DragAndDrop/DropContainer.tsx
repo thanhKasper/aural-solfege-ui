@@ -29,7 +29,6 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   const [draggedElementHeight, setDraggedElementHeight] = useState<
     number | undefined
   >(undefined);
-  const capturedHeightRef = useRef<number | undefined>(undefined);
   const { checkCollision } = useObservant({
     id,
     ref: containerRef as React.RefObject<HTMLElement | null>,
@@ -51,19 +50,17 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
         if (!checkCollision(containerRef)) {
           setPlaceholderIndex(null);
           setDraggingItem(null);
-          setDraggedElementHeight(undefined);
-          capturedHeightRef.current = undefined;
           return;
         }
 
         setDraggingItem(sourceId);
 
-        if (!capturedHeightRef.current) {
-          const el = itemRefs.current.get(sourceId);
-          if (el) {
-            capturedHeightRef.current = el.getBoundingClientRect().height;
-            setDraggedElementHeight(capturedHeightRef.current);
-          }
+        const el = itemRefs.current.get(sourceId);
+        console.log(el?.getBoundingClientRect().height);
+        if (el) {
+          const elementHeight = el.getBoundingClientRect().height;
+          if (elementHeight > 0)
+            setDraggedElementHeight(el.getBoundingClientRect().height);
         }
 
         if (dragState.isDrop) {
@@ -85,7 +82,6 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
           setPlaceholderIndex(null);
           setDraggingItem(null);
           setDraggedElementHeight(undefined);
-          capturedHeightRef.current = undefined;
           return;
         }
 
