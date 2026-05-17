@@ -33,7 +33,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
     id,
     ref: containerRef as React.RefObject<HTMLElement | null>,
     callback: (dragState) => {
-      if (dragState?.postAction === "create") {
+      if (dragState?.action === "create") {
         if (checkCollision(containerRef)) {
           setContainerCollision(true);
           if (dragState?.isDrop) {
@@ -43,7 +43,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
         } else {
           setContainerCollision(false);
         }
-      } else if (dragState?.postAction === "updatePosition") {
+      } else if (dragState?.action === "updatePosition") {
         const sourceId = dragState.sourceId;
         if (!sourceId) return;
 

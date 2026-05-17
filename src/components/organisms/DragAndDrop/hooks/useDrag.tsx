@@ -14,7 +14,7 @@ interface GhostDragProps {
   id: string;
   elementRef?: RefObject<HTMLElement | null>;
   GhostComponent: ReactNode;
-  actionType: DragState["postAction"];
+  actionType: DragState["action"];
 }
 
 export default function useGhostDrag({
@@ -39,7 +39,7 @@ export default function useGhostDrag({
       setDragStartPos({ x: e.clientX, y: e.clientY });
       setIsDragging(true);
       notify({
-        postAction: actionType,
+        action: actionType,
         isDrop: false,
         x: e.clientX,
         y: e.clientY,
@@ -59,7 +59,7 @@ export default function useGhostDrag({
         ghostRef.current.style.top = `${e.clientY}px`;
         const ghostRect = ghostRef.current.getBoundingClientRect();
         notify({
-          postAction: actionType,
+          action: actionType,
           isDrop: false,
           x: e.clientX,
           y: e.clientY,
@@ -74,7 +74,7 @@ export default function useGhostDrag({
         setIsDragging(false);
         setDragStartPos(null);
         notify({
-          postAction: actionType,
+          action: actionType,
           isDrop: true,
           x: e.clientX,
           y: e.clientY,
