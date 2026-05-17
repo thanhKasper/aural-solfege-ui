@@ -1,7 +1,18 @@
 import { Box } from "@mui/material";
 import { useRef, useState } from "react";
+import type { DragState } from "./DragAndDropContext";
 import useObservant from "./hooks/useObservant";
 import RelocatableElement from "./RelocatableElement";
+
+function isDragAbove(
+  dragState: DragState,
+  element: HTMLElement | null | undefined,
+): boolean {
+  if (!element) return false;
+  const rect = element.getBoundingClientRect();
+  const centerY = rect.top;
+  return dragState.y < centerY;
+}
 
 interface DropContainerProps {
   id: string;
@@ -9,6 +20,7 @@ interface DropContainerProps {
 
 const DropContainer = ({ id }: DropContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
   const [draggableElements, setDraggableElements] = useState<string[]>([]);
   const { checkCollision } = useObservant({
@@ -25,6 +37,34 @@ const DropContainer = ({ id }: DropContainerProps) => {
         } else {
           setContainerCollision(false);
         }
+      } else if (dragState?.postAction === "updatePosition") {
+        if (!checkCollision(containerRef)) {
+          return;
+        }
+        const sourceId = dragState.sourceId;
+        if (!sourceId) return;
+
+        let insertIndex = draggableElements.length;
+        for (let i = 0; i < draggableElements.length; i++) {
+          const itemId = draggableElements[i];
+          if (itemId === sourceId) continue;
+          if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
+            insertIndex = i;
+            break;
+          }
+        }
+
+        setDraggableElements((old) => {
+          const sourceIndex = old.indexOf(sourceId);
+          if (sourceIndex === -1) return old;
+          const adjustedIndex =
+            insertIndex > sourceIndex ? insertIndex - 1 : insertIndex;
+          if (adjustedIndex === sourceIndex) return old;
+          const copy = [...old];
+          const [movedItem] = copy.splice(sourceIndex, 1);
+          copy.splice(adjustedIndex, 0, movedItem);
+          return copy;
+        });
       }
     },
   });
@@ -44,11 +84,18 @@ const DropContainer = ({ id }: DropContainerProps) => {
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
-      {draggableElements.map((value, id) => (
-        <RelocatableElement key={id} id={String(id)}>
-          {value}
-        </RelocatableElement>
-      ))}
+      {draggableElements.map((value) => {
+        return (
+          <div
+            key={value}
+            ref={(el) => {
+              itemRefs.current.set(value, el);
+            }}
+          >
+            <RelocatableElement id={value}>{value}</RelocatableElement>
+          </div>
+        );
+      })}
     </Box>
   );
 };
