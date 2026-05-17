@@ -26,12 +26,17 @@ export default function useGhostDrag({
   const { notify } = useNotify();
   const ghostRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPos, setDragStartPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const onMouseDown = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
       if (!elementRef?.current) return;
       const rect = elementRef.current.getBoundingClientRect();
+      setDragStartPos({ x: e.clientX, y: e.clientY });
       setIsDragging(true);
       notify({
         postAction: actionType,
@@ -65,6 +70,7 @@ export default function useGhostDrag({
     const onDrop = (e: MouseEvent) => {
       if (ghostRef.current) {
         setIsDragging(false);
+        setDragStartPos(null);
         notify({
           postAction: actionType,
           isDrop: true,
@@ -89,6 +95,8 @@ export default function useGhostDrag({
           ref={ghostRef}
           style={{
             position: "fixed",
+            left: dragStartPos?.x,
+            top: dragStartPos?.y,
             pointerEvents: "none",
             zIndex: 9999,
             transform: "translate(-50%, -50%)",
