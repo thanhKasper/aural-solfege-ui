@@ -1,15 +1,16 @@
 import { createContext, type RefObject } from "react";
+import type { TAction } from "./actions";
 
 export interface DragState {
   x: number;
   y: number;
-  action: "create" | "updatePosition";
+  command: TAction;
   isDrop: boolean;
   ghostRect: DOMRect | null;
   sourceId?: string;
 }
 
-export interface Observer {
+export interface Subscriber {
   id: string;
   ref: RefObject<HTMLElement | null>;
   createRelocatableElement: (dragState: DragState | null) => void;
@@ -18,7 +19,7 @@ export interface Observer {
 }
 
 export interface IDragAndDropContext {
-  subscribe: (observer: Observer) => void;
+  subscribe: (observer: Subscriber) => void;
   unsubscribe: (id: string) => void;
   updatePosition: (dragState: DragState | null) => void;
   checkCollision: (dropRef: RefObject<HTMLElement | null>) => boolean;

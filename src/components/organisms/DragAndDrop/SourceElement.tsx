@@ -1,5 +1,6 @@
 import { type PropsWithChildren } from "react";
 import DraggableElement from "./DraggableElement";
+import { createRelocatableElementAction } from "./actions";
 
 interface ISourceElementProps {
   id: string;
@@ -13,7 +14,7 @@ const SourceElement = ({
     <DraggableElement
       id={id}
       GhostComponent={children}
-      onDropActionType="create"
+      onDrop={createRelocatableElementAction}
     >
       {children}
     </DraggableElement>

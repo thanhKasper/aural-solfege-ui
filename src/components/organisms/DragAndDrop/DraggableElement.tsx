@@ -1,14 +1,14 @@
-import { useRef, type PropsWithChildren, type ReactNode } from "react";
-import { Box } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material";
+import { Box } from "@mui/material";
+import { useRef, type PropsWithChildren, type ReactNode } from "react";
+import type { TAction } from "./actions";
 import useGhostDrag from "./hooks/useDrag";
-import type { DragState } from "./DragAndDropContext";
 
 interface IDraggableElementProps {
   id: string;
   onMouseDown?: (e: MouseEvent, base: (e: MouseEvent) => void) => void;
   GhostComponent: ReactNode;
-  onDropActionType: DragState["postAction"];
+  onDrop: TAction;
   sx?: SxProps<Theme>;
 }
 
@@ -17,7 +17,7 @@ const DraggableElement = ({
   children,
   onMouseDown = (e, base) => base(e),
   GhostComponent,
-  onDropActionType,
+  onDrop,
   sx,
 }: PropsWithChildren<IDraggableElementProps>) => {
   const draggableElementRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ const DraggableElement = ({
     id,
     elementRef: draggableElementRef,
     GhostComponent,
-    actionType: onDropActionType,
+    commandOnMouseDown: onDrop,
   });
 
   return (

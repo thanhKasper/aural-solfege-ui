@@ -1,16 +1,23 @@
 import { useEffect, useState, type PropsWithChildren } from "react";
 import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
+import { updateRelocatableElementPosition } from "./actions";
 
 interface IRelocatableElement {
   id: string;
   sx?: SxProps<Theme>;
+  onElementCreated?: () => void;
+  onElementUnMounted?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 const RelocatableElement = ({
   id,
   sx,
   children,
+  onElementCreated,
+  onElementUnMounted,
 }: PropsWithChildren<IRelocatableElement>) => {
   const [shouldShowElement, setShouldShowElement] = useState<boolean>(true);
 
@@ -25,6 +32,13 @@ const RelocatableElement = ({
     };
   }, []);
 
+  useEffect(() => {
+    onElementCreated?.();
+    return () => {
+      onElementUnMounted?.();
+    };
+  });
+
   return (
     <DraggableElement
       id={id}
@@ -33,7 +47,7 @@ const RelocatableElement = ({
         setShouldShowElement(false);
       }}
       GhostComponent={children}
-      onDropActionType="updatePosition"
+      onDrop={updateRelocatableElementPosition}
       sx={sx}
     >
       {shouldShowElement && children}

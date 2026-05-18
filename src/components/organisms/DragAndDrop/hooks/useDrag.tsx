@@ -7,21 +7,21 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
+import type { TAction } from "../actions";
 import useNotify from "./useNotify";
-import type { DragState } from "../DragAndDropContext";
 
 interface GhostDragProps {
   id: string;
   elementRef?: RefObject<HTMLElement | null>;
   GhostComponent: ReactNode;
-  actionType: DragState["action"];
+  commandOnMouseDown: TAction;
 }
 
 export default function useGhostDrag({
   id,
   elementRef,
   GhostComponent,
-  actionType,
+  commandOnMouseDown,
 }: GhostDragProps) {
   const { notify } = useNotify();
   const ghostRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ export default function useGhostDrag({
       setDragStartPos({ x: e.clientX, y: e.clientY });
       setIsDragging(true);
       notify({
-        action: actionType,
+        command: commandOnMouseDown,
         isDrop: false,
         x: e.clientX,
         y: e.clientY,
@@ -47,7 +47,7 @@ export default function useGhostDrag({
         sourceId: id,
       });
     },
-    [elementRef, notify, actionType, id],
+    [elementRef, notify, commandOnMouseDown, id],
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function useGhostDrag({
         ghostRef.current.style.top = `${e.clientY}px`;
         const ghostRect = ghostRef.current.getBoundingClientRect();
         notify({
-          action: actionType,
+          command: commandOnMouseDown,
           isDrop: false,
           x: e.clientX,
           y: e.clientY,
@@ -74,7 +74,7 @@ export default function useGhostDrag({
         setIsDragging(false);
         setDragStartPos(null);
         notify({
-          action: actionType,
+          command: commandOnMouseDown,
           isDrop: true,
           x: e.clientX,
           y: e.clientY,
@@ -90,7 +90,7 @@ export default function useGhostDrag({
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [isDragging, id, notify, actionType]);
+  }, [isDragging, id, notify, commandOnMouseDown]);
 
   const ghostPortal = isDragging
     ? createPortal(

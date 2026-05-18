@@ -6,7 +6,7 @@ import {
 } from "react";
 import DragAndDropContext, {
   type DragState,
-  type Observer,
+  type Subscriber,
 } from "./DragAndDropContext";
 
 function rectsOverlap(rectA: DOMRect, rectB: DOMRect): boolean {
@@ -19,9 +19,8 @@ function rectsOverlap(rectA: DOMRect, rectB: DOMRect): boolean {
 }
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
-  // const [dragState, setDragState] = useState<DragState | null>(null);
   const dragStateRef = useRef<DragState | null>(null);
-  const observersRef = useRef<Map<string, Observer>>(new Map());
+  const observersRef = useRef<Map<string, Subscriber>>(new Map());
 
   const subscribe = useCallback(
     ({
@@ -30,7 +29,7 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
       createRelocatableElement,
       updateRelocatableElementPosition,
       callback,
-    }: Observer) => {
+    }: Subscriber) => {
       observersRef.current.set(id, {
         id,
         ref,
@@ -52,13 +51,10 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
       return;
     }
     observersRef.current.forEach((observer) => {
-      if (newDragState.action === "create")
-        observer.createRelocatableElement(newDragState);
-      else if (newDragState.action === "updatePosition")
-        observer.updateRelocatableElementPosition(newDragState);
-      else {
-        observer.callback?.(newDragState);
+      if (!dragStateRef.current) {
+        return;
       }
+      dragStateRef.current.command(observer, dragStateRef.current);
     });
   }, []);
 
