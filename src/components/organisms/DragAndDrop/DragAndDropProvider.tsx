@@ -73,7 +73,7 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
       value={{
         subscribe,
         unsubscribe,
-        updatePosition: notify,
+        notify: notify,
         checkCollision: isColliding,
       }}
     >

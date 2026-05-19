@@ -1,8 +1,8 @@
 import type { SxProps, Theme } from "@mui/material";
 import { Box } from "@mui/material";
 import { useRef, type PropsWithChildren, type ReactNode } from "react";
-import type { TAction } from "./actions";
-import useGhostDrag from "./hooks/useDrag";
+import type { TAction } from "../actions";
+import useGhostDrag from "../hooks/useDrag";
 
 interface IDraggableElementProps {
   id: string;

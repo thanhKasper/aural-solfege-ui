@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from "react";
-import DraggableElement from "./DraggableElement";
+import DraggableElement from "./elements/DraggableElement";
 import { createRelocatableElementAction } from "./actions";
 
 interface ISourceElementProps {

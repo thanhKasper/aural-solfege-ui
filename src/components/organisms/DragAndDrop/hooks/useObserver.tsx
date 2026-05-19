@@ -3,5 +3,5 @@ import DragAndDropContext from "../DragAndDropContext";
 
 export const useObserver = () => {
   const dndCtx = useContext(DragAndDropContext);
-  return { notify: dndCtx.updatePosition };
+  return { notify: dndCtx.notify };
 };

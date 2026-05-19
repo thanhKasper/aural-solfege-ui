@@ -21,14 +21,14 @@ export interface Subscriber {
 export interface IDragAndDropContext {
   subscribe: (observer: Subscriber) => void;
   unsubscribe: (id: string) => void;
-  updatePosition: (dragState: DragState | null) => void;
+  notify: (dragState: DragState | null) => void;
   checkCollision: (dropRef: RefObject<HTMLElement | null>) => boolean;
 }
 
 const DragAndDropContext = createContext<IDragAndDropContext>({
   subscribe: () => {},
   unsubscribe: () => {},
-  updatePosition: () => {},
+  notify: () => {},
   checkCollision: () => false,
 });
 

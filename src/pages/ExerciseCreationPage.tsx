@@ -1,8 +1,8 @@
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import DropContainer from "@/components/organisms/DragAndDrop/DropContainer";
-import SourceElement from "@/components/organisms/DragAndDrop/SourceElement";
+import DropContainer from "@/components/organisms/DragAndDrop/containers/DropContainer";
+import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
 import { Box, Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 

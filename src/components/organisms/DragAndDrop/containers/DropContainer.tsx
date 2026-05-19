@@ -1,8 +1,8 @@
 import { Box, type SxProps, type Theme } from "@mui/material";
 import React, { useRef, useState } from "react";
-import type { DragState } from "./DragAndDropContext";
-import useObservant from "./hooks/useObservant";
-import RelocatableElement from "./RelocatableElement";
+import type { DragState } from "../DragAndDropContext";
+import useObservant from "../hooks/useObservant";
+import RelocatableElement from "../elements/RelocatableElement";
 
 function isDragAbove(
   dragState: DragState,
