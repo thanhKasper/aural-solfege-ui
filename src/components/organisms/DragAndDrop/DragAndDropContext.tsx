@@ -17,6 +17,7 @@ export interface Subscriber {
   ref: RefObject<HTMLElement | null>;
   createRelocatableElement: (dragState: DragState | null) => void;
   updateRelocatableElementPosition: (dragState: DragState | null) => void;
+  detectCollision: (domRect: DOMRect) => void;
   callback?: (dragState: DragState | null) => void;
 }
 
@@ -24,14 +25,12 @@ export interface IDragAndDropContext {
   subscribe: (eventType: EventType, subscriber: Subscriber) => void;
   unsubscribe: (eventType: EventType, subscriber: Subscriber) => void;
   notify: (eventType: EventType, action: TAction) => void;
-  checkCollision: (dropRef: RefObject<HTMLElement | null>) => boolean;
 }
 
 const DragAndDropContext = createContext<IDragAndDropContext>({
   subscribe: () => {},
   unsubscribe: () => {},
   notify: () => {},
-  checkCollision: () => false,
 });
 
 export default DragAndDropContext;
