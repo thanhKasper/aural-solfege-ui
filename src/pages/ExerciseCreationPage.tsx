@@ -1,9 +1,17 @@
+import { IntervalEarTrainingSource } from "@/components/ExerciseFormatsDragAndDrop/IntervalEarTraining";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
 import DropContainer from "@/components/organisms/DragAndDrop/containers/DropContainer";
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
-import { Box, Container, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
@@ -68,22 +76,25 @@ const ExerciseCreationPage = () => {
               render={() => (
                 <InputLabel label="Training plan">
                   <DragAndDropProvider>
-                    <SourceElement id="pitch-listening">
-                      <Box sx={{ border: "1px solid black", padding: 2 }}>
-                        <Typography>Listening pitch</Typography>
-                      </Box>
-                    </SourceElement>
-                    <SourceElement id="pitch-comparison">
-                      <Box sx={{ border: "1px solid black", padding: 2 }}>
-                        <Typography>Pitch comparison</Typography>
-                      </Box>
-                    </SourceElement>
-                    <SourceElement id="stack-detection">
-                      <Box sx={{ border: "1px solid black", padding: 2 }}>
-                        <Typography>Stack detection</Typography>
-                      </Box>
-                    </SourceElement>
-                    <DropContainer id="dropContainer1" />
+                    <Stack direction={"row"} spacing={2}>
+                      <Stack sx={{ minWidth: "15%" }} spacing={1}>
+                        <SourceElement id="pitch-listening">
+                          <IntervalEarTrainingSource />
+                        </SourceElement>
+                        <SourceElement id="pitch-comparison">
+                          <Box sx={{ border: "1px solid black", padding: 2 }}>
+                            <Typography>Pitch comparison</Typography>
+                          </Box>
+                        </SourceElement>
+                        <SourceElement id="stack-detection">
+                          <Box sx={{ border: "1px solid black", padding: 2 }}>
+                            <Typography>Stack detection</Typography>
+                          </Box>
+                        </SourceElement>
+                      </Stack>
+
+                      <DropContainer id="dropContainer1" />
+                    </Stack>
                   </DragAndDropProvider>
                 </InputLabel>
               )}
