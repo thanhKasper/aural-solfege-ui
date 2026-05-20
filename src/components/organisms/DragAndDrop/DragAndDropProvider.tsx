@@ -7,7 +7,9 @@ import {
 import DragAndDropContext, {
   type DragState,
   type Subscriber,
+  type TAction,
 } from "./DragAndDropContext";
+import { EventType } from "./types";
 
 function rectsOverlap(rectA: DOMRect, rectB: DOMRect): boolean {
   return !(
@@ -20,42 +22,36 @@ function rectsOverlap(rectA: DOMRect, rectB: DOMRect): boolean {
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
   const dragStateRef = useRef<DragState | null>(null);
-  const observersRef = useRef<Map<string, Subscriber>>(new Map());
+  const topics = useRef<Map<EventType, Subscriber[]>>(new Map());
 
   const subscribe = useCallback(
-    ({
-      id,
-      ref,
-      createRelocatableElement,
-      updateRelocatableElementPosition,
-      callback,
-    }: Subscriber) => {
-      observersRef.current.set(id, {
-        id,
-        ref,
-        createRelocatableElement,
-        updateRelocatableElementPosition,
-        callback,
-      });
+    (eventType: EventType, subscriber: Subscriber) => {
+      if (!topics.current.has(eventType)) {
+        topics.current.set(eventType, []);
+      }
+      topics.current.get(eventType)!.push(subscriber);
     },
     [],
   );
 
-  const unsubscribe = useCallback((id: string) => {
-    observersRef.current.delete(id);
-  }, []);
-
-  const notify = useCallback((newDragState: DragState | null) => {
-    dragStateRef.current = newDragState;
-    if (!newDragState) {
-      return;
-    }
-    observersRef.current.forEach((observer) => {
-      if (!dragStateRef.current) {
-        return;
+  const unsubscribe = useCallback(
+    (eventType: EventType, subscriber: Subscriber) => {
+      const subscribers = topics.current.get(eventType);
+      if (subscribers) {
+        topics.current.set(
+          eventType,
+          subscribers.filter((s) => s !== subscriber),
+        );
       }
-      dragStateRef.current.command(observer, dragStateRef.current);
-    });
+    },
+    [],
+  );
+
+  const notify = useCallback((eventType: EventType, action: TAction) => {
+    const subscribers = topics.current.get(eventType);
+    if (subscribers) {
+      subscribers.forEach((subscriber) => action(subscriber));
+    }
   }, []);
 
   const isColliding = useCallback(
@@ -73,7 +69,7 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
       value={{
         subscribe,
         unsubscribe,
-        notify: notify,
+        notify,
         checkCollision: isColliding,
       }}
     >

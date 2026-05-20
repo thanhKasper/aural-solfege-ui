@@ -1,6 +1,5 @@
 import { createContext, type RefObject } from "react";
-import type { TAction } from "./actions";
-import type { EventType } from "react-hook-form";
+import type { EventType } from "./types";
 
 export interface DragState {
   x: number;
@@ -11,6 +10,8 @@ export interface DragState {
   sourceId?: string;
 }
 
+export type TAction = (subscriber: Subscriber) => void;
+
 export interface Subscriber {
   id: string;
   ref: RefObject<HTMLElement | null>;
@@ -20,9 +21,9 @@ export interface Subscriber {
 }
 
 export interface IDragAndDropContext {
-  subscribe: (event: EventType, subscriber: Subscriber) => void;
-  unsubscribe: (event: EventType, id: string) => void;
-  notify: (dragState: DragState | null) => void;
+  subscribe: (eventType: EventType, subscriber: Subscriber) => void;
+  unsubscribe: (eventType: EventType, subscriber: Subscriber) => void;
+  notify: (eventType: EventType, action: TAction) => void;
   checkCollision: (dropRef: RefObject<HTMLElement | null>) => boolean;
 }
 

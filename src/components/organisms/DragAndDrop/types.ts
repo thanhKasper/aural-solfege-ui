@@ -1,0 +1,6 @@
+export enum EventType {
+  DRAG = "DRAG",
+  DROP = "DROP",
+  ELEMENT_CREATED = "ELEMENT_CREATED",
+  ELEMENT_DELETED = "ELEMENT_DELETED",
+}
