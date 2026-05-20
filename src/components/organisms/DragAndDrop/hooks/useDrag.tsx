@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import type { TAction } from "../DragAndDropContext";
 import { EventType } from "../types";
@@ -16,6 +22,7 @@ export default function useGhostDrag({
   commandOnMouseDown,
 }: GhostDragProps) {
   const { notify } = useNotify();
+  const ghostRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartPos, setDragStartPos] = useState<{
     x: number;
@@ -32,7 +39,13 @@ export default function useGhostDrag({
     if (!isDragging) return;
 
     const onMove = (e: MouseEvent) => {
-      setDragStartPos({ x: e.clientX, y: e.clientY });
+      if (ghostRef.current) {
+        setDragStartPos({ x: e.clientX, y: e.clientY });
+        const ghostBoundary = ghostRef.current.getBoundingClientRect();
+        notify(EventType.DRAG, (subscriber) => {
+          subscriber?.detectCollision(ghostBoundary);
+        });
+      }
     };
 
     const onDrop = () => {
@@ -52,6 +65,7 @@ export default function useGhostDrag({
   const ghostPortal = isDragging
     ? createPortal(
         <div
+          ref={ghostRef}
           style={{
             position: "fixed",
             left: dragStartPos?.x,
