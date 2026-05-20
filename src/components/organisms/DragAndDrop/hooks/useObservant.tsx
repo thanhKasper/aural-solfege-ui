@@ -6,8 +6,7 @@ export default function useObservant(
   events: EventType[],
   subscriber: Subscriber,
 ) {
-  const { subscribe, unsubscribe, checkCollision } =
-    useContext(DragAndDropContext);
+  const { subscribe, unsubscribe } = useContext(DragAndDropContext);
 
   useEffect(() => {
     events.map((event) => subscribe(event, subscriber));
@@ -15,8 +14,4 @@ export default function useObservant(
       events.map((event) => unsubscribe(event, subscriber));
     };
   }, [events, subscriber, subscribe, unsubscribe]);
-
-  return {
-    checkCollision,
-  };
 }
