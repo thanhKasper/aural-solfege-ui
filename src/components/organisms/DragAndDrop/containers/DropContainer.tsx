@@ -1,8 +1,10 @@
 import { Box, type SxProps, type Theme } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, type ReactNode } from "react";
 import type { DragState } from "../DragAndDropContext";
 import useObservant from "../hooks/useObservant";
 import RelocatableElement from "../elements/RelocatableElement";
+import { EventType } from "../types";
+import checkCollision from "../utils/checkCollision";
 
 function isDragAbove(
   dragState: DragState,
@@ -23,78 +25,110 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
-  const [draggableElements, setDraggableElements] = useState<string[]>([]);
+  const [draggableElements, setDraggableElements] = useState<
+    { id: string; render: () => ReactNode }[]
+  >([]);
   const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
   const [draggingItem, setDraggingItem] = useState<string | null>(null);
   const [draggedElementHeight, setDraggedElementHeight] = useState<
     number | undefined
   >(undefined);
-  const { checkCollision } = useObservant({
+  // const { checkCollision } = useObservant({
+  //   id,
+  //   ref: containerRef as React.RefObject<HTMLElement | null>,
+  //   // onDrag: (dragState) => {
+  //   //   if (!checkCollision(containerRef)) {
+  //   //     setPlaceholderIndex(null);
+  //   //     setDraggingItem(null);
+  //   //     return;
+  //   //   }
+
+  //   //   const sourceId = dragState?.sourceId;
+  //   //   if (!sourceId) return;
+
+  //   //   setDraggingItem(sourceId);
+
+  //   //   const el = itemRefs.current.get(sourceId);
+  //   //   if (el) {
+  //   //     const elementHeight = el.getBoundingClientRect().height;
+  //   //     if (elementHeight > 0)
+  //   //       setDraggedElementHeight(el.getBoundingClientRect().height);
+  //   //   }
+
+  //   //   let insertIndex = draggableElements.length;
+  //   //   for (let i = 0; i < draggableElements.length; i++) {
+  //   //     const itemId = draggableElements[i];
+  //   //     if (itemId === sourceId) continue;
+  //   //     if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
+  //   //       insertIndex = i;
+  //   //       break;
+  //   //     }
+  //   //   }
+  //   //   setPlaceholderIndex(insertIndex);
+  //   // },
+  //   // onDrop: (dragState) => {
+  //   //   if (checkCollision(containerRef)) {
+  //   //     setContainerCollision(true);
+  //   //     if (dragState?.isDrop) {
+  //   //       setDraggableElements((old) => [...old, crypto.randomUUID()]);
+  //   //       setContainerCollision(false);
+  //   //     }
+  //   //   } else {
+  //   //     setContainerCollision(false);
+  //   //   }
+
+  //   //   const sourceId = dragState?.sourceId;
+  //   //   if (!sourceId) return;
+
+  //   //   if (placeholderIndex !== null) {
+  //   //     setDraggableElements((old) => {
+  //   //       const sourceIndex = old.indexOf(sourceId);
+  //   //       if (sourceIndex === -1) return old;
+  //   //       const adjustedIndex =
+  //   //         placeholderIndex > sourceIndex
+  //   //           ? placeholderIndex - 1
+  //   //           : placeholderIndex;
+  //   //       if (adjustedIndex === sourceIndex) return old;
+  //   //       const copy = [...old];
+  //   //       const [movedItem] = copy.splice(sourceIndex, 1);
+  //   //       copy.splice(adjustedIndex, 0, movedItem);
+  //   //       return copy;
+  //   //     });
+  //   //   }
+  //   //   setPlaceholderIndex(null);
+  //   //   setDraggingItem(null);
+  //   //   setDraggedElementHeight(undefined);
+  //   // },
+  // });
+  useObservant([EventType.DROP, EventType.DRAG], {
     id,
-    ref: containerRef as React.RefObject<HTMLElement | null>,
-    createElement: (dragState) => {
-      if (checkCollision(containerRef)) {
-        setContainerCollision(true);
-        if (dragState?.isDrop) {
-          setDraggableElements((old) => [...old, crypto.randomUUID()]);
+    ref: containerRef,
+    createRelocatableElement: (dropPosition, render) => {
+      if (containerRef.current) {
+        const containerDomRect = containerRef.current.getBoundingClientRect();
+        if (checkCollision(dropPosition, containerDomRect)) {
+          setDraggableElements((old) => [
+            ...old,
+            { id: crypto.randomUUID(), render },
+          ]);
           setContainerCollision(false);
         }
-      } else {
-        setContainerCollision(false);
       }
     },
-    updatePosition: (dragState) => {
-      const sourceId = dragState?.sourceId;
-      if (!sourceId) return;
-
-      if (!checkCollision(containerRef)) {
-        setPlaceholderIndex(null);
-        setDraggingItem(null);
-        return;
-      }
-
-      setDraggingItem(sourceId);
-
-      const el = itemRefs.current.get(sourceId);
-      console.log(el?.getBoundingClientRect().height);
-      if (el) {
-        const elementHeight = el.getBoundingClientRect().height;
-        if (elementHeight > 0)
-          setDraggedElementHeight(el.getBoundingClientRect().height);
-      }
-
-      if (dragState.isDrop) {
-        if (placeholderIndex !== null) {
-          setDraggableElements((old) => {
-            const sourceIndex = old.indexOf(sourceId);
-            if (sourceIndex === -1) return old;
-            const adjustedIndex =
-              placeholderIndex > sourceIndex
-                ? placeholderIndex - 1
-                : placeholderIndex;
-            if (adjustedIndex === sourceIndex) return old;
-            const copy = [...old];
-            const [movedItem] = copy.splice(sourceIndex, 1);
-            copy.splice(adjustedIndex, 0, movedItem);
-            return copy;
-          });
-        }
-        setPlaceholderIndex(null);
-        setDraggingItem(null);
-        setDraggedElementHeight(undefined);
-        return;
-      }
-
-      let insertIndex = draggableElements.length;
-      for (let i = 0; i < draggableElements.length; i++) {
-        const itemId = draggableElements[i];
-        if (itemId === sourceId) continue;
-        if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
-          insertIndex = i;
-          break;
+    updateRelocatableElementPosition: () => {},
+    detectCollision: (draggingElementDomRect) => {
+      if (containerRef.current) {
+        if (
+          checkCollision(
+            draggingElementDomRect,
+            containerRef.current?.getBoundingClientRect(),
+          )
+        ) {
+          setContainerCollision(true);
+        } else {
+          setContainerCollision(false);
         }
       }
-      setPlaceholderIndex(insertIndex);
     },
   });
 
@@ -113,7 +147,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
       ref={containerRef}
       sx={{
         width: "100%",
-        height: "500px",
+        minHeight: "500px",
         border: "1px dashed black",
         alignSelf: "stretch",
         backgroundColor: containerCollision
@@ -123,20 +157,22 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
-      {draggableElements.map((value, index) => {
+      {draggableElements.map((element, index) => {
         return (
-          <React.Fragment key={value}>
+          <React.Fragment key={element.id}>
             {placeholderIndex === index && <Box sx={placeholderSxResolved} />}
             <div
               ref={(el) => {
-                itemRefs.current.set(value, el);
+                itemRefs.current.set(element.id, el);
               }}
               style={{
-                opacity: draggingItem === value ? 0 : 1,
+                opacity: draggingItem === element.id ? 0 : 1,
                 transition: "opacity 0.15s",
               }}
             >
-              <RelocatableElement id={value}>{value}</RelocatableElement>
+              <RelocatableElement id={element.id}>
+                {element.render()}
+              </RelocatableElement>
             </div>
           </React.Fragment>
         );
