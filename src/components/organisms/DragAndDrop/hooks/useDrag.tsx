@@ -6,14 +6,14 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import type { TAction } from "../DragAndDropContext";
+import type { Subscriber } from "../DragAndDropContext";
 import { EventType } from "../types";
 import useNotify from "./useNotify";
 
 interface GhostDragProps {
   id: string;
   GhostComponent: ReactNode;
-  commandOnMouseDown: TAction;
+  commandOnMouseDown: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
 }
 
 export default function useGhostDrag({
@@ -51,7 +51,12 @@ export default function useGhostDrag({
     const onDrop = () => {
       setIsDragging(false);
       setDragStartPos(null);
-      notify(EventType.DROP, commandOnMouseDown);
+      if (ghostRef.current) {
+        const boundRect = ghostRef.current.getBoundingClientRect();
+        notify(EventType.DROP, (subscriber) =>
+          commandOnMouseDown(boundRect, subscriber),
+        );
+      }
     };
 
     window.addEventListener("mousemove", onMove);
@@ -81,5 +86,9 @@ export default function useGhostDrag({
       )
     : null;
 
-  return { onMouseDown, ghostPortal };
+  return {
+    onMouseDown,
+    ghostPortal,
+    ghostRef,
+  };
 }
