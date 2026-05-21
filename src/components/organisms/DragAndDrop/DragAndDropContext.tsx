@@ -1,4 +1,4 @@
-import { createContext, type RefObject } from "react";
+import { createContext, type ReactNode, type RefObject } from "react";
 import type { EventType } from "./types";
 
 export interface DragState {
@@ -15,7 +15,10 @@ export type TAction = (subscriber: Subscriber) => void;
 export interface Subscriber {
   id: string;
   ref: RefObject<HTMLElement | null>;
-  createRelocatableElement: (dragState: DragState | null) => void;
+  createRelocatableElement: (
+    dropPosition: DOMRect,
+    render: () => ReactNode,
+  ) => void;
   updateRelocatableElementPosition: (dragState: DragState | null) => void;
   detectCollision: (domRect: DOMRect) => void;
   callback?: (dragState: DragState | null) => void;
