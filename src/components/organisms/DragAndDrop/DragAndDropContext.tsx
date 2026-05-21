@@ -19,9 +19,12 @@ export interface Subscriber {
     dropPosition: DOMRect,
     render: () => ReactNode,
   ) => void;
-  updateRelocatableElementPosition: (dragState: DragState | null) => void;
+  updateRelocatableElementPosition: (
+    elementId: string,
+    domRect: DOMRect,
+  ) => void;
   detectCollision: (domRect: DOMRect) => void;
-  callback?: (dragState: DragState | null) => void;
+  indicateDropPosition: (elementId: string, domRect: DOMRect) => void;
 }
 
 export interface IDragAndDropContext {

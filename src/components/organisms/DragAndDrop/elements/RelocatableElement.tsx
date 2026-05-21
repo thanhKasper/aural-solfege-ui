@@ -45,8 +45,13 @@ const RelocatableElement = ({
         baseOnMouseDown(e);
         setShouldShowElement(false);
       }}
+      onMove={(dropPosition, subscriber) => {
+        subscriber.indicateDropPosition(id, dropPosition);
+      }}
       GhostComponent={children}
-      onDrop={() => {}}
+      onDrop={(dropPosition, subscriber) => {
+        subscriber.updateRelocatableElementPosition(id, dropPosition);
+      }}
       sx={sx}
     >
       {shouldShowElement && children}

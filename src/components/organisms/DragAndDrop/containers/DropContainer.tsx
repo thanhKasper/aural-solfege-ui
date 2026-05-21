@@ -7,13 +7,13 @@ import { EventType } from "../types";
 import checkCollision from "../utils/checkCollision";
 
 function isDragAbove(
-  dragState: DragState,
+  draggingPosition: DOMRect,
   element: HTMLElement | null | undefined,
 ): boolean {
   if (!element) return false;
   const rect = element.getBoundingClientRect();
   const centerY = rect.top;
-  return dragState.y < centerY;
+  return draggingPosition.y < centerY;
 }
 
 interface DropContainerProps {
@@ -115,7 +115,27 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
         }
       }
     },
-    updateRelocatableElementPosition: () => {},
+    updateRelocatableElementPosition: (sourceId, dropPosition) => {
+      if (placeholderIndex !== null) {
+        setDraggableElements((old) => {
+          const focusedElement = old.find((el) => el.id === sourceId);
+          const focusedElementIndex = old.findIndex((el) => el.id);
+          if (!focusedElement) return old;
+          const adjustedIndex =
+            placeholderIndex > focusedElementIndex
+              ? placeholderIndex - 1
+              : placeholderIndex;
+          if (adjustedIndex === focusedElementIndex) return old;
+          const copy = [...old];
+          const [movedItem] = copy.splice(focusedElementIndex, 1);
+          copy.splice(adjustedIndex, 0, movedItem);
+          return copy;
+        });
+      }
+      setPlaceholderIndex(null);
+      setDraggingItem(null);
+      setDraggedElementHeight(undefined);
+    },
     detectCollision: (draggingElementDomRect) => {
       if (containerRef.current) {
         if (
@@ -129,6 +149,25 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
           setContainerCollision(false);
         }
       }
+    },
+    indicateDropPosition: (sourceId, domRect) => {
+      setDraggingItem(sourceId);
+      const el = itemRefs.current.get(sourceId);
+      if (el) {
+        const elementHeight = el.getBoundingClientRect().height;
+        if (elementHeight > 0)
+          setDraggedElementHeight(el.getBoundingClientRect().height);
+      }
+      let insertIndex = draggableElements.length;
+      for (let i = 0; i < draggableElements.length; i++) {
+        const itemId = draggableElements[i].id;
+        if (itemId === sourceId) continue;
+        if (isDragAbove(domRect, itemRefs.current.get(itemId))) {
+          insertIndex = i;
+          break;
+        }
+      }
+      setPlaceholderIndex(insertIndex);
     },
   });
 

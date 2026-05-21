@@ -9,6 +9,7 @@ interface IDraggableElementProps {
   onMouseDown?: (e: MouseEvent, base: (e: MouseEvent) => void) => void;
   GhostComponent: ReactNode;
   onDrop: (domRect: DOMRect, subscriber: Subscriber) => void;
+  onMove?: (domRect: DOMRect, subscriber: Subscriber) => void;
   sx?: SxProps<Theme>;
 }
 
@@ -18,6 +19,7 @@ const DraggableElement = ({
   onMouseDown = (e, base) => base(e),
   GhostComponent,
   onDrop,
+  onMove,
   sx,
 }: PropsWithChildren<IDraggableElementProps>) => {
   const draggableElementRef = useRef<HTMLDivElement>(null);
@@ -25,6 +27,7 @@ const DraggableElement = ({
     id,
     GhostComponent,
     commandOnMouseDown: onDrop,
+    commandOnMouseMove: onMove,
   });
 
   return (

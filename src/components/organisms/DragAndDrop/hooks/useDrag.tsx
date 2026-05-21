@@ -14,12 +14,14 @@ interface GhostDragProps {
   id: string;
   GhostComponent: ReactNode;
   commandOnMouseDown: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
+  commandOnMouseMove?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
 }
 
 export default function useGhostDrag({
   id,
   GhostComponent,
   commandOnMouseDown,
+  commandOnMouseMove,
 }: GhostDragProps) {
   const { notify } = useNotify();
   const ghostRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +45,11 @@ export default function useGhostDrag({
         setDragStartPos({ x: e.clientX, y: e.clientY });
         const ghostBoundary = ghostRef.current.getBoundingClientRect();
         notify(EventType.DRAG, (subscriber) => {
-          subscriber?.detectCollision(ghostBoundary);
+          if (commandOnMouseMove) {
+            commandOnMouseMove(ghostBoundary, subscriber);
+          } else {
+            subscriber?.detectCollision(ghostBoundary);
+          }
         });
       }
     };
