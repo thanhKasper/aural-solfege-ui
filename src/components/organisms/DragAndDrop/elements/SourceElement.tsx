@@ -1,9 +1,11 @@
-import { type PropsWithChildren } from "react";
-import DraggableElement from "./elements/DraggableElement";
-import { createRelocatableElementAction } from "./actions";
+import { type PropsWithChildren, type ReactNode } from "react";
+import DraggableElement from "./DraggableElement";
 
 interface ISourceElementProps {
   id: string;
+  render?: () => ReactNode;
+  onElementCreated?: () => void;
+  onElementRemoved?: () => void;
 }
 
 const SourceElement = ({
@@ -14,7 +16,11 @@ const SourceElement = ({
     <DraggableElement
       id={id}
       GhostComponent={children}
-      onDrop={createRelocatableElementAction}
+      onDrop={(domRect, subscriber) => {
+        subscriber.createRelocatableElement(domRect, () => {
+          return <p>This is created from source element {id}</p>;
+        });
+      }}
     >
       {children}
     </DraggableElement>
