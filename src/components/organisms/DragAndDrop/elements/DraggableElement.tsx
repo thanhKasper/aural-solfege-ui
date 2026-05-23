@@ -5,7 +5,6 @@ import type { Subscriber } from "../DragAndDropContext";
 import useGhostDrag from "../hooks/useDrag";
 
 interface IDraggableElementProps {
-  id: string;
   onMouseDown?: (e: MouseEvent) => void;
   GhostComponent: ReactNode;
   onDrop: (domRect: DOMRect, subscriber: Subscriber) => void;
@@ -14,7 +13,6 @@ interface IDraggableElementProps {
 }
 
 const DraggableElement = ({
-  id,
   children,
   onMouseDown,
   GhostComponent,
@@ -24,7 +22,6 @@ const DraggableElement = ({
 }: PropsWithChildren<IDraggableElementProps>) => {
   const draggableElementRef = useRef<HTMLDivElement>(null);
   const { ghostPortal, onMouseDown: baseMouseDown } = useGhostDrag({
-    id,
     GhostComponent,
     commandOnMouseDown: onDrop,
     commandOnMouseMove: onMove,

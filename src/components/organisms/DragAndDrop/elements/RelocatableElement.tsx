@@ -40,7 +40,6 @@ const RelocatableElement = ({
 
   return (
     <DraggableElement
-      id={id}
       onMouseDown={() => {
         setShouldShowElement(false);
       }}
