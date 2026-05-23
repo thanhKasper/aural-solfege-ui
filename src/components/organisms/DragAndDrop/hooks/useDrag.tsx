@@ -71,7 +71,7 @@ export default function useGhostDrag({
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [isDragging, id, notify, commandOnMouseDown]);
+  }, [isDragging, id, notify, commandOnMouseDown, commandOnMouseMove]);
 
   const ghostPortal = isDragging
     ? createPortal(

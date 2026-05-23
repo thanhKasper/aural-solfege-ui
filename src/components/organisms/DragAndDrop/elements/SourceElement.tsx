@@ -11,6 +11,7 @@ interface ISourceElementProps {
 const SourceElement = ({
   id,
   children,
+  render,
 }: PropsWithChildren<ISourceElementProps>) => {
   return (
     <DraggableElement
@@ -18,7 +19,7 @@ const SourceElement = ({
       GhostComponent={children}
       onDrop={(domRect, subscriber) => {
         subscriber.createRelocatableElement(domRect, () => {
-          return <p>This is created from source element {id}</p>;
+          return render?.();
         });
       }}
     >

@@ -33,73 +33,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   const [draggedElementHeight, setDraggedElementHeight] = useState<
     number | undefined
   >(undefined);
-  // const { checkCollision } = useObservant({
-  //   id,
-  //   ref: containerRef as React.RefObject<HTMLElement | null>,
-  //   // onDrag: (dragState) => {
-  //   //   if (!checkCollision(containerRef)) {
-  //   //     setPlaceholderIndex(null);
-  //   //     setDraggingItem(null);
-  //   //     return;
-  //   //   }
 
-  //   //   const sourceId = dragState?.sourceId;
-  //   //   if (!sourceId) return;
-
-  //   //   setDraggingItem(sourceId);
-
-  //   //   const el = itemRefs.current.get(sourceId);
-  //   //   if (el) {
-  //   //     const elementHeight = el.getBoundingClientRect().height;
-  //   //     if (elementHeight > 0)
-  //   //       setDraggedElementHeight(el.getBoundingClientRect().height);
-  //   //   }
-
-  //   //   let insertIndex = draggableElements.length;
-  //   //   for (let i = 0; i < draggableElements.length; i++) {
-  //   //     const itemId = draggableElements[i];
-  //   //     if (itemId === sourceId) continue;
-  //   //     if (isDragAbove(dragState, itemRefs.current.get(itemId))) {
-  //   //       insertIndex = i;
-  //   //       break;
-  //   //     }
-  //   //   }
-  //   //   setPlaceholderIndex(insertIndex);
-  //   // },
-  //   // onDrop: (dragState) => {
-  //   //   if (checkCollision(containerRef)) {
-  //   //     setContainerCollision(true);
-  //   //     if (dragState?.isDrop) {
-  //   //       setDraggableElements((old) => [...old, crypto.randomUUID()]);
-  //   //       setContainerCollision(false);
-  //   //     }
-  //   //   } else {
-  //   //     setContainerCollision(false);
-  //   //   }
-
-  //   //   const sourceId = dragState?.sourceId;
-  //   //   if (!sourceId) return;
-
-  //   //   if (placeholderIndex !== null) {
-  //   //     setDraggableElements((old) => {
-  //   //       const sourceIndex = old.indexOf(sourceId);
-  //   //       if (sourceIndex === -1) return old;
-  //   //       const adjustedIndex =
-  //   //         placeholderIndex > sourceIndex
-  //   //           ? placeholderIndex - 1
-  //   //           : placeholderIndex;
-  //   //       if (adjustedIndex === sourceIndex) return old;
-  //   //       const copy = [...old];
-  //   //       const [movedItem] = copy.splice(sourceIndex, 1);
-  //   //       copy.splice(adjustedIndex, 0, movedItem);
-  //   //       return copy;
-  //   //     });
-  //   //   }
-  //   //   setPlaceholderIndex(null);
-  //   //   setDraggingItem(null);
-  //   //   setDraggedElementHeight(undefined);
-  //   // },
-  // });
   useObservant([EventType.DROP, EventType.DRAG], {
     id,
     ref: containerRef,
@@ -119,7 +53,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
       if (placeholderIndex !== null) {
         setDraggableElements((old) => {
           const focusedElement = old.find((el) => el.id === sourceId);
-          const focusedElementIndex = old.findIndex((el) => el.id);
+          const focusedElementIndex = old.findIndex((el) => el.id === sourceId);
           if (!focusedElement) return old;
           const adjustedIndex =
             placeholderIndex > focusedElementIndex

@@ -41,8 +41,7 @@ const RelocatableElement = ({
   return (
     <DraggableElement
       id={id}
-      onMouseDown={(e, baseOnMouseDown) => {
-        baseOnMouseDown(e);
+      onMouseDown={() => {
         setShouldShowElement(false);
       }}
       onMove={(dropPosition, subscriber) => {

@@ -6,7 +6,7 @@ import useGhostDrag from "../hooks/useDrag";
 
 interface IDraggableElementProps {
   id: string;
-  onMouseDown?: (e: MouseEvent, base: (e: MouseEvent) => void) => void;
+  onMouseDown?: (e: MouseEvent) => void;
   GhostComponent: ReactNode;
   onDrop: (domRect: DOMRect, subscriber: Subscriber) => void;
   onMove?: (domRect: DOMRect, subscriber: Subscriber) => void;
@@ -16,7 +16,7 @@ interface IDraggableElementProps {
 const DraggableElement = ({
   id,
   children,
-  onMouseDown = (e, base) => base(e),
+  onMouseDown,
   GhostComponent,
   onDrop,
   onMove,
@@ -34,7 +34,10 @@ const DraggableElement = ({
     <>
       <Box
         ref={draggableElementRef}
-        onMouseDown={(e) => onMouseDown?.(e.nativeEvent, baseMouseDown)}
+        onMouseDown={(e) => {
+          baseMouseDown(e.nativeEvent);
+          onMouseDown?.(e.nativeEvent);
+        }}
         sx={sx}
       >
         {children}
