@@ -1,10 +1,10 @@
 import { Box, type SxProps, type Theme } from "@mui/material";
-import React, { useRef, useState, type ReactNode } from "react";
-import type { DragState } from "../DragAndDropContext";
+import React, { useRef, useState } from "react";
 import useObservant from "../hooks/useObservant";
 import RelocatableElement from "../elements/RelocatableElement";
 import { EventType } from "../types";
 import checkCollision from "../utils/checkCollision";
+import type { DragAndDropElement } from "./Container.types";
 
 function isDragAbove(
   draggingPosition: DOMRect,
@@ -26,7 +26,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   const itemRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
   const [draggableElements, setDraggableElements] = useState<
-    { id: string; render: () => ReactNode }[]
+    DragAndDropElement[]
   >([]);
   const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
   const [draggingItem, setDraggingItem] = useState<string | null>(null);
@@ -105,6 +105,12 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
     },
   });
 
+  const handleRemoveElement = (elementId: string) => {
+    setDraggableElements((old) =>
+      old.filter((element) => element.id !== elementId),
+    );
+  };
+
   const placeholderSxResolved: SxProps<Theme> = {
     height: draggedElementHeight ?? 40,
     mx: 2,
@@ -144,7 +150,15 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
               }}
             >
               <RelocatableElement id={element.id}>
-                {element.render()}
+                {element.render({
+                  moveDown: () => {},
+                  moveUp: () => {},
+                  onCreated: () => {},
+                  onRemoved: () => {},
+                  removeSelf: () => {
+                    handleRemoveElement(element.id);
+                  },
+                })}
               </RelocatableElement>
             </div>
           </React.Fragment>
