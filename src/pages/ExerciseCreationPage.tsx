@@ -79,16 +79,17 @@ const ExerciseCreationPage = () => {
                     <Stack direction={"row"} spacing={2}>
                       <Stack sx={{ minWidth: "15%" }} spacing={1}>
                         <SourceElement
-                          id="interval-training"
-                          render={() => {
-                            console.log("Render is being called");
-                            return <IntervalEarTraining.RelocatableElement />;
+                          render={({ removeSelf }) => {
+                            return (
+                              <IntervalEarTraining.RelocatableElement
+                                onRemove={removeSelf}
+                              />
+                            );
                           }}
                         >
                           <IntervalEarTraining />
                         </SourceElement>
                         <SourceElement
-                          id="pitch-comparison"
                           render={() => (
                             <Box>
                               <Typography>
@@ -102,7 +103,6 @@ const ExerciseCreationPage = () => {
                           </Box>
                         </SourceElement>
                         <SourceElement
-                          id="stack-detection"
                           render={() => (
                             <Box>
                               <Typography>

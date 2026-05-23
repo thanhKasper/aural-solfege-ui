@@ -38,7 +38,11 @@ IntervalEarTraining.SourceElement = () => {
   );
 };
 
-IntervalEarTraining.RelocatableElement = () => {
+IntervalEarTraining.RelocatableElement = ({
+  onRemove,
+}: {
+  onRemove: () => void;
+}) => {
   return (
     <Stack
       direction={"row"}
@@ -55,6 +59,7 @@ IntervalEarTraining.RelocatableElement = () => {
           variant="contained"
           onClick={(e) => {
             e.stopPropagation();
+            onRemove();
           }}
         >
           Remove
