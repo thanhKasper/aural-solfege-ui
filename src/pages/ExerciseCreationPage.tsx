@@ -75,57 +75,51 @@ const ExerciseCreationPage = () => {
               control={control}
               render={() => (
                 <InputLabel label="Training plan">
-                  <div style={{ border: "1px solid blue", padding: "32px" }}>
-                    <DragAndDropProvider>
-                      <Stack
-                        direction={"row"}
-                        spacing={2}
-                        sx={{ border: "1px solid black", padding: 2 }}
-                      >
-                        <Stack sx={{ minWidth: "15%" }} spacing={1}>
-                          <SourceElement
-                            id="interval-training"
-                            render={() => {
-                              console.log("Render is being called");
-                              return <IntervalEarTraining.RelocatableElement />;
-                            }}
-                          >
-                            <IntervalEarTraining />
-                          </SourceElement>
-                          <SourceElement
-                            id="pitch-comparison"
-                            render={() => (
-                              <Box>
-                                <Typography>
-                                  Pitch comparison {crypto.randomUUID()}
-                                </Typography>
-                              </Box>
-                            )}
-                          >
-                            <Box sx={{ border: "1px solid black", padding: 2 }}>
-                              <Typography>Pitch comparison</Typography>
+                  <DragAndDropProvider>
+                    <Stack direction={"row"} spacing={2}>
+                      <Stack sx={{ minWidth: "15%" }} spacing={1}>
+                        <SourceElement
+                          id="interval-training"
+                          render={() => {
+                            console.log("Render is being called");
+                            return <IntervalEarTraining.RelocatableElement />;
+                          }}
+                        >
+                          <IntervalEarTraining />
+                        </SourceElement>
+                        <SourceElement
+                          id="pitch-comparison"
+                          render={() => (
+                            <Box>
+                              <Typography>
+                                Pitch comparison {crypto.randomUUID()}
+                              </Typography>
                             </Box>
-                          </SourceElement>
-                          <SourceElement
-                            id="stack-detection"
-                            render={() => (
-                              <Box>
-                                <Typography>
-                                  Stack detection {crypto.randomUUID()}
-                                </Typography>
-                              </Box>
-                            )}
-                          >
-                            <Box sx={{ border: "1px solid black", padding: 2 }}>
-                              <Typography>Stack detection</Typography>
+                          )}
+                        >
+                          <Box sx={{ border: "1px solid black", padding: 2 }}>
+                            <Typography>Pitch comparison</Typography>
+                          </Box>
+                        </SourceElement>
+                        <SourceElement
+                          id="stack-detection"
+                          render={() => (
+                            <Box>
+                              <Typography>
+                                Stack detection {crypto.randomUUID()}
+                              </Typography>
                             </Box>
-                          </SourceElement>
-                        </Stack>
-
-                        <DropContainer id="dropContainer1" />
+                          )}
+                        >
+                          <Box sx={{ border: "1px solid black", padding: 2 }}>
+                            <Typography>Stack detection</Typography>
+                          </Box>
+                        </SourceElement>
                       </Stack>
-                    </DragAndDropProvider>
-                  </div>
+
+                      <DropContainer id="dropContainer1" />
+                    </Stack>
+                  </DragAndDropProvider>
                 </InputLabel>
               )}
             />
