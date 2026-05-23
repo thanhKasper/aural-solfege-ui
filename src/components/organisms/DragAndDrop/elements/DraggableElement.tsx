@@ -32,6 +32,10 @@ const DraggableElement = ({
       <Box
         ref={draggableElementRef}
         onMouseDown={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("button, a")) {
+            return;
+          }
           baseMouseDown(e.nativeEvent);
           onMouseDown?.(e.nativeEvent);
         }}
