@@ -1,5 +1,6 @@
-import { createContext, type ReactNode, type RefObject } from "react";
+import { createContext, type RefObject } from "react";
 import type { EventType } from "./types";
+import type { DragAndDropElement } from "./containers/Container.types";
 
 export interface DragState {
   x: number;
@@ -17,7 +18,7 @@ export interface Subscriber {
   ref: RefObject<HTMLElement | null>;
   createRelocatableElement: (
     dropPosition: DOMRect,
-    render: () => ReactNode,
+    render: DragAndDropElement["render"],
   ) => void;
   updateRelocatableElementPosition: (
     elementId: string,
