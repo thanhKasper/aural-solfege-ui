@@ -69,7 +69,7 @@ const ExerciseCreationPage = () => {
               />
             </Grid>
           </Grid>
-          <Grid container size={12}>
+          <Grid size={12}>
             <Controller
               name="trainingPlan"
               control={control}

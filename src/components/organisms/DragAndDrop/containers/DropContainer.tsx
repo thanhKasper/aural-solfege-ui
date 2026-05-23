@@ -49,7 +49,7 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
         }
       }
     },
-    updateRelocatableElementPosition: (sourceId, dropPosition) => {
+    updateRelocatableElementPosition: (sourceId) => {
       if (placeholderIndex !== null) {
         setDraggableElements((old) => {
           const focusedElement = old.find((el) => el.id === sourceId);
