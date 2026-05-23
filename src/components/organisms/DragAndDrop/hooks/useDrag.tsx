@@ -6,13 +6,13 @@ import useNotify from "./useNotify";
 
 interface GhostDragProps {
   GhostComponent: ReactNode;
-  commandOnMouseDown: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
+  commandOnMouseUp: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
   commandOnMouseMove?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
 }
 
 export default function useGhostDrag({
   GhostComponent,
-  commandOnMouseDown,
+  commandOnMouseUp,
   commandOnMouseMove,
 }: GhostDragProps) {
   const { notify } = useNotify();
@@ -69,21 +69,21 @@ export default function useGhostDrag({
     if (ghostRef.current) {
       const boundRect = ghostRef.current.getBoundingClientRect();
       notify(EventType.DROP, (subscriber) =>
-        commandOnMouseDown(boundRect, subscriber),
+        commandOnMouseUp(boundRect, subscriber),
       );
     }
-  }, [commandOnMouseDown, notify, onMove]);
+  }, [commandOnMouseUp, notify, onMove]);
 
   const onMouseDown = useCallback(
-    (e: MouseEvent) => {
-      console.log("on mouse down");
+    (e: MouseEvent, customMouseDown?: (e: MouseEvent) => void) => {
       e.preventDefault();
       isMouseHold.current = true;
       timeoutKey.current = setTimeout(() => {
         setIsDragging(true);
         allowedToDrag.current = true;
         setDragStartPos({ x: e.clientX, y: e.clientY });
-      }, 500);
+        customMouseDown?.(e);
+      }, 200);
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onDrop);
     },

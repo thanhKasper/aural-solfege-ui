@@ -64,10 +64,7 @@ IntervalEarTraining.RelocatableElement = ({
         >
           Remove
         </Button>
-        <Button
-          variant="contained"
-          onMouseEnter={() => console.log("there is a mouse above me")}
-        >
+        <Button variant="contained" onMouseEnter={() => {}}>
           Edit
         </Button>
         <Button variant="contained">Move up</Button>

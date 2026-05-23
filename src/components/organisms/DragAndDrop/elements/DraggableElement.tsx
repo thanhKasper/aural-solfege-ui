@@ -23,7 +23,7 @@ const DraggableElement = ({
   const draggableElementRef = useRef<HTMLDivElement>(null);
   const { ghostPortal, onMouseDown: baseMouseDown } = useGhostDrag({
     GhostComponent,
-    commandOnMouseDown: onDrop,
+    commandOnMouseUp: onDrop,
     commandOnMouseMove: onMove,
   });
 
@@ -36,10 +36,9 @@ const DraggableElement = ({
           if (target.closest("button, a")) {
             return;
           }
-          baseMouseDown(e.nativeEvent);
-          onMouseDown?.(e.nativeEvent);
+          baseMouseDown(e.nativeEvent, onMouseDown);
         }}
-        sx={sx}
+        sx={{ cursor: "grab", ...sx }}
       >
         {children}
       </Box>
