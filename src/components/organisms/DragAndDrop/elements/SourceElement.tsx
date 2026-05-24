@@ -1,16 +1,25 @@
 import { type PropsWithChildren } from "react";
-import DraggableElement from "./DraggableElement";
 import type { DragAndDropElement } from "../containers/Container.types";
+import DraggableElement from "./DraggableElement";
+
+interface ISourceElementProps {
+  onRelocatableElementCreated?: () => void;
+  render: DragAndDropElement["render"];
+}
 
 const SourceElement = ({
   children,
-  ...callbacks
-}: PropsWithChildren<Omit<DragAndDropElement, "id">>) => {
+  onRelocatableElementCreated,
+  render,
+}: PropsWithChildren<ISourceElementProps>) => {
   return (
     <DraggableElement
       GhostComponent={children}
       onDrop={(domRect, subscriber) => {
-        subscriber.createRelocatableElement(domRect, callbacks);
+        subscriber.createRelocatableElement(domRect, {
+          onCreated: onRelocatableElementCreated,
+          render,
+        });
       }}
     >
       {children}

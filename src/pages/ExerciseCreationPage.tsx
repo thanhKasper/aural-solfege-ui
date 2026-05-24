@@ -79,7 +79,7 @@ const ExerciseCreationPage = () => {
                     <Stack direction={"row"} spacing={2}>
                       <Stack sx={{ minWidth: "15%" }} spacing={1}>
                         <SourceElement
-                          onCreated={() => {
+                          onRelocatableElementCreated={() => {
                             console.log("I am created");
                           }}
                           render={({ removeSelf }) => {
