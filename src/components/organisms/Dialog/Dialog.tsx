@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { getModalSelector } from "@/store/selectors";
 import { closeModal } from "@/store/slices";
 import {
+  Button,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -11,10 +12,15 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 const Dialog = () => {
-  const { content, isOpen, title } = useAppSelector(getModalSelector());
+  const { content, isOpen, title, buttons } =
+    useAppSelector(getModalSelector());
   const dispatch = useAppDispatch();
   return (
-    <MuiDialog maxWidth='lg' open={isOpen} onClose={() => dispatch(closeModal())}>
+    <MuiDialog
+      maxWidth="lg"
+      open={isOpen}
+      onClose={() => dispatch(closeModal())}
+    >
       <IconButton
         aria-label="close"
         onClick={() => dispatch(closeModal())}
@@ -29,7 +35,11 @@ const Dialog = () => {
       </IconButton>
       <DialogTitle sx={{ mr: 2 }}>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
-      <DialogActions></DialogActions>
+      <DialogActions>
+        {buttons.map((button) => (
+          <Button onClick={button.onClick}>{button.label}</Button>
+        ))}
+      </DialogActions>
     </MuiDialog>
   );
 };
