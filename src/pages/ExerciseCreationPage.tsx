@@ -4,6 +4,7 @@ import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionIn
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
 import DropContainer from "@/components/organisms/DragAndDrop/containers/DropContainer";
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
+import useDialog from "@/services/dialog/useDialog";
 import {
   Box,
   Container,
@@ -16,6 +17,7 @@ import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
   const { control } = useForm();
+  const { open } = useDialog();
   return (
     <Container>
       <Typography variant="h3">Create new exercise</Typography>
@@ -80,7 +82,10 @@ const ExerciseCreationPage = () => {
                       <Stack sx={{ minWidth: "15%" }} spacing={1}>
                         <SourceElement
                           onRelocatableElementCreated={() => {
-                            console.log("I am created");
+                            const close = open({
+                              title: "Some title",
+                              content: <div>Hello World</div>,
+                            });
                           }}
                           render={({ removeSelf }) => {
                             return (
