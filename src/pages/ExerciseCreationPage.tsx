@@ -1,23 +1,11 @@
-import { IntervalEarTraining } from "@/components/ExerciseFormatsDragAndDrop/IntervalEarTraining";
+import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
-import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import DropContainer from "@/components/organisms/DragAndDrop/containers/DropContainer";
-import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
-import useDialog from "@/services/dialog/useDialog";
-import {
-  Box,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
   const { control } = useForm();
-  const { open } = useDialog();
   return (
     <Container>
       <Typography variant="h3">Create new exercise</Typography>
@@ -77,45 +65,7 @@ const ExerciseCreationPage = () => {
               control={control}
               render={() => (
                 <InputLabel label="Training plan">
-                  <DragAndDropProvider>
-                    <Stack direction={"row"} spacing={2}>
-                      <Stack sx={{ minWidth: "15%" }} spacing={1}>
-                        <SourceElement
-                          onRelocatableElementCreated={(handleCancellation) => {
-                            const close = open({
-                              title: "Interval exercise training configuration",
-                              content: <IntervalEarTraining.Configuration />,
-                              buttons: [
-                                {
-                                  label: "Cancel",
-                                  onClick: () => {
-                                    handleCancellation();
-                                    close();
-                                  },
-                                },
-                                {
-                                  label: "Submit",
-                                  onClick: () => {
-                                    console.log("Save the data");
-                                  },
-                                },
-                              ],
-                            });
-                          }}
-                          render={({ removeSelf }) => {
-                            return (
-                              <IntervalEarTraining.RelocatableElement
-                                onRemove={removeSelf}
-                              />
-                            );
-                          }}
-                        >
-                          <IntervalEarTraining />
-                        </SourceElement>
-                      </Stack>
-                      <DropContainer id="dropContainer1" />
-                    </Stack>
-                  </DragAndDropProvider>
+                  <ExerciseFormatsDragAndDrop />
                 </InputLabel>
               )}
             />
