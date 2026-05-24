@@ -81,10 +81,25 @@ const ExerciseCreationPage = () => {
                     <Stack direction={"row"} spacing={2}>
                       <Stack sx={{ minWidth: "15%" }} spacing={1}>
                         <SourceElement
-                          onRelocatableElementCreated={() => {
+                          onRelocatableElementCreated={(handleCancellation) => {
                             const close = open({
-                              title: "Some title",
-                              content: <div>Hello World</div>,
+                              title: "Interval exercise training configuration",
+                              content: <IntervalEarTraining.Configuration />,
+                              buttons: [
+                                {
+                                  label: "Cancel",
+                                  onClick: () => {
+                                    handleCancellation();
+                                    close();
+                                  },
+                                },
+                                {
+                                  label: "Submit",
+                                  onClick: () => {
+                                    console.log("Save the data");
+                                  },
+                                },
+                              ],
                             });
                           }}
                           render={({ removeSelf }) => {
@@ -97,34 +112,7 @@ const ExerciseCreationPage = () => {
                         >
                           <IntervalEarTraining />
                         </SourceElement>
-                        <SourceElement
-                          render={() => (
-                            <Box>
-                              <Typography>
-                                Pitch comparison {crypto.randomUUID()}
-                              </Typography>
-                            </Box>
-                          )}
-                        >
-                          <Box sx={{ border: "1px solid black", padding: 2 }}>
-                            <Typography>Pitch comparison</Typography>
-                          </Box>
-                        </SourceElement>
-                        <SourceElement
-                          render={() => (
-                            <Box>
-                              <Typography>
-                                Stack detection {crypto.randomUUID()}
-                              </Typography>
-                            </Box>
-                          )}
-                        >
-                          <Box sx={{ border: "1px solid black", padding: 2 }}>
-                            <Typography>Stack detection</Typography>
-                          </Box>
-                        </SourceElement>
                       </Stack>
-
                       <DropContainer id="dropContainer1" />
                     </Stack>
                   </DragAndDropProvider>
