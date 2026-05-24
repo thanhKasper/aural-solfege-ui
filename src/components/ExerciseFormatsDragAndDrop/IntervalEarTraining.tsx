@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import {
   Box,
   Button,
@@ -7,10 +7,17 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
 import useComponentFirstMount from "@/hooks/useComponentFirstMount";
 import useDialog from "@/services/dialog/useDialog";
+
+interface ConfigurationFormValues {
+  interval: string;
+  texture: string;
+}
+
+type ConfigurationRef = UseFormReturn<ConfigurationFormValues>;
 
 export const IntervalEarTraining = () => {
   return (
@@ -52,12 +59,13 @@ const SourceElement = () => {
 
 const RelocatableElement = ({ onRemove }: { onRemove: () => void }) => {
   const { open } = useDialog();
+  const configurationRef = useRef<ConfigurationRef | null>(null);
 
   useComponentFirstMount(
     useCallback(() => {
       const close = open({
         title: "Interval exercise training configuration",
-        content: <Configuration />,
+        content: <Configuration formRef={configurationRef} />,
         buttons: [
           {
             label: "Cancel",
@@ -69,7 +77,8 @@ const RelocatableElement = ({ onRemove }: { onRemove: () => void }) => {
           {
             label: "Submit",
             onClick: () => {
-              console.log("Save the data");
+              console.log(configurationRef.current?.getValues());
+              close();
             },
           },
         ],
@@ -130,13 +139,21 @@ const TEXTURES = [
   { value: "descending", label: "Descending" },
 ];
 
-const Configuration = () => {
-  const { control } = useForm();
+const Configuration = ({
+  formRef,
+}: {
+  formRef: RefObject<ConfigurationRef | null>;
+}) => {
+  const form = useForm<ConfigurationFormValues>();
+
+  useEffect(() => {
+    formRef.current = form;
+  }, [formRef, form]);
 
   return (
     <Stack spacing={3} sx={{ py: 2 }}>
       <Controller
-        control={control}
+        control={form.control}
         name="interval"
         render={({ field }) => (
           <InputLabel label="Interval">
@@ -151,7 +168,7 @@ const Configuration = () => {
         )}
       />
       <Controller
-        control={control}
+        control={form.control}
         name="texture"
         render={({ field }) => (
           <InputLabel label="Texture">
