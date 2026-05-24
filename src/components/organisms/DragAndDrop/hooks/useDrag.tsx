@@ -83,7 +83,7 @@ export default function useGhostDrag({
         allowedToDrag.current = true;
         setDragStartPos({ x: e.clientX, y: e.clientY });
         customMouseDown?.(e);
-      }, 200);
+      }, 100);
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onDrop);
     },
