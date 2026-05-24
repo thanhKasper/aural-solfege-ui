@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 
 export interface DragAndDropElement {
   id: string;
+  onCreated?: () => void;
+  onRemoved?: () => void;
   render: (args: {
-    onCreated: (callback: () => void) => void;
-    onRemoved: (callback: () => void) => void;
     removeSelf: () => void;
     moveUp: () => void;
     moveDown: () => void;

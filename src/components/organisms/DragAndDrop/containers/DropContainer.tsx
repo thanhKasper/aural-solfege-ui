@@ -37,13 +37,13 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
   useObservant([EventType.DROP, EventType.DRAG], {
     id,
     ref: containerRef,
-    createRelocatableElement: (dropPosition, render) => {
+    createRelocatableElement: (dropPosition, callbacks) => {
       if (containerRef.current) {
         const containerDomRect = containerRef.current.getBoundingClientRect();
         if (checkCollision(dropPosition, containerDomRect)) {
           setDraggableElements((old) => [
             ...old,
-            { id: crypto.randomUUID(), render },
+            { id: crypto.randomUUID(), ...callbacks },
           ]);
           setContainerCollision(false);
         }
@@ -149,12 +149,10 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
                 transition: "opacity 0.15s",
               }}
             >
-              <RelocatableElement id={element.id}>
+              <RelocatableElement id={element.id} onCreated={element.onCreated}>
                 {element.render({
                   moveDown: () => {},
                   moveUp: () => {},
-                  onCreated: () => {},
-                  onRemoved: () => {},
                   removeSelf: () => {
                     handleRemoveElement(element.id);
                   },

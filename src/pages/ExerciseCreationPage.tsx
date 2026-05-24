@@ -79,6 +79,9 @@ const ExerciseCreationPage = () => {
                     <Stack direction={"row"} spacing={2}>
                       <Stack sx={{ minWidth: "15%" }} spacing={1}>
                         <SourceElement
+                          onCreated={() => {
+                            console.log("I am created");
+                          }}
                           render={({ removeSelf }) => {
                             return (
                               <IntervalEarTraining.RelocatableElement

@@ -18,7 +18,7 @@ export interface Subscriber {
   ref: RefObject<HTMLElement | null>;
   createRelocatableElement: (
     dropPosition: DOMRect,
-    render: DragAndDropElement["render"],
+    callbacks: Omit<DragAndDropElement, "id">,
   ) => void;
   updateRelocatableElementPosition: (
     elementId: string,

@@ -1,18 +1,28 @@
-import { useEffect, useState, type PropsWithChildren } from "react";
+import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
 
 interface IRelocatableElement {
   id: string;
   sx?: SxProps<Theme>;
+  onCreated?: () => void;
 }
 
 const RelocatableElement = ({
   id,
   sx,
+  onCreated,
   children,
 }: PropsWithChildren<IRelocatableElement>) => {
   const [shouldShowElement, setShouldShowElement] = useState<boolean>(true);
+  const firstRenderRef = useRef(false);
+
+  useEffect(() => {
+    if (!firstRenderRef.current) {
+      firstRenderRef.current = true;
+      onCreated?.();
+    }
+  }, [onCreated]);
 
   return (
     <DraggableElement
