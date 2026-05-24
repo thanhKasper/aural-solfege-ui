@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
   Box,
   Button,
@@ -8,6 +9,8 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
+import useComponentFirstMount from "@/hooks/useComponentFirstMount";
+import useDialog from "@/services/dialog/useDialog";
 
 export const IntervalEarTraining = () => {
   return (
@@ -48,6 +51,32 @@ const SourceElement = () => {
 };
 
 const RelocatableElement = ({ onRemove }: { onRemove: () => void }) => {
+  const { open } = useDialog();
+
+  useComponentFirstMount(
+    useCallback(() => {
+      const close = open({
+        title: "Interval exercise training configuration",
+        content: <Configuration />,
+        buttons: [
+          {
+            label: "Cancel",
+            onClick: () => {
+              onRemove();
+              close();
+            },
+          },
+          {
+            label: "Submit",
+            onClick: () => {
+              console.log("Save the data");
+            },
+          },
+        ],
+      });
+    }, [open, onRemove]),
+  );
+
   return (
     <Stack
       direction={"row"}
