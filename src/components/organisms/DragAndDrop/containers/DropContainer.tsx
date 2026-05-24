@@ -149,7 +149,11 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
                 transition: "opacity 0.15s",
               }}
             >
-              <RelocatableElement id={element.id} onCreated={element.onCreated}>
+              <RelocatableElement
+                id={element.id}
+                onCreated={element.onCreated}
+                handleCancellation={() => handleRemoveElement(element.id)}
+              >
                 {element.render({
                   moveDown: () => {},
                   moveUp: () => {},

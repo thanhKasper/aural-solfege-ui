@@ -3,7 +3,7 @@ import type { DragAndDropElement } from "../containers/Container.types";
 import DraggableElement from "./DraggableElement";
 
 interface ISourceElementProps {
-  onRelocatableElementCreated?: () => void;
+  onRelocatableElementCreated?: DragAndDropElement["onCreated"];
   render: DragAndDropElement["render"];
 }
 
