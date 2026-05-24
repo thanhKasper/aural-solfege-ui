@@ -6,6 +6,5 @@ export default function useNotify() {
 
   return {
     notify: dndCtx.notify,
-    isColliding: dndCtx.checkCollision,
   };
 }
