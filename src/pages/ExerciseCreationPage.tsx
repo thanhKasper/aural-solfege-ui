@@ -1,11 +1,16 @@
 import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
-import { Container, Grid, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
+  const handleSave = () => {
+    handleSubmit((exercise) => {
+      console.log(exercise);
+    })();
+  };
   return (
     <Container>
       <Typography variant="h3">Create new exercise</Typography>
@@ -16,9 +21,13 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="title"
-                render={() => (
+                render={({ field: { value, onChange } }) => (
                   <InputLabel label="Title">
-                    <TextField placeholder="Enter title" />
+                    <TextField
+                      placeholder="Enter title"
+                      value={value}
+                      onInput={onChange}
+                    />
                   </InputLabel>
                 )}
               />
@@ -27,9 +36,12 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="repetition"
-                render={() => (
+                render={({ field: { value, onChange } }) => (
                   <InputLabel label="Repeat">
-                    <ExerciseRepetitionInput />
+                    <ExerciseRepetitionInput
+                      value={value}
+                      onTextChange={onChange}
+                    />
                   </InputLabel>
                 )}
               />
@@ -40,9 +52,15 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="description"
-                render={() => (
+                render={({ field: { value, onChange } }) => (
                   <InputLabel label="Description">
-                    <TextField multiline minRows={5} maxRows={10} />
+                    <TextField
+                      multiline
+                      minRows={5}
+                      maxRows={10}
+                      value={value}
+                      onInput={onChange}
+                    />
                   </InputLabel>
                 )}
               />
@@ -51,9 +69,9 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="rest"
-                render={() => (
+                render={({ field: { value, onChange } }) => (
                   <InputLabel label="Rest between repetition">
-                    <TextField />
+                    <TextField value={value} onInput={onChange} />
                   </InputLabel>
                 )}
               />
@@ -63,12 +81,18 @@ const ExerciseCreationPage = () => {
             <Controller
               name="trainingPlan"
               control={control}
-              render={() => (
+              render={({ field: { value, onChange } }) => (
                 <InputLabel label="Training plan">
-                  <ExerciseFormatsDragAndDrop />
+                  <ExerciseFormatsDragAndDrop
+                    value={value}
+                    onChange={onChange}
+                  />
                 </InputLabel>
               )}
             />
+          </Grid>
+          <Grid size={12}>
+            <Button onClick={handleSave}>Save</Button>
           </Grid>
         </Grid>
       </Form>
