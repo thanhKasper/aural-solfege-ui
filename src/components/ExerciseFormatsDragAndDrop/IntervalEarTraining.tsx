@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, type RefObject } from "react";
 import {
   Box,
   Button,
+  Grid,
   MenuItem,
   Select,
   Stack,
@@ -11,13 +12,7 @@ import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
 import useComponentFirstMount from "@/hooks/useComponentFirstMount";
 import useDialog from "@/services/dialog/useDialog";
-
-interface ConfigurationFormValues {
-  interval: string;
-  texture: string;
-}
-
-type ConfigurationRef = UseFormReturn<ConfigurationFormValues>;
+import type { TBaseExerciseFormat } from "./ExerciseFormat.types";
 
 export const IntervalEarTraining = () => {
   return (
@@ -57,34 +52,54 @@ const SourceElement = () => {
   );
 };
 
-const RelocatableElement = ({ onRemove }: { onRemove: () => void }) => {
+export type TIntervalTrainingExercise = TBaseExerciseFormat<{
+  interval: string;
+  texture: string;
+}>;
+
+type ConfigurationRef = UseFormReturn<TIntervalTrainingExercise>;
+
+interface IRelocatableElement {
+  onRemove: (data?: TIntervalTrainingExercise) => void;
+  value?: TIntervalTrainingExercise;
+  onChange?: (data: TIntervalTrainingExercise) => void;
+}
+
+const RelocatableElement = ({
+  onRemove,
+  onChange,
+  value,
+}: IRelocatableElement) => {
   const { open } = useDialog();
   const configurationRef = useRef<ConfigurationRef | null>(null);
 
-  useComponentFirstMount(
-    useCallback(() => {
-      const close = open({
-        title: "Interval exercise training configuration",
-        content: <Configuration formRef={configurationRef} />,
-        buttons: [
-          {
-            label: "Cancel",
-            onClick: () => {
-              onRemove();
-              close();
-            },
+  useComponentFirstMount(() => {
+    const close = open({
+      title: "Interval exercise training configuration",
+      content: (
+        <Configuration formRef={configurationRef} defaultValue={value} />
+      ),
+      buttons: [
+        {
+          label: "Cancel",
+          onClick: () => {
+            onRemove(configurationRef.current?.getValues());
+            close();
           },
-          {
-            label: "Submit",
-            onClick: () => {
-              console.log(configurationRef.current?.getValues());
+        },
+        {
+          label: "Submit",
+          onClick: () =>
+            configurationRef.current?.handleSubmit((data) => {
+              const id = crypto.randomUUID();
+              configurationRef.current?.setValue("id", id);
+              onChange?.({ ...data, id });
               close();
-            },
-          },
-        ],
-      });
-    }, [open, onRemove]),
-  );
+            })(),
+        },
+      ],
+    });
+  });
 
   return (
     <Stack
@@ -102,7 +117,7 @@ const RelocatableElement = ({ onRemove }: { onRemove: () => void }) => {
           variant="contained"
           onClick={(e) => {
             e.stopPropagation();
-            onRemove();
+            onRemove(configurationRef.current?.getValues());
           }}
         >
           Remove
@@ -141,48 +156,56 @@ const TEXTURES = [
 
 const Configuration = ({
   formRef,
+  defaultValue,
 }: {
   formRef: RefObject<ConfigurationRef | null>;
+  defaultValue?: TIntervalTrainingExercise;
 }) => {
-  const form = useForm<ConfigurationFormValues>();
+  const form = useForm<TIntervalTrainingExercise>({
+    defaultValues: defaultValue,
+  });
 
   useEffect(() => {
     formRef.current = form;
   }, [formRef, form]);
 
   return (
-    <Stack spacing={3} sx={{ py: 2 }}>
-      <Controller
-        control={form.control}
-        name="interval"
-        render={({ field }) => (
-          <InputLabel label="Interval">
-            <Select {...field} fullWidth>
-              {INTERVALS.map((i) => (
-                <MenuItem key={i.value} value={i.value}>
-                  {i.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </InputLabel>
-        )}
-      />
-      <Controller
-        control={form.control}
-        name="texture"
-        render={({ field }) => (
-          <InputLabel label="Texture">
-            <Select {...field} fullWidth>
-              {TEXTURES.map((t) => (
-                <MenuItem key={t.value} value={t.value}>
-                  {t.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </InputLabel>
-        )}
-      />
-    </Stack>
+    <Grid container spacing={2}>
+      <Grid size={12}>
+        <Controller
+          control={form.control}
+          name="interval"
+          render={({ field }) => (
+            <InputLabel label="Interval">
+              <Select {...field} fullWidth size="small">
+                {INTERVALS.map((i) => (
+                  <MenuItem key={i.value} value={i.value}>
+                    {i.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </InputLabel>
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={form.control}
+          name="texture"
+          render={({ field }) => (
+            <InputLabel label="Texture">
+              <Select {...field} fullWidth size="small">
+                {TEXTURES.map((t) => (
+                  <MenuItem key={t.value} value={t.value}>
+                    {t.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </InputLabel>
+          )}
+        />
+      </Grid>
+    </Grid>
   );
 };
 
