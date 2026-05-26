@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import {
   Box,
   Button,
@@ -63,15 +68,20 @@ interface IRelocatableElement {
   onRemove: (data?: TIntervalTrainingExercise) => void;
   value?: TIntervalTrainingExercise;
   onChange?: (data: TIntervalTrainingExercise) => void;
+  onCreated?: (data: TIntervalTrainingExercise) => void;
 }
 
 const RelocatableElement = ({
   onRemove,
   onChange,
+  onCreated,
   value,
 }: IRelocatableElement) => {
   const { open } = useDialog();
   const configurationRef = useRef<ConfigurationRef | null>(null);
+  const [currentValue, setCurrentValue] = useState<
+    TIntervalTrainingExercise | undefined
+  >(undefined);
 
   useComponentFirstMount(() => {
     const close = open({
@@ -91,9 +101,8 @@ const RelocatableElement = ({
           label: "Submit",
           onClick: () =>
             configurationRef.current?.handleSubmit((data) => {
-              const id = crypto.randomUUID();
-              configurationRef.current?.setValue("id", id);
-              onChange?.({ ...data, id });
+              onCreated?.(data);
+              setCurrentValue(data);
               close();
             })(),
         },
@@ -107,10 +116,10 @@ const RelocatableElement = ({
       sx={{ backgroundColor: (theme) => theme.palette.secondary.main }}
     >
       <Box>
-        <Typography>
-          Interval Ear Training Exercise {crypto.randomUUID()}
-        </Typography>
-        <Typography>P5 - M6 - m7</Typography>
+        <Typography>Interval Ear Training Exercise</Typography>
+        <Typography>{currentValue?.interval}</Typography>
+        <Typography>{currentValue?.texture}</Typography>
+        <Typography>{currentValue?.position}</Typography>
       </Box>
       <Box>
         <Button

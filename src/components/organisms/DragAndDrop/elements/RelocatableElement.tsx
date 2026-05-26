@@ -17,7 +17,6 @@ const RelocatableElement = ({
   onCreated,
   children,
 }: PropsWithChildren<IRelocatableElement>) => {
-  const [shouldShowElement, setShouldShowElement] = useState<boolean>(true);
   const firstRenderRef = useRef(false);
 
   useEffect(() => {
@@ -29,20 +28,16 @@ const RelocatableElement = ({
 
   return (
     <DraggableElement
-      onMouseDown={() => {
-        setShouldShowElement(false);
-      }}
       onMove={(dropPosition, subscriber) => {
         subscriber.indicateDropPosition(id, dropPosition);
       }}
       GhostComponent={children}
       onDrop={(dropPosition, subscriber) => {
         subscriber.updateRelocatableElementPosition(id, dropPosition);
-        setShouldShowElement(true);
       }}
       sx={sx}
     >
-      {shouldShowElement && children}
+      {children}
     </DraggableElement>
   );
 };

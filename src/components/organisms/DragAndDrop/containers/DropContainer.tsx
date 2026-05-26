@@ -19,9 +19,14 @@ function isDragAbove(
 interface DropContainerProps {
   id: string;
   placeholderSx?: SxProps<Theme>;
+  onElementPositionChange?: (newPosition: number, elementId: string) => void;
 }
 
-const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
+const DropContainer = ({
+  id,
+  placeholderSx,
+  onElementPositionChange,
+}: DropContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
@@ -51,11 +56,13 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
     },
     updateRelocatableElementPosition: (sourceId) => {
       if (placeholderIndex !== null) {
+        let adjustedIndex: number | null = null;
+        let focusedElement: DragAndDropElement | undefined;
         setDraggableElements((old) => {
-          const focusedElement = old.find((el) => el.id === sourceId);
+          focusedElement = old.find((el) => el.id === sourceId);
           const focusedElementIndex = old.findIndex((el) => el.id === sourceId);
           if (!focusedElement) return old;
-          const adjustedIndex =
+          adjustedIndex =
             placeholderIndex > focusedElementIndex
               ? placeholderIndex - 1
               : placeholderIndex;
@@ -65,6 +72,9 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
           copy.splice(adjustedIndex, 0, movedItem);
           return copy;
         });
+        if (adjustedIndex && focusedElement) {
+          onElementPositionChange?.(adjustedIndex, focusedElement.id);
+        }
       }
       setPlaceholderIndex(null);
       setDraggingItem(null);
@@ -155,6 +165,8 @@ const DropContainer = ({ id, placeholderSx }: DropContainerProps) => {
                 handleCancellation={() => handleRemoveElement(element.id)}
               >
                 {element.render({
+                  relocatableElementId: element.id,
+                  currentPosition: index,
                   moveDown: () => {},
                   moveUp: () => {},
                   removeSelf: () => {

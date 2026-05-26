@@ -43,10 +43,9 @@ const ExerciseFormatsDragAndDrop = ({
       <Stack direction="row" spacing={2}>
         <Stack sx={{ minWidth: "15%" }} spacing={1}>
           <SourceElement
-            render={({ removeSelf }) => (
+            render={({ removeSelf, relocatableElementId, currentPosition }) => (
               <IntervalEarTraining.RelocatableElement
                 onRemove={(data) => {
-                  console.log(data);
                   const newArr = exerciseFormatsRef.current.filter(
                     (exerciseFormat) => exerciseFormat.id !== data?.id,
                   );
@@ -55,13 +54,31 @@ const ExerciseFormatsDragAndDrop = ({
                   removeSelf();
                 }}
                 onChange={handleElementChange}
+                onCreated={(data) =>
+                  handleElementChange({
+                    ...data,
+                    id: relocatableElementId,
+                    position: currentPosition,
+                  })
+                }
               />
             )}
           >
             <IntervalEarTraining />
           </SourceElement>
         </Stack>
-        <DropContainer id="dropContainer1" />
+        <DropContainer
+          id="dropContainer1"
+          onElementPositionChange={(newPosition, elementId) => {
+            onChange?.(
+              exerciseFormatsRef.current.map((exerciseFormat) =>
+                exerciseFormat.id === elementId
+                  ? { ...exerciseFormat, position: newPosition }
+                  : { ...exerciseFormat },
+              ),
+            );
+          }}
+        />
       </Stack>
     </DragAndDropProvider>
   );

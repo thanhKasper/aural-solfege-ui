@@ -5,6 +5,8 @@ export interface DragAndDropElement {
   onCreated?: (cancelCreation: () => void) => void;
   onRemoved?: (cancelRemoval: () => void) => void;
   render: (args: {
+    relocatableElementId: string;
+    currentPosition: number;
     removeSelf: () => void;
     moveUp: () => void;
     moveDown: () => void;
