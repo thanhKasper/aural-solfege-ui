@@ -31,7 +31,6 @@ const RelocatableElement = ({
       onMove={(dropPosition, subscriber) => {
         subscriber.indicateDropPosition(id, dropPosition);
       }}
-      GhostComponent={children}
       onDrop={(dropPosition, subscriber) => {
         subscriber.updateRelocatableElementPosition(id, dropPosition);
       }}

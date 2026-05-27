@@ -1,21 +1,20 @@
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { useCallback, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Subscriber } from "../DragAndDropContext";
 import { EventType } from "../types";
 import useNotify from "./useNotify";
 
 interface GhostDragProps {
-  GhostComponent: ReactNode;
   commandOnMouseUp: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
   commandOnMouseMove?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
 }
 
 export default function useGhostDrag({
-  GhostComponent,
   commandOnMouseUp,
   commandOnMouseMove,
 }: GhostDragProps) {
   const { notify } = useNotify();
+  const [ghostHTML, setGhostHTML] = useState<string>("");
   const ghostRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const isMouseHold = useRef<boolean>(false);
@@ -75,7 +74,11 @@ export default function useGhostDrag({
   }, [commandOnMouseUp, notify, onMove]);
 
   const onMouseDown = useCallback(
-    (e: MouseEvent, customMouseDown?: (e: MouseEvent) => void) => {
+    (
+      e: MouseEvent,
+      ghostHTMLView: string,
+      customMouseDown?: (e: MouseEvent) => void,
+    ) => {
       e.preventDefault();
       isMouseHold.current = true;
       timeoutKey.current = setTimeout(() => {
@@ -83,6 +86,7 @@ export default function useGhostDrag({
         allowedToDrag.current = true;
         setDragStartPos({ x: e.clientX, y: e.clientY });
         customMouseDown?.(e);
+        setGhostHTML(ghostHTMLView);
       }, 100);
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onDrop);
@@ -102,9 +106,8 @@ export default function useGhostDrag({
             zIndex: 9999,
             transform: "translate(-50%, -50%)",
           }}
-        >
-          {GhostComponent}
-        </div>,
+          dangerouslySetInnerHTML={{ __html: ghostHTML }}
+        />,
         document.body,
       )
     : null;

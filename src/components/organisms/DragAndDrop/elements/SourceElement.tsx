@@ -14,7 +14,6 @@ const SourceElement = ({
 }: PropsWithChildren<ISourceElementProps>) => {
   return (
     <DraggableElement
-      GhostComponent={children}
       onDrop={(domRect, subscriber) => {
         subscriber.createRelocatableElement(domRect, {
           onCreated: onRelocatableElementCreated,
