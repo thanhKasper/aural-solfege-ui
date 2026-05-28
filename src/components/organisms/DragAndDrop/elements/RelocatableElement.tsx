@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PropsWithChildren } from "react";
+import { useEffect, useRef, type PropsWithChildren } from "react";
 import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
 import type { DragAndDropElement } from "../containers/Container.types";
@@ -29,6 +29,9 @@ const RelocatableElement = ({
   return (
     <DraggableElement
       onMove={(dropPosition, subscriber) => {
+        subscriber.indicateDropPosition(id, dropPosition);
+      }}
+      onMouseDown={(dropPosition, subscriber) => {
         subscriber.indicateDropPosition(id, dropPosition);
       }}
       onDrop={(dropPosition, subscriber) => {

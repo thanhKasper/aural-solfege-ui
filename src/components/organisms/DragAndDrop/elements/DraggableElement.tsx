@@ -5,7 +5,7 @@ import type { Subscriber } from "../DragAndDropContext";
 import useGhostDrag from "../hooks/useDrag";
 
 interface IDraggableElementProps {
-  onMouseDown?: (e: MouseEvent) => void;
+  onMouseDown?: (domRect: DOMRect, subscriber: Subscriber) => void;
   onDrop: (domRect: DOMRect, subscriber: Subscriber) => void;
   onMove?: (domRect: DOMRect, subscriber: Subscriber) => void;
   sx?: SxProps<Theme>;
@@ -22,6 +22,7 @@ const DraggableElement = ({
   const { ghostPortal, onMouseDown: baseMouseDown } = useGhostDrag({
     commandOnMouseUp: onDrop,
     commandOnMouseMove: onMove,
+    commandOnMouseDown: onMouseDown,
   });
 
   return (
@@ -36,7 +37,6 @@ const DraggableElement = ({
           baseMouseDown(
             e.nativeEvent,
             draggableElementRef.current?.innerHTML ?? "",
-            onMouseDown,
           );
         }}
         sx={{ cursor: "grab", ...sx }}

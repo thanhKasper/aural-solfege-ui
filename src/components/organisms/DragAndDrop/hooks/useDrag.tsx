@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Subscriber } from "../DragAndDropContext";
 import { EventType } from "../types";
@@ -7,16 +7,21 @@ import useNotify from "./useNotify";
 interface GhostDragProps {
   commandOnMouseUp: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
   commandOnMouseMove?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
+  commandOnMouseDown?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
 }
 
 export default function useGhostDrag({
   commandOnMouseUp,
   commandOnMouseMove,
+  commandOnMouseDown,
 }: GhostDragProps) {
   const { notify } = useNotify();
   const [ghostHTML, setGhostHTML] = useState<string>("");
   const ghostRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [shouldNotifyStart, setShouldNotifyStart] = useState<MouseEvent | null>(
+    null,
+  );
   const isMouseHold = useRef<boolean>(false);
   const allowedToDrag = useRef<boolean>(false);
   const [dragStartPos, setDragStartPos] = useState<{
@@ -74,25 +79,31 @@ export default function useGhostDrag({
   }, [commandOnMouseUp, notify, onMove]);
 
   const onMouseDown = useCallback(
-    (
-      e: MouseEvent,
-      ghostHTMLView: string,
-      customMouseDown?: (e: MouseEvent) => void,
-    ) => {
+    (e: MouseEvent, ghostHTMLView: string) => {
       e.preventDefault();
       isMouseHold.current = true;
       timeoutKey.current = setTimeout(() => {
         setIsDragging(true);
         allowedToDrag.current = true;
         setDragStartPos({ x: e.clientX, y: e.clientY });
-        customMouseDown?.(e);
         setGhostHTML(ghostHTMLView);
+        setShouldNotifyStart(e);
       }, 100);
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onDrop);
     },
     [onMove, onDrop],
   );
+
+  useLayoutEffect(() => {
+    if (shouldNotifyStart && ghostRef.current) {
+      const boundRect = ghostRef.current.getBoundingClientRect();
+      notify(EventType.START_DRAGGING, (subscriber) =>
+        commandOnMouseDown?.(boundRect, subscriber),
+      );
+      setShouldNotifyStart(null);
+    }
+  }, [shouldNotifyStart, commandOnMouseDown, notify]);
 
   const ghostPortal = isDragging
     ? createPortal(
@@ -104,6 +115,7 @@ export default function useGhostDrag({
             top: dragStartPos?.y,
             pointerEvents: "none",
             zIndex: 9999,
+            // visibility: !isDragging ? "hidden" : "visible",
             transform: "translate(-50%, -50%)",
           }}
           dangerouslySetInnerHTML={{ __html: ghostHTML }}
@@ -111,7 +123,6 @@ export default function useGhostDrag({
         document.body,
       )
     : null;
-
   return {
     onMouseDown,
     ghostPortal,
