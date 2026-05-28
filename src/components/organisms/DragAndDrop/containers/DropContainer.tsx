@@ -39,7 +39,7 @@ const DropContainer = ({
     number | undefined
   >(undefined);
 
-  useObservant([EventType.DROP, EventType.DRAG], {
+  useObservant([EventType.DROP, EventType.DRAG, EventType.START_DRAGGING], {
     id,
     ref: containerRef,
     createRelocatableElement: (dropPosition, callbacks) => {
@@ -105,8 +105,11 @@ const DropContainer = ({
       let insertIndex = draggableElements.length;
       for (let i = 0; i < draggableElements.length; i++) {
         const itemId = draggableElements[i].id;
-        if (itemId === sourceId) continue;
-        if (isDragAbove(domRect, itemRefs.current.get(itemId))) {
+        const itemRef = itemRefs.current.get(itemId);
+        if (itemId === sourceId) {
+          continue;
+        }
+        if (isDragAbove(domRect, itemRef)) {
           insertIndex = i;
           break;
         }
@@ -156,6 +159,7 @@ const DropContainer = ({
               }}
               style={{
                 opacity: draggingItem === element.id ? 0 : 1,
+                display: draggingItem === element.id ? "none" : "block",
                 transition: "opacity 0.15s",
               }}
             >
