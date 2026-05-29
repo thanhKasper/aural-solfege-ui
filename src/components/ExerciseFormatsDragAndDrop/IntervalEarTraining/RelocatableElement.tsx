@@ -30,7 +30,9 @@ export const RelocatableElement = ({
         {
           label: "Cancel",
           onClick: () => {
-            onRemove(configurationRef.current?.getValues());
+            if (configurationRef.current) {
+              onRemove(configurationRef.current.getValues());
+            }
             close();
           },
         },
