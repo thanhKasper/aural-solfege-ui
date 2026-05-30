@@ -13,7 +13,11 @@ export const IntervalEarTrainingSourceElement = ({
       render={({ removeSelf, relocatableElementId, currentPosition }) => (
         <RelocatableElement
           onRemove={(data) => {
-            onRemoved(data);
+            onRemoved({
+              ...data,
+              id: relocatableElementId,
+              position: currentPosition,
+            });
             removeSelf();
           }}
           onChange={onChanged}
