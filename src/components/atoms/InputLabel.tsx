@@ -17,7 +17,7 @@ const InputLabel = ({
         {label}
       </Typography>
       <div style={{ width: "100%" }}>{children}</div>
-      {errorMessage ?? (
+      {errorMessage && (
         <Typography variant="subtitle2" color="error">
           {errorMessage}
         </Typography>
