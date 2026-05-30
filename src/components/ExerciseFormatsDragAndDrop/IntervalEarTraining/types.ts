@@ -2,11 +2,13 @@ import type { UseFormReturn } from "react-hook-form";
 import type { TBaseExerciseFormat } from "../ExerciseFormat.types";
 
 export type TIntervalTrainingExercise = TBaseExerciseFormat<{
+  title: string;
   interval: string;
   texture: string;
 }>;
 
-export type ConfigurationRef = UseFormReturn<TIntervalTrainingExercise>;
+export type IntervalEarTrainingConfiguration =
+  UseFormReturn<TIntervalTrainingExercise>;
 
 export interface IRelocatableElement {
   onRemove: (data: TIntervalTrainingExercise) => void;

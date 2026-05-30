@@ -2,9 +2,9 @@ import { useRef, useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import useComponentFirstMount from "@/hooks/useComponentFirstMount";
 import useDialog from "@/services/dialog/useDialog";
-import { Configuration } from "./Configuration";
+import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
 import type {
-  ConfigurationRef,
+  IntervalEarTrainingConfiguration,
   IRelocatableElement,
   TIntervalTrainingExercise,
 } from "./types";
@@ -15,7 +15,9 @@ export const RelocatableElement = ({
   value,
 }: IRelocatableElement) => {
   const { open } = useDialog();
-  const configurationRef = useRef<ConfigurationRef | null>(null);
+  const configurationRef = useRef<IntervalEarTrainingConfiguration | null>(
+    null,
+  );
   const [currentValue, setCurrentValue] = useState<
     TIntervalTrainingExercise | undefined
   >(undefined);
@@ -24,7 +26,10 @@ export const RelocatableElement = ({
     const close = open({
       title: "Interval exercise training configuration",
       content: (
-        <Configuration formRef={configurationRef} defaultValue={value} />
+        <IntervalEarTrainingConfigurationContent
+          formRef={configurationRef}
+          defaultValue={value}
+        />
       ),
       buttons: [
         {

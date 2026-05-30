@@ -1,8 +1,11 @@
 import { useEffect, type RefObject } from "react";
-import { Grid, MenuItem, Select } from "@mui/material";
+import { Grid, MenuItem, Select, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
-import type { ConfigurationRef, TIntervalTrainingExercise } from "./types";
+import type {
+  IntervalEarTrainingConfiguration,
+  TIntervalTrainingExercise,
+} from "./types";
 
 const INTERVALS = [
   { value: "P0", label: "Unison (P0)" },
@@ -26,11 +29,11 @@ const TEXTURES = [
   { value: "descending", label: "Descending" },
 ];
 
-export const Configuration = ({
+export const IntervalEarTrainingConfigurationContent = ({
   formRef,
   defaultValue,
 }: {
-  formRef: RefObject<ConfigurationRef | null>;
+  formRef: RefObject<IntervalEarTrainingConfiguration | null>;
   defaultValue?: TIntervalTrainingExercise;
 }) => {
   const form = useForm<TIntervalTrainingExercise>({
@@ -46,10 +49,28 @@ export const Configuration = ({
       <Grid size={12}>
         <Controller
           control={form.control}
+          name="title"
+          rules={{ required: "This field is required" }}
+          render={({ field, fieldState: { error } }) => (
+            <InputLabel label="Title" errorMessage={error?.message}>
+              <TextField {...field} onInput={field.onChange} />
+            </InputLabel>
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={form.control}
           name="interval"
-          render={({ field }) => (
-            <InputLabel label="Interval">
-              <Select {...field} fullWidth size="small">
+          rules={{ required: "This field is required" }}
+          render={({ field, fieldState: { error } }) => (
+            <InputLabel label="Interval" errorMessage={error?.message}>
+              <Select
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                fullWidth
+                size="small"
+              >
                 {INTERVALS.map((i) => (
                   <MenuItem key={i.value} value={i.value}>
                     {i.label}
@@ -64,9 +85,15 @@ export const Configuration = ({
         <Controller
           control={form.control}
           name="texture"
-          render={({ field }) => (
-            <InputLabel label="Texture">
-              <Select {...field} fullWidth size="small">
+          rules={{ required: "This field is required" }}
+          render={({ field, fieldState: { error } }) => (
+            <InputLabel label="Texture" errorMessage={error?.message}>
+              <Select
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                fullWidth
+                size="small"
+              >
                 {TEXTURES.map((t) => (
                   <MenuItem key={t.value} value={t.value}>
                     {t.label}
