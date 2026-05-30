@@ -16,10 +16,12 @@ function isDragAbove(
   return draggingPosition.y < centerY;
 }
 
+type TElementPosition = { elementId: string; position: number };
+
 interface DropContainerProps {
   id: string;
   placeholderSx?: SxProps<Theme>;
-  onElementPositionChange?: (newPosition: number, elementId: string) => void;
+  onElementPositionChange?: (updatedElements: TElementPosition[]) => void;
 }
 
 const DropContainer = ({
@@ -58,6 +60,7 @@ const DropContainer = ({
       if (placeholderIndex !== null) {
         let adjustedIndex: number | null = null;
         let focusedElement: DragAndDropElement | undefined;
+        let updatedElementList: TElementPosition[] = [];
         setDraggableElements((old) => {
           focusedElement = old.find((el) => el.id === sourceId);
           const focusedElementIndex = old.findIndex((el) => el.id === sourceId);
@@ -70,10 +73,14 @@ const DropContainer = ({
           const copy = [...old];
           const [movedItem] = copy.splice(focusedElementIndex, 1);
           copy.splice(adjustedIndex, 0, movedItem);
+          updatedElementList = copy.map((element, idx) => ({
+            elementId: element.id,
+            position: idx,
+          }));
           return copy;
         });
-        if (adjustedIndex && focusedElement) {
-          onElementPositionChange?.(adjustedIndex, focusedElement.id);
+        if (adjustedIndex !== null && focusedElement) {
+          onElementPositionChange?.(updatedElementList);
         }
       }
       setPlaceholderIndex(null);
