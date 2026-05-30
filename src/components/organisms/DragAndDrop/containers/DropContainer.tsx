@@ -1,5 +1,5 @@
 import { Box, type SxProps, type Theme } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useObservant from "../hooks/useObservant";
 import RelocatableElement from "../elements/RelocatableElement";
 import { EventType } from "../types";
@@ -60,7 +60,6 @@ const DropContainer = ({
       if (placeholderIndex !== null) {
         let adjustedIndex: number | null = null;
         let focusedElement: DragAndDropElement | undefined;
-        let updatedElementList: TElementPosition[] = [];
         setDraggableElements((old) => {
           focusedElement = old.find((el) => el.id === sourceId);
           const focusedElementIndex = old.findIndex((el) => el.id === sourceId);
@@ -73,15 +72,8 @@ const DropContainer = ({
           const copy = [...old];
           const [movedItem] = copy.splice(focusedElementIndex, 1);
           copy.splice(adjustedIndex, 0, movedItem);
-          updatedElementList = copy.map((element, idx) => ({
-            elementId: element.id,
-            position: idx,
-          }));
           return copy;
         });
-        if (adjustedIndex !== null && focusedElement) {
-          onElementPositionChange?.(updatedElementList);
-        }
       }
       setPlaceholderIndex(null);
       setDraggingItem(null);
@@ -124,6 +116,19 @@ const DropContainer = ({
       setPlaceholderIndex(insertIndex);
     },
   });
+
+  /**
+   * As long as the draggableElements is updated, it means there is a position change happening
+   * across elements inside the drop container
+   */
+  useEffect(() => {
+    onElementPositionChange?.(
+      draggableElements.map((element, idx) => ({
+        elementId: element.id,
+        position: idx,
+      })),
+    );
+  }, [draggableElements, onElementPositionChange]);
 
   const handleRemoveElement = (elementId: string) => {
     setDraggableElements((old) =>
