@@ -34,9 +34,6 @@ export const IntervalEarTrainingSourceElement = ({
           borderLeftWidth: 5,
           borderStyle: "solid",
           borderColor: (theme) => theme.palette.primary.main,
-          backgroundColor: (theme) => {
-            return theme.palette.surface[400];
-          },
         }}
       >
         <Typography>Interval Ear Training</Typography>

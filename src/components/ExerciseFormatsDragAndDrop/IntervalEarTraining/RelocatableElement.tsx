@@ -1,5 +1,9 @@
 import { useRef, useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import useComponentFirstMount from "@/hooks/useComponentFirstMount";
 import useDialog from "@/services/dialog/useDialog";
 import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
@@ -57,17 +61,21 @@ export const RelocatableElement = ({
   return (
     <Stack
       direction={"row"}
-      sx={{ backgroundColor: (theme) => theme.palette.secondary.main }}
+      sx={{
+        justifyContent: "space-between",
+        padding: 2,
+        ":hover": {
+          backgroundColor: (theme) => theme.palette.surface[400],
+        },
+      }}
     >
       <Box>
-        <Typography>Interval Ear Training Exercise</Typography>
+        <Typography variant="h6">{currentValue?.title}</Typography>
         <Typography>{currentValue?.interval}</Typography>
         <Typography>{currentValue?.texture}</Typography>
-        <Typography>{currentValue?.position}</Typography>
       </Box>
       <Box>
-        <Button
-          variant="contained"
+        <IconButton
           onClick={(e) => {
             e.stopPropagation();
             if (configurationRef.current) {
@@ -75,13 +83,17 @@ export const RelocatableElement = ({
             }
           }}
         >
-          Remove
-        </Button>
-        <Button variant="contained" onMouseEnter={() => {}}>
-          Edit
-        </Button>
-        <Button variant="contained">Move up</Button>
-        <Button variant="contained">Move down</Button>
+          <DeleteIcon />
+        </IconButton>
+        <IconButton>
+          <EditIcon />
+        </IconButton>
+        <IconButton>
+          <KeyboardArrowUpIcon />
+        </IconButton>
+        <IconButton>
+          <KeyboardArrowDownIcon />
+        </IconButton>
       </Box>
     </Stack>
   );
