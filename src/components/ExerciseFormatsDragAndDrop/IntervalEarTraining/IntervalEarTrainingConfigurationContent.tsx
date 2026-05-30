@@ -53,7 +53,7 @@ export const IntervalEarTrainingConfigurationContent = ({
           rules={{ required: "This field is required" }}
           render={({ field, fieldState: { error } }) => (
             <InputLabel label="Title" errorMessage={error?.message}>
-              <TextField {...field} onInput={field.onChange} />
+              <TextField value={field.value ?? ""} onInput={field.onChange} />
             </InputLabel>
           )}
         />
