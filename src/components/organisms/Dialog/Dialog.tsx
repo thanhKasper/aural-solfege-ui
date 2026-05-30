@@ -17,7 +17,8 @@ const Dialog = () => {
   const dispatch = useAppDispatch();
   return (
     <MuiDialog
-      maxWidth="lg"
+      fullWidth
+      maxWidth={"md"}
       open={isOpen}
       onClose={() => dispatch(closeModal())}
     >
@@ -32,12 +33,14 @@ const Dialog = () => {
         })}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton>{" "}
       <DialogTitle sx={{ mr: 2 }}>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        {buttons.map((button) => (
-          <Button onClick={button.onClick}>{button.label}</Button>
+        {buttons.map((button, idx) => (
+          <Button key={idx} onClick={button.onClick}>
+            {button.label}
+          </Button>
         ))}
       </DialogActions>
     </MuiDialog>
