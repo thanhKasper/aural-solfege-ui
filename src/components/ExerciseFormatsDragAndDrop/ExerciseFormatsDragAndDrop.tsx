@@ -51,14 +51,22 @@ const ExerciseFormatsDragAndDrop = ({
         </Stack>
         <DropContainer
           id="dropContainer1"
-          onElementPositionChange={(newPosition, elementId) => {
-            onChange?.(
-              exerciseFormatsRef.current.map((exerciseFormat) =>
-                exerciseFormat.id === elementId
-                  ? { ...exerciseFormat, position: newPosition }
-                  : { ...exerciseFormat },
-              ),
+          onElementPositionChange={(newElementList) => {
+            const hashedElement: Record<string, number> = newElementList.reduce(
+              (reduced, curr) => {
+                return { ...reduced, [curr.elementId]: curr.position };
+              },
+              {},
             );
+            exerciseFormatsRef.current = exerciseFormatsRef.current.map(
+              (exerciseFormat) => {
+                return {
+                  ...exerciseFormat,
+                  position: hashedElement[exerciseFormat.id],
+                };
+              },
+            );
+            onChange?.(exerciseFormatsRef.current);
           }}
         />
       </Stack>
