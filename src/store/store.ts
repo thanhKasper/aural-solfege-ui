@@ -5,6 +5,13 @@ export const store = configureStore({
   reducer: {
     modal: modalReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["modal/openModal"],
+        ignoredPaths: ["modal.content", "modal.buttons"],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
