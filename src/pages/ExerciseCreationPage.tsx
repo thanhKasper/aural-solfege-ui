@@ -6,14 +6,7 @@ import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import { useCallback } from "react";
-import {
-  Controller,
-  Form,
-  useForm,
-  useWatch,
-  type ControllerRenderProps,
-} from "react-hook-form";
+import { Controller, Form, useForm, useWatch } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
   const { control, handleSubmit, setValue } = useForm<ExerciseDTO>();
@@ -23,23 +16,6 @@ const ExerciseCreationPage = () => {
       console.log(exercise);
     })();
   };
-
-  const onExerciseFormatsChange = useCallback(
-    (
-      onChange: ControllerRenderProps<
-        ExerciseDTO,
-        "exerciseFormats"
-      >["onChange"],
-      data: TExerciseFormat[],
-    ) => {
-      onChange(
-        data.map((internalExerciseFormat) =>
-          transformDataMap[internalExerciseFormat.type](internalExerciseFormat),
-        ),
-      );
-    },
-    [],
-  );
 
   return (
     <Container>
