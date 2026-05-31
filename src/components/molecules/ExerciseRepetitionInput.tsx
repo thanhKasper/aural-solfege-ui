@@ -32,9 +32,9 @@ const ExerciseRepetitionInput = ({
         variant={variant}
         size={size}
         onChange={(e) => {
-          onTextChange?.(e.target.value);
+          onTextChange?.(e.currentTarget.value);
         }}
-        type="number"
+        slotProps={{ htmlInput: { inputMode: "numeric" } }}
         disabled={infiniteRepetition}
       />
       <FormControlLabel

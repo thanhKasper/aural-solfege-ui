@@ -3,26 +3,35 @@ import { reverseTransformMap } from "@/components/ExerciseFormatsDragAndDrop/dat
 import { transformDataMap } from "@/components/ExerciseFormatsDragAndDrop/dataTransform";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
+import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import { createNewExercise } from "@/providers/auralSolfege/apis";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Controller, Form, useForm, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 const ExerciseCreationPage = () => {
   const { control, handleSubmit, setValue } = useForm<ExerciseDTO>();
+  const navigate = useNavigate();
   const isInfiniteLoop = useWatch({ control: control, name: "loop" });
-  const { mutate } = useMutation({
+  const { mutate, isSuccess } = useMutation({
     mutationFn: (newExercise: ExerciseDTO) => {
       return createNewExercise(newExercise);
     },
   });
   const handleSave = () => {
     handleSubmit((exercise) => {
-      console.log(exercise);
       mutate(exercise);
     })();
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]);
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <Container>
@@ -59,10 +68,9 @@ const ExerciseCreationPage = () => {
                       if (data.loop) {
                         return true;
                       }
-                      if (fieldValue) {
-                        return true;
-                      }
-                      return "Field is required";
+                      return fieldValue !== undefined
+                        ? true
+                        : "This field is required";
                     },
                   },
                 }}
@@ -74,9 +82,19 @@ const ExerciseCreationPage = () => {
                     <ExerciseRepetitionInput
                       value={value?.toString() ?? ""}
                       isLoop={isInfiniteLoop}
-                      onTextChange={onChange}
+                      onTextChange={(v) => {
+                        if (v === "") {
+                          onChange(undefined);
+                          return;
+                        }
+                        const num = Number(v);
+                        if (!Number.isNaN(num)) {
+                          onChange(num);
+                        }
+                      }}
                       onRepetitionChecked={(checked) => {
                         setValue("loop", checked);
+                        onChange(undefined);
                       }}
                     />
                   </InputLabel>
@@ -110,7 +128,9 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="rest"
-                rules={{ required: "This field is required" }}
+                rules={{
+                  required: "This field is required",
+                }}
                 render={({
                   field: { value, onChange },
                   fieldState: { error },
@@ -119,7 +139,20 @@ const ExerciseCreationPage = () => {
                     label="Rest between repetition"
                     errorMessage={error?.message}
                   >
-                    <TextField value={value} onInput={onChange} />
+                    <TextField
+                      value={value?.toString() ?? ""}
+                      onChange={(e) => {
+                        const v = e.currentTarget.value;
+                        if (v === "") {
+                          onChange(undefined);
+                          return;
+                        }
+                        const num = Number(v);
+                        if (!Number.isNaN(num)) {
+                          onChange(num);
+                        }
+                      }}
+                    />
                   </InputLabel>
                 )}
               />
