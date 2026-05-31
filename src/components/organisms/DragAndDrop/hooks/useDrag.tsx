@@ -1,8 +1,15 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import { createPortal } from "react-dom";
 import type { Subscriber } from "../DragAndDropContext";
 import { EventType } from "../types";
 import useNotify from "./useNotify";
+import { useTheme } from "@mui/material";
 
 interface GhostDragProps {
   commandOnMouseUp: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
@@ -15,8 +22,24 @@ export default function useGhostDrag({
   commandOnMouseMove,
   commandOnMouseDown,
 }: GhostDragProps) {
+  const theme = useTheme();
   const { notify } = useNotify();
-  const [ghostHTML, setGhostHTML] = useState<string>("");
+  const [ghostHTML, setGhostHTML] = useState<{
+    htmlString: string;
+    style: {
+      width: number;
+      height: number;
+      backgroundColor?: string;
+    };
+  }>({
+    htmlString: "",
+    style: {
+      width: 0,
+      height: 0,
+      backgroundColor: theme.palette.surface[400],
+    },
+  });
+
   const ghostRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [shouldNotifyStart, setShouldNotifyStart] = useState<MouseEvent | null>(
@@ -28,6 +51,10 @@ export default function useGhostDrag({
     x: number;
     y: number;
   } | null>(null);
+  const deviationRef = useRef<{ xDev: number; yDev: number }>({
+    xDev: 0,
+    yDev: 0,
+  });
   const timeoutKey = useRef<number | null>(null);
 
   const onMove = useCallback(
@@ -43,7 +70,10 @@ export default function useGhostDrag({
 
       if (ghostRef.current) {
         if (isMouseHold.current && allowedToDrag.current) {
-          setDragStartPos({ x: e.clientX, y: e.clientY });
+          setDragStartPos({
+            x: e.clientX - deviationRef.current.xDev,
+            y: e.clientY - deviationRef.current.yDev,
+          });
           const ghostBoundary = ghostRef.current.getBoundingClientRect();
           notify(EventType.DRAG, (subscriber) => {
             if (commandOnMouseMove) {
@@ -79,14 +109,33 @@ export default function useGhostDrag({
   }, [commandOnMouseUp, notify, onMove]);
 
   const onMouseDown = useCallback(
-    (e: MouseEvent, ghostHTMLView: string) => {
+    (e: MouseEvent, ghostElementRef: RefObject<HTMLElement | null>) => {
       e.preventDefault();
       isMouseHold.current = true;
       timeoutKey.current = setTimeout(() => {
         setIsDragging(true);
         allowedToDrag.current = true;
         setDragStartPos({ x: e.clientX, y: e.clientY });
-        setGhostHTML(ghostHTMLView);
+        if (ghostElementRef.current) {
+          const ghostElement = ghostElementRef.current;
+          const ghostElementRect = ghostElement.getBoundingClientRect();
+          deviationRef.current = {
+            xDev: e.clientX - ghostElementRect.x,
+            yDev: e.clientY - ghostElementRect.y,
+          };
+          setGhostHTML((old) => ({
+            htmlString: ghostElement.innerHTML,
+            style: {
+              ...old.style,
+              height: ghostElementRect.height,
+              width: ghostElementRect.width,
+            },
+          }));
+          setDragStartPos({
+            x: ghostElementRect.x,
+            y: ghostElementRect.y,
+          });
+        }
         setShouldNotifyStart(e);
       }, 100);
       window.addEventListener("mousemove", onMove);
@@ -115,10 +164,9 @@ export default function useGhostDrag({
             top: dragStartPos?.y,
             pointerEvents: "none",
             zIndex: 9999,
-            // visibility: !isDragging ? "hidden" : "visible",
-            transform: "translate(-50%, -50%)",
+            ...ghostHTML.style,
           }}
-          dangerouslySetInnerHTML={{ __html: ghostHTML }}
+          dangerouslySetInnerHTML={{ __html: ghostHTML.htmlString }}
         />,
         document.body,
       )

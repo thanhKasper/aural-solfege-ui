@@ -34,10 +34,7 @@ const DraggableElement = ({
           if (target.closest("button, a")) {
             return;
           }
-          baseMouseDown(
-            e.nativeEvent,
-            draggableElementRef.current?.innerHTML ?? "",
-          );
+          baseMouseDown(e.nativeEvent, draggableElementRef);
         }}
         sx={{ cursor: "grab", ...sx }}
       >
