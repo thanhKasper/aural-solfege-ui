@@ -1,5 +1,5 @@
 import { Box, type SxProps, type Theme } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useEffectEvent, useRef, useState } from "react";
 import useObservant from "../hooks/useObservant";
 import RelocatableElement from "../elements/RelocatableElement";
 import { EventType } from "../types";
@@ -16,7 +16,7 @@ function isDragAbove(
   return draggingPosition.y < centerY;
 }
 
-type TElementPosition = { elementId: string; position: number };
+export type TElementPosition = { elementId: string; position: number };
 
 interface DropContainerProps {
   id: string;
@@ -117,18 +117,24 @@ const DropContainer = ({
     },
   });
 
+  const updateElementPosition = useEffectEvent(
+    (draggableElements: DragAndDropElement[]) => {
+      onElementPositionChange?.(
+        draggableElements.map((element, idx) => ({
+          elementId: element.id,
+          position: idx,
+        })),
+      );
+    },
+  );
+
   /**
    * As long as the draggableElements is updated, it means there is a position change happening
    * across elements inside the drop container
    */
   useEffect(() => {
-    onElementPositionChange?.(
-      draggableElements.map((element, idx) => ({
-        elementId: element.id,
-        position: idx,
-      })),
-    );
-  }, [draggableElements, onElementPositionChange]);
+    updateElementPosition(draggableElements);
+  }, [draggableElements]);
 
   const handleRemoveElement = (elementId: string) => {
     setDraggableElements((old) =>

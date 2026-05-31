@@ -1,18 +1,26 @@
+import type { EXERCISE_FORMAT } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
+
 export type ExerciseDTO = {
   title: string;
   description?: string;
   exerciseId: string;
-  reps: number | null;
+  reps?: number;
+  rest: number;
+  loop: boolean;
   trainingMethodology: string;
   exerciseFormats: ExerciseFormat[];
 };
 
-type ExerciseFormat = ActiveExerciseFormat | PassiveExerciseFormat;
+export type ExerciseFormat = TIntervalEarTrainingFormatDTO;
 
-type ActiveExerciseFormat = {
-  type: "active";
+type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
+  type: FORMAT_TYPE;
+  position: number;
 };
 
-type PassiveExerciseFormat = {
-  type: "passive";
-};
+type TIntervalEarTrainingFormatDTO =
+  TBaseExerciseFormat<EXERCISE_FORMAT.SINGLE_INTERVAL> & {
+    title: string;
+    interval: string;
+    texture: string;
+  };

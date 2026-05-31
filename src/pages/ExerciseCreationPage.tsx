@@ -1,16 +1,46 @@
+import type { TExerciseFormat } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
 import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
+import { reverseTransformMap } from "@/components/ExerciseFormatsDragAndDrop/dataReverseTransform";
+import { transformDataMap } from "@/components/ExerciseFormatsDragAndDrop/dataTransform";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
+import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import { Controller, Form, useForm } from "react-hook-form";
+import { useCallback } from "react";
+import {
+  Controller,
+  Form,
+  useForm,
+  useWatch,
+  type ControllerRenderProps,
+} from "react-hook-form";
 
 const ExerciseCreationPage = () => {
-  const { control, handleSubmit, setValue } = useForm();
+  const { control, handleSubmit, setValue } = useForm<ExerciseDTO>();
+  const isInfiniteLoop = useWatch({ control: control, name: "loop" });
   const handleSave = () => {
     handleSubmit((exercise) => {
       console.log(exercise);
     })();
   };
+
+  const onExerciseFormatsChange = useCallback(
+    (
+      onChange: ControllerRenderProps<
+        ExerciseDTO,
+        "exerciseFormats"
+      >["onChange"],
+      data: TExerciseFormat[],
+    ) => {
+      onChange(
+        data.map((internalExerciseFormat) =>
+          transformDataMap[internalExerciseFormat.type](internalExerciseFormat),
+        ),
+      );
+    },
+    [],
+  );
+
   return (
     <Container>
       <Typography variant="h3">Create new exercise</Typography>
@@ -29,7 +59,7 @@ const ExerciseCreationPage = () => {
                   <InputLabel label="Title" errorMessage={error?.message}>
                     <TextField
                       placeholder="Enter title"
-                      value={value}
+                      value={value ?? ""}
                       onInput={onChange}
                     />
                   </InputLabel>
@@ -39,11 +69,11 @@ const ExerciseCreationPage = () => {
             <Grid size={2}>
               <Controller
                 control={control}
-                name="repetition"
+                name="reps"
                 rules={{
                   validate: {
                     repetitionRequired: (fieldValue, data) => {
-                      if (data.infiniteLoop) {
+                      if (data.loop) {
                         return true;
                       }
                       if (fieldValue) {
@@ -59,10 +89,11 @@ const ExerciseCreationPage = () => {
                 }) => (
                   <InputLabel label="Repeat" errorMessage={error?.message}>
                     <ExerciseRepetitionInput
-                      value={value}
+                      value={value?.toString() ?? ""}
+                      isLoop={isInfiniteLoop}
                       onTextChange={onChange}
                       onRepetitionChecked={(checked) => {
-                        setValue("infiniteLoop", checked);
+                        setValue("loop", checked);
                       }}
                     />
                   </InputLabel>
@@ -85,7 +116,7 @@ const ExerciseCreationPage = () => {
                       multiline
                       minRows={5}
                       maxRows={10}
-                      value={value}
+                      value={value ?? ""}
                       onInput={onChange}
                     />
                   </InputLabel>
@@ -113,7 +144,7 @@ const ExerciseCreationPage = () => {
           </Grid>
           <Grid size={12}>
             <Controller
-              name="trainingPlan"
+              name="exerciseFormats"
               control={control}
               rules={{
                 required: "This field is required",
@@ -124,8 +155,18 @@ const ExerciseCreationPage = () => {
               }) => (
                 <InputLabel label="Training plan" errorMessage={error?.message}>
                   <ExerciseFormatsDragAndDrop
-                    value={value}
-                    onChange={onChange}
+                    value={(value ?? []).map((exerciseFormat) =>
+                      reverseTransformMap[exerciseFormat.type](exerciseFormat),
+                    )}
+                    onExerciseFormatsChange={(data) =>
+                      onChange(
+                        data.map((internalExerciseFormat) =>
+                          transformDataMap[internalExerciseFormat.type](
+                            internalExerciseFormat,
+                          ),
+                        ),
+                      )
+                    }
                   />
                 </InputLabel>
               )}
