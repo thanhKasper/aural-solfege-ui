@@ -138,9 +138,8 @@ const DropContainer = ({
 
   const placeholderSxResolved: SxProps<Theme> = {
     height: draggedElementHeight ?? 40,
-    mx: 2,
     borderRadius: 1,
-    bgcolor: "primary.main",
+    bgcolor: "secondary.light",
     opacity: 0.6,
     transition: "all 0.2s ease",
     ...placeholderSx,
@@ -154,9 +153,7 @@ const DropContainer = ({
         minHeight: "500px",
         border: "1px dashed black",
         alignSelf: "stretch",
-        backgroundColor: containerCollision
-          ? "rgba(0, 123, 255, 0.1)"
-          : "transparent",
+        backgroundColor: containerCollision ? "secondary.light" : "transparent",
         borderColor: containerCollision ? "blue" : "black",
         transition: "background-color 0.2s, border-color 0.2s",
       }}

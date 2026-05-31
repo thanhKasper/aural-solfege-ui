@@ -170,6 +170,13 @@ const theme = createTheme({
         },
       ],
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          backgroundColor: theme.palette.surface[300],
+        }),
+      },
+    },
   },
   typography: {
     h1: {
