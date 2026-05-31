@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -70,7 +70,7 @@ export const RelocatableElement = ({
       }}
     >
       <Box>
-        <Typography variant="h6">{currentValue?.title}</Typography>
+        <Typography variant="h6">Single interval exercise</Typography>
         <Typography>{currentValue?.interval}</Typography>
         <Typography>{currentValue?.texture}</Typography>
       </Box>

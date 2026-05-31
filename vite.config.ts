@@ -9,6 +9,13 @@ export default defineConfig({
   base: "/aural-solfege",
   server: {
     port: 3000,
+    proxy: {
+      "/aural-solfege/api": {
+        target: "http://localhost:8080/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/aural-solfege\/api/, ""),
+      },
+    },
   },
   resolve: {
     alias: {

@@ -20,7 +20,6 @@ type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
 
 type TIntervalEarTrainingFormatDTO =
   TBaseExerciseFormat<EXERCISE_FORMAT.SINGLE_INTERVAL> & {
-    title: string;
     interval: string;
     texture: string;
   };

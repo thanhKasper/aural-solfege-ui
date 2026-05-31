@@ -6,5 +6,10 @@ export async function getAllExercises(): Promise<ExerciseDTO[]> {
 }
 
 export async function createNewExercise(newExercise: ExerciseDTO) {
-  return auralSolfegeClient.post("/exercises", newExercise).then((res) => res);
+  return auralSolfegeClient
+    .post("/exercises", {
+      ...newExercise,
+      trainingMethodology: "INTERVAL_TRAINING",
+    })
+    .then((res) => res);
 }
