@@ -5,7 +5,7 @@ import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Controller, Form, useForm } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, setValue } = useForm();
   const handleSave = () => {
     handleSubmit((exercise) => {
       console.log(exercise);
@@ -21,8 +21,12 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="title"
-                render={({ field: { value, onChange } }) => (
-                  <InputLabel label="Title">
+                rules={{ required: "This field is required" }}
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <InputLabel label="Title" errorMessage={error?.message}>
                     <TextField
                       placeholder="Enter title"
                       value={value}
@@ -36,11 +40,30 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="repetition"
-                render={({ field: { value, onChange } }) => (
-                  <InputLabel label="Repeat">
+                rules={{
+                  validate: {
+                    repetitionRequired: (fieldValue, data) => {
+                      if (data.infiniteLoop) {
+                        return true;
+                      }
+                      if (fieldValue) {
+                        return true;
+                      }
+                      return "Field is required";
+                    },
+                  },
+                }}
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <InputLabel label="Repeat" errorMessage={error?.message}>
                     <ExerciseRepetitionInput
                       value={value}
                       onTextChange={onChange}
+                      onRepetitionChecked={(checked) => {
+                        setValue("infiniteLoop", checked);
+                      }}
                     />
                   </InputLabel>
                 )}
@@ -52,8 +75,12 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="description"
-                render={({ field: { value, onChange } }) => (
-                  <InputLabel label="Description">
+                rules={{ required: "This field is required" }}
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <InputLabel label="Description" errorMessage={error?.message}>
                     <TextField
                       multiline
                       minRows={5}
@@ -69,8 +96,15 @@ const ExerciseCreationPage = () => {
               <Controller
                 control={control}
                 name="rest"
-                render={({ field: { value, onChange } }) => (
-                  <InputLabel label="Rest between repetition">
+                rules={{ required: "This field is required" }}
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <InputLabel
+                    label="Rest between repetition"
+                    errorMessage={error?.message}
+                  >
                     <TextField value={value} onInput={onChange} />
                   </InputLabel>
                 )}
@@ -81,8 +115,14 @@ const ExerciseCreationPage = () => {
             <Controller
               name="trainingPlan"
               control={control}
-              render={({ field: { value, onChange } }) => (
-                <InputLabel label="Training plan">
+              rules={{
+                required: "This field is required",
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <InputLabel label="Training plan" errorMessage={error?.message}>
                   <ExerciseFormatsDragAndDrop
                     value={value}
                     onChange={onChange}

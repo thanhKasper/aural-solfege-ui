@@ -9,14 +9,16 @@ import { useState } from "react";
 
 interface ExerciseRepetitionInputProps {
   value?: string;
+  isLoop?: boolean;
   onTextChange?: (value?: string) => void;
-  onRepetitionChecked?: () => void;
+  onRepetitionChecked?: (checked: boolean) => void;
   variant?: TextFieldProps["variant"];
   size?: TextFieldProps["size"];
 }
 
 const ExerciseRepetitionInput = ({
   value,
+  isLoop,
   variant,
   onTextChange,
   onRepetitionChecked,
@@ -26,7 +28,7 @@ const ExerciseRepetitionInput = ({
   return (
     <Stack>
       <TextField
-        value={value}
+        value={value ?? ""}
         variant={variant}
         size={size}
         onChange={(e) => {
@@ -38,9 +40,10 @@ const ExerciseRepetitionInput = ({
       <FormControlLabel
         control={
           <Checkbox
+            checked={isLoop ?? false}
             onChange={(e) => {
               setInfiniteRepetition(e.target.checked);
-              onRepetitionChecked?.();
+              onRepetitionChecked?.(e.target.checked);
             }}
           />
         }
