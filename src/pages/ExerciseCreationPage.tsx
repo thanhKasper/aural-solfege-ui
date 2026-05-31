@@ -1,19 +1,26 @@
-import type { TExerciseFormat } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
 import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
 import { reverseTransformMap } from "@/components/ExerciseFormatsDragAndDrop/dataReverseTransform";
 import { transformDataMap } from "@/components/ExerciseFormatsDragAndDrop/dataTransform";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
+import { createNewExercise } from "@/providers/auralSolfege/apis";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { Controller, Form, useForm, useWatch } from "react-hook-form";
 
 const ExerciseCreationPage = () => {
   const { control, handleSubmit, setValue } = useForm<ExerciseDTO>();
   const isInfiniteLoop = useWatch({ control: control, name: "loop" });
+  const { mutate } = useMutation({
+    mutationFn: (newExercise: ExerciseDTO) => {
+      return createNewExercise(newExercise);
+    },
+  });
   const handleSave = () => {
     handleSubmit((exercise) => {
       console.log(exercise);
+      mutate(exercise);
     })();
   };
 
