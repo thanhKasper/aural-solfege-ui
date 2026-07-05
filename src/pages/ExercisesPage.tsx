@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 const ExercisesPage = () => {
   const { data, isSuccess } = useQuery({
     queryKey: ["exercises"],
-    queryFn: async () => await getAllExercises(),
+    queryFn: async () => await getAllExercises({ page: 0, pageSize: 5 }),
   });
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const ExercisesPage = () => {
         <Grid size={12}>
           <Grid container spacing={4}>
             {isSuccess &&
-              data.map((exercise) => (
+              data.content.map((exercise) => (
                 <Grid size={3}>
                   <ExerciseCard exercise={exercise} />
                 </Grid>

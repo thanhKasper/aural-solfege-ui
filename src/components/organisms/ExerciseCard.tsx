@@ -11,8 +11,9 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import IconContent from "../molecules/IconContent";
 import RepeatIcon from "@mui/icons-material/Repeat";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import Icon from "../atoms/Icon";
+import { getNotation } from "@/utils/retrieveMusicalInterval";
 
 const ExerciseCardContainer = styled(Card)(({ theme }) => {
   return {
@@ -71,11 +72,13 @@ export const ExerciseCard = ({
             <Grid>
               <IconContent
                 icon={<MusicNoteIcon fontSize="small" />}
-                content={[
-                  <Typography variant="body1">Perfect 5th</Typography>,
-                  <Typography variant="body1">Unison</Typography>,
-                  <Typography variant="body1">Major 6th</Typography>,
-                ]}
+                content={
+                  exercise.intervals?.map((interval) => (
+                    <Typography variant="body1" key={interval}>
+                      {getNotation(interval)}
+                    </Typography>
+                  )) ?? []
+                }
               />
             </Grid>
           </Grid>
@@ -84,14 +87,20 @@ export const ExerciseCard = ({
               <IconContent
                 icon={<RepeatIcon fontSize="small" />}
                 content={[
-                  <Typography variant="body1">{exercise.reps}</Typography>,
+                  exercise.loop ? (
+                    <Icon icon="infinite" />
+                  ) : (
+                    <Typography variant="body1">{exercise.reps}</Typography>
+                  ),
                 ]}
               />
             </Grid>
             <Grid size="auto">
               <IconContent
-                icon={<AccessTimeIcon fontSize="small" />}
-                content={[<Typography variant="body1">1h 34m</Typography>]}
+                icon={<Icon icon="quarter-rest" fontSize="small" />}
+                content={[
+                  <Typography variant="body1">{exercise.rest}s</Typography>,
+                ]}
               />
             </Grid>
           </Grid>
