@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link, type LinkProps } from "react-router";
 
@@ -6,21 +7,21 @@ interface NavLinkProps extends LinkProps {
 }
 
 export const NavLink = styled(Link)<NavLinkProps>(({ theme, isActive }) => ({
+  ...theme.typography.overline,
   display: "flex",
   alignItems: "center",
-  color: isActive ? "#fff" : "#000",
-  fontFamily: theme.typography.h5.fontFamily,
+  // color: isActive ? "#fff" : "#000",
   textDecoration: "none",
   paddingLeft: 16,
   paddingRight: 16,
   cursor: "pointer",
-  backgroundColor: isActive ? theme.palette.primary.main : "inherit",
+  // backgroundColor: isActive ? theme.palette.structure[300] : "inherit",
   position: "relative",
-  ...(!isActive && {
-    ":hover": {
-      backgroundColor: theme.palette.secondary.dark,
-    },
-  }),
+
+  ":hover": {
+    backgroundColor: theme.palette.structure["200"],
+  },
+
   "&::after": isActive
     ? {
         position: "absolute",
@@ -29,7 +30,7 @@ export const NavLink = styled(Link)<NavLinkProps>(({ theme, isActive }) => ({
         content: "''",
         width: "100%",
         height: 4,
-        backgroundColor: theme.palette.surface.main,
+        backgroundColor: theme.palette.accent[300],
       }
     : {},
 }));

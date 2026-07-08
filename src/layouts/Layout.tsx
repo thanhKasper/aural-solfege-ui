@@ -7,7 +7,7 @@ const Layout = () => {
   const theme = useTheme();
   return (
     <Stack
-      sx={{ backgroundColor: theme.palette.surface["300"], minHeight: "100vh" }}
+      sx={{ backgroundColor: theme.palette.canvas["100"], minHeight: "100vh" }}
     >
       <Header />
       <Outlet />

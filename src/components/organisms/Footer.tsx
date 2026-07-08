@@ -11,7 +11,10 @@ import {
 import { styled } from "@mui/material/styles";
 
 const FooterContainer = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: theme.palette.structure[100],
+  borderTopWidth: "1px",
+  borderTopStyle: "solid",
+  borderTopColor: theme.palette.structure[300],
 }));
 
 export const Footer = () => {
