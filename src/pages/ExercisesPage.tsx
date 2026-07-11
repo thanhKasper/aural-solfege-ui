@@ -30,7 +30,14 @@ const ExercisesPage = () => {
             {isSuccess &&
               data.content.map((exercise) => (
                 <Grid size={3}>
-                  <ExerciseCard exercise={exercise} />
+                  <ExerciseCard
+                    exercise={exercise}
+                    onExerciseStart={() => {
+                      navigate(
+                        `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exercise.exerciseId}`,
+                      );
+                    }}
+                  />
                 </Grid>
               ))}
           </Grid>
