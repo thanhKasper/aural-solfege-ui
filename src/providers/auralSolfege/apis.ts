@@ -11,6 +11,12 @@ export async function getAllExercises(
     .then((res) => res.data);
 }
 
+export async function getExercise(exerciseId: string): Promise<ExerciseDTO> {
+  return auralSolfegeClient
+    .get("/exercises/" + exerciseId)
+    .then((res) => res.data);
+}
+
 export async function createNewExercise(newExercise: ExerciseDTO) {
   return auralSolfegeClient
     .post("/exercises", {
@@ -18,4 +24,10 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
       trainingMethodology: "INTERVAL_TRAINING",
     })
     .then((res) => res);
+}
+
+export async function getExerciseSession(exerciseId: string) {
+  return auralSolfegeClient
+    .post("/exercises/" + exerciseId + "/sessions")
+    .then((response) => response.data);
 }
