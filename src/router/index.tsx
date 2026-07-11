@@ -4,6 +4,7 @@ import ExercisesPage from "@/pages/ExercisesPage";
 import OverviewPage from "@/pages/OverviewPage";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import ExerciseCreationPage from "@/pages/ExerciseCreationPage";
+import ExerciseSessionPage from "@/pages/ExerciseSessionPage";
 
 const router = createBrowserRouter(
   [
@@ -22,6 +23,10 @@ const router = createBrowserRouter(
         {
           path: URL_PATH[NAVIGATION_ENDPOINT.CREATE_EXERCISE],
           element: <ExerciseCreationPage />,
+        },
+        {
+          path: `/${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/:id`,
+          element: <ExerciseSessionPage />,
         },
       ],
     },
