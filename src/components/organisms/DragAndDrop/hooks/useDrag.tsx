@@ -36,7 +36,7 @@ export default function useGhostDrag({
     style: {
       width: 0,
       height: 0,
-      backgroundColor: theme.palette.surface[400],
+      backgroundColor: theme.palette.canvas[200],
     },
   });
 

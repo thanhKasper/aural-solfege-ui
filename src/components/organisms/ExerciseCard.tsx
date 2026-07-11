@@ -20,7 +20,7 @@ const ExerciseCardContainer = styled(Card)(({ theme }) => {
     backgroundColor: "inherit",
     position: "relative",
     ":hover": {
-      backgroundColor: theme.palette.surface[400],
+      backgroundColor: theme.palette.canvas[200],
       "& > :first-child::after": {
         backgroundColor: "inherit",
       },

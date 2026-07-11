@@ -65,7 +65,7 @@ export const RelocatableElement = ({
         justifyContent: "space-between",
         padding: 2,
         ":hover": {
-          backgroundColor: (theme) => theme.palette.surface[400],
+          backgroundColor: (theme) => theme.palette.canvas[100],
         },
       }}
     >
