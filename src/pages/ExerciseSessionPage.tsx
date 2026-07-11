@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
-  const { data } = useQuery({
+  const { data: exercise } = useQuery({
     queryKey: ["exercise"],
     queryFn: async () => await getExercise(exerciseId),
   });
@@ -16,11 +16,18 @@ const ExerciseSessionPage = () => {
   });
   return (
     <Container>
-      <Typography variant="h1">{data?.title}</Typography>
-      <Typography variant="body2">{data?.description}</Typography>
+      <Typography variant="h1">{exercise?.title}</Typography>
+      <Typography variant="body2">{exercise?.description}</Typography>
 
-      <Stack direction={"row"}>
-        <Stepper />
+      <Stack direction={"row"} sx={{ mt: 2 }}>
+        <Stepper
+          orientation="vertical"
+          activeStep={currentExerciseStep?.currentStep.activityPosition}
+          steps={(exercise?.exerciseActivities ?? []).map((activity) => ({
+            title: activity.type,
+            content: `${activity.interval} - ${activity.texture}`,
+          }))}
+        />
         <div>{JSON.stringify(currentExerciseStep)}</div>
       </Stack>
     </Container>

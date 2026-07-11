@@ -1,4 +1,9 @@
-import type { ExerciseDTO, Page, PagingParameters } from "./apis.type";
+import type {
+  ExerciseDTO,
+  ExerciseSessionResponse,
+  Page,
+  PagingParameters,
+} from "./apis.type";
 import auralSolfegeClient from "./auralSolfegeClient";
 
 export async function getAllExercises(
@@ -26,7 +31,9 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
     .then((res) => res);
 }
 
-export async function getExerciseSession(exerciseId: string) {
+export async function getExerciseSession(
+  exerciseId: string,
+): Promise<ExerciseSessionResponse> {
   return auralSolfegeClient
     .post("/exercises/" + exerciseId + "/sessions")
     .then((response) => response.data);
