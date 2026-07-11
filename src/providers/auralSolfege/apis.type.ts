@@ -28,7 +28,46 @@ export type ExerciseDTO = {
   loop: boolean;
   trainingMethodology: string;
   intervals?: MUSICAL_INTERVAL[]; // Optional since this field won't be send during the exercise creation phase
-  exerciseFormats: ExerciseFormat[];
+  exerciseActivities: ExerciseFormat[];
+};
+
+type StepStatus = "ACTIVE" | "COMPLETED" | "PENDING";
+type StepType = "LISTEN_INTERVAL";
+type Direction = "UP" | "DOWN";
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+export type SessionMetadata = {
+  sessionId: string;
+  totalSteps: number;
+  currentStepIndex: number;
+  hasNext: boolean;
+};
+
+export type PracticeStep = {
+  type: StepType;
+  activityPosition: number;
+  stepType: StepType;
+  status: StepStatus;
+  interval: MUSICAL_INTERVAL;
+  direction: Direction;
+  texture: string;
+};
+
+export type ApiCallInfo = {
+  method: HttpMethod;
+  url: string;
+  query: {
+    direction: Direction;
+    interval: MUSICAL_INTERVAL;
+    texture: string;
+  };
+  body: null | Record<string, unknown>;
+};
+
+export type ExerciseSessionResponse = {
+  metadata: SessionMetadata;
+  currentStep: PracticeStep;
+  apiCall: ApiCallInfo;
 };
 
 export type ExerciseFormat = TIntervalEarTrainingFormatDTO;
