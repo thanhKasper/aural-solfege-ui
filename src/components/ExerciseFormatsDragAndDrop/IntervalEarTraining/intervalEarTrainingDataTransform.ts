@@ -6,7 +6,7 @@ export const transformIntervalEarTraining: (
   data: TIntervalTrainingExercise,
 ) => ExerciseFormat = (data) => {
   return {
-    interval: data.interval,
+    intervals: [data.interval],
     position: data.position,
     texture: data.texture,
     type: EXERCISE_FORMAT.SINGLE_INTERVAL,

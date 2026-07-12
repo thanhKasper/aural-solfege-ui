@@ -6,6 +6,7 @@ export const inverseTransformSingleIntervalTraining: (
 ) => TIntervalTrainingExercise = (data) => {
   return {
     ...data,
+    interval: data.intervals[0],
     id: crypto.randomUUID(),
   };
 };

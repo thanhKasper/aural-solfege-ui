@@ -160,7 +160,7 @@ const ExerciseCreationPage = () => {
           </Grid>
           <Grid size={12}>
             <Controller
-              name="exerciseFormats"
+              name="exerciseActivities"
               control={control}
               rules={{
                 required: "This field is required",
