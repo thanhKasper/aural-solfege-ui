@@ -1,6 +1,6 @@
 import Stepper from "@/components/organisms/Stepper/Stepper";
 import { getExercise, getExerciseSession } from "@/providers/auralSolfege/apis";
-import { Container, Stack, Typography } from "@mui/material";
+import { Button, Container, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
@@ -19,7 +19,7 @@ const ExerciseSessionPage = () => {
       <Typography variant="h1">{exercise?.title}</Typography>
       <Typography variant="body2">{exercise?.description}</Typography>
 
-      <Stack direction={"row"} sx={{ mt: 2 }}>
+      <Stack direction={"row"} sx={{ mt: 2 }} spacing={4}>
         <Stepper
           orientation="vertical"
           activeStep={currentExerciseStep?.currentStep.activityPosition}
@@ -28,7 +28,17 @@ const ExerciseSessionPage = () => {
             content: `${activity.interval} - ${activity.texture}`,
           }))}
         />
-        <div>{JSON.stringify(currentExerciseStep)}</div>
+        <Stack direction={"column"} sx={{ flexGrow: 1 }}>
+          <Stack direction={"column"}>
+            <Typography variant="h2">
+              A placeholder that will be different depending on the type of step that we would handle
+            </Typography>
+          </Stack>
+          <Stack direction={"row"} sx={{ marginX: "auto" }}>
+            <Button>Previous</Button>
+            <Button>Next</Button>
+          </Stack>
+        </Stack>
       </Stack>
     </Container>
   );
