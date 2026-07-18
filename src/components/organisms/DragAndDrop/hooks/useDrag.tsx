@@ -27,6 +27,7 @@ export interface GhostDragProps {
 
 export default function useGhostDrag({
   commandOnMouseUp,
+  commandOnMouseMove,
   commandOnMouseDown,
 }: GhostDragProps) {
   const theme = useTheme();
@@ -82,11 +83,15 @@ export default function useGhostDrag({
             y: e.clientY - deviationRef.current.yDev,
           });
           const ghostBoundary = ghostRef.current.getBoundingClientRect();
-          notify(EventType.DRAG, ghostBoundary);
+          if (!commandOnMouseMove) {
+            notify(EventType.DRAG, { draggingElement: ghostBoundary });
+          } else {
+            commandOnMouseMove(ghostBoundary, notify);
+          }
         }
       }
     },
-    [notify],
+    [notify, commandOnMouseMove],
   );
 
   const onDrop = useCallback(() => {

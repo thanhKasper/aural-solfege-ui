@@ -3,20 +3,28 @@ import DragAndDropContext, { type Subscriber } from "./DragAndDropContext";
 import { EventType } from "./types";
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
-  const topics = useRef<Map<EventType, Subscriber[]>>(new Map());
+  const topics = useRef<Map<EventType, Subscriber<any>[]>>(new Map());
 
   const subscribe = useCallback(
-    (eventType: EventType, subscriber: Subscriber) => {
+    <Payload,>(eventType: EventType, subscriber: Subscriber<Payload>) => {
       if (!topics.current.has(eventType)) {
         topics.current.set(eventType, []);
       }
-      topics.current.get(eventType)!.push(subscriber);
+
+      const filteredSubscribers =
+        topics.current
+          .get(eventType)
+          ?.filter(
+            (registeredSubscriber) => subscriber.id !== registeredSubscriber.id,
+          ) ?? [];
+
+      topics.current.set(eventType, [...filteredSubscribers, subscriber]);
     },
     [],
   );
 
   const unsubscribe = useCallback(
-    (eventType: EventType, subscriber: Subscriber) => {
+    <Payload,>(eventType: EventType, subscriber: Subscriber<Payload>) => {
       const subscribers = topics.current.get(eventType);
       if (subscribers) {
         topics.current.set(
