@@ -62,12 +62,12 @@ const retrieveMusicalInterval = (musicalInterval: MUSICAL_INTERVAL) => {
   return intervalMap[musicalInterval];
 };
 
-export const getNotation = (musicalInterval: MUSICAL_INTERVAL): string => {
+export const getIntervalNotation = (
+  musicalInterval: MUSICAL_INTERVAL,
+): string => {
   return retrieveMusicalInterval(musicalInterval).notation;
 };
 
-export const getName = (musicalInterval: MUSICAL_INTERVAL): string => {
+export const getIntervalName = (musicalInterval: MUSICAL_INTERVAL): string => {
   return retrieveMusicalInterval(musicalInterval).name;
 };
-
-export default retrieveMusicalInterval;

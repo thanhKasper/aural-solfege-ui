@@ -12,6 +12,8 @@ import type {
   IRelocatableElement,
   TIntervalTrainingExercise,
 } from "./IntervalEarTraining.types";
+import { getIntervalName } from "@/utils/retrieveMusicalInterval";
+import type { MUSICAL_INTERVAL } from "@/constants";
 
 export const IntervalEarTrainingRelocatableContent = ({
   onRemove,
@@ -71,7 +73,11 @@ export const IntervalEarTrainingRelocatableContent = ({
     >
       <Box>
         <Typography variant="h6">Single interval exercise</Typography>
-        <Typography>{currentValue?.interval}</Typography>
+        {currentValue?.interval && (
+          <Typography>
+            {getIntervalName(currentValue.interval as MUSICAL_INTERVAL)}
+          </Typography>
+        )}
         <Typography>{currentValue?.texture}</Typography>
       </Box>
       <Box>

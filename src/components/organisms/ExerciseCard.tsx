@@ -13,7 +13,7 @@ import IconContent from "../molecules/IconContent";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import Icon from "../atoms/Icon";
-import { getNotation } from "@/utils/retrieveMusicalInterval";
+import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 
 const ExerciseCardContainer = styled(Card)(({ theme }) => {
   return {
@@ -75,7 +75,7 @@ export const ExerciseCard = ({
                 content={
                   exercise.intervals?.map((interval) => (
                     <Typography variant="body1" key={interval}>
-                      {getNotation(interval)}
+                      {getIntervalNotation(interval)}
                     </Typography>
                   )) ?? []
                 }

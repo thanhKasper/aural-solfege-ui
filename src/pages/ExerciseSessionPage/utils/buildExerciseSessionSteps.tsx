@@ -2,7 +2,7 @@ import Icon from "@/components/atoms/Icon";
 import MultiValueTextContent from "@/components/atoms/MultiValueTextContent";
 import type { StepperContent } from "@/components/organisms/Stepper/Stepper";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
-import { getNotation } from "@/utils/retrieveMusicalInterval";
+import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 import { Stack } from "@mui/material";
 
 export const buildExerciseSessionStep = (
@@ -18,7 +18,7 @@ export const buildExerciseSessionStep = (
         <Stack>
           <MultiValueTextContent
             multiValueText={activity.intervals.map((interval) =>
-              getNotation(interval),
+              getIntervalNotation(interval),
             )}
           />
         </Stack>
