@@ -76,7 +76,8 @@ const ASfStepContent = styled(StepContent)(
   }),
 );
 
-type StepperContent = {
+export type StepperContent = {
+  icon?: ReactNode;
   title: string;
   content?: ReactNode;
 };
@@ -119,7 +120,9 @@ const Stepper = (props: StepperProps & { steps: StepperContent[] }) => {
       <MuiStepper {...props}>
         {steps.map((step, index) => (
           <ASfStep key={index}>
-            <ASfStepLabel slots={{ stepIcon: ASfStepIcon }}>
+            <ASfStepLabel
+              slots={{ stepIcon: step.icon ? () => step.icon : ASfStepIcon }}
+            >
               {step.title}
             </ASfStepLabel>
             <ASfStepContent slotProps={{ transition: { in: true } }}>
