@@ -28,7 +28,7 @@ export type ExerciseDTO = {
   loop: boolean;
   trainingMethodology: string;
   intervals?: MUSICAL_INTERVAL[]; // Optional since this field won't be send during the exercise creation phase
-  exerciseActivities: ExerciseFormat[];
+  exerciseActivities: ExerciseActivity[];
 };
 
 type StepStatus = "ACTIVE" | "COMPLETED" | "PENDING";
@@ -70,7 +70,7 @@ export type ExerciseSessionResponse = {
   apiCall: ApiCallInfo;
 };
 
-export type ExerciseFormat = TIntervalEarTrainingFormatDTO;
+export type ExerciseActivity = TIntervalEarTrainingFormatDTO;
 
 type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
   type: FORMAT_TYPE;
@@ -79,6 +79,6 @@ type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
 
 type TIntervalEarTrainingFormatDTO =
   TBaseExerciseFormat<EXERCISE_FORMAT.SINGLE_INTERVAL> & {
-    intervals: string[];
+    intervals: MUSICAL_INTERVAL[];
     texture: string;
   };
