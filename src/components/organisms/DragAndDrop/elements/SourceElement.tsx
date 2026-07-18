@@ -1,6 +1,7 @@
 import { type PropsWithChildren } from "react";
 import type { DragAndDropElement } from "../containers/Container.types";
 import DraggableElement from "./DraggableElement";
+import { EventType } from "../types";
 
 interface ISourceElementProps {
   onRelocatableElementCreated?: DragAndDropElement["onCreated"];
@@ -14,10 +15,13 @@ const SourceElement = ({
 }: PropsWithChildren<ISourceElementProps>) => {
   return (
     <DraggableElement
-      onDrop={(domRect, subscriber) => {
-        subscriber.createRelocatableElement(domRect, {
-          onCreated: onRelocatableElementCreated,
-          render,
+      onDrop={(domRect, sendEvent) => {
+        sendEvent(EventType.DROP, {
+          dropPosition: domRect,
+          callbacks: {
+            onCreated: onRelocatableElementCreated,
+            render,
+          },
         });
       }}
     >

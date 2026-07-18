@@ -2,6 +2,7 @@ import { useEffect, useRef, type PropsWithChildren } from "react";
 import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
 import type { DragAndDropElement } from "../containers/Container.types";
+import { EventType } from "../types";
 
 interface IRelocatableElement {
   id: string;
@@ -28,14 +29,23 @@ const RelocatableElement = ({
 
   return (
     <DraggableElement
-      onMove={(dropPosition, subscriber) => {
-        subscriber.indicateDropPosition(id, dropPosition);
+      onMove={(currentPosition, sendEvent) => {
+        sendEvent(EventType.DRAG, {
+          draggingElement: currentPosition,
+          sourceId: id,
+        });
       }}
-      onMouseDown={(dropPosition, subscriber) => {
-        subscriber.indicateDropPosition(id, dropPosition);
+      onMouseDown={(currentPosition, sendEvent) => {
+        sendEvent(EventType.DRAG, {
+          draggingElement: currentPosition,
+          sourceId: id,
+        });
       }}
-      onDrop={(dropPosition, subscriber) => {
-        subscriber.updateRelocatableElementPosition(id, dropPosition);
+      onDrop={(dropPosition, sendEvent) => {
+        sendEvent(EventType.CHANGE_POSITION, {
+          sourceId: id,
+          dropPosition,
+        });
       }}
       sx={sx}
     >

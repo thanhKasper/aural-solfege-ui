@@ -1,17 +1,19 @@
-import { useContext, useEffect } from "react";
-import DragAndDropContext, { type Subscriber } from "../DragAndDropContext";
+import { useContext } from "react";
+import DragAndDropContext from "../DragAndDropContext";
 import type { EventType } from "../types";
 
-export default function useObservant(
-  events: EventType[],
-  subscriber: Subscriber,
-) {
-  const { subscribe, unsubscribe } = useContext(DragAndDropContext);
+export default function useObservant(subscriberId: string) {
+  const { subscribe } = useContext(DragAndDropContext);
 
-  useEffect(() => {
-    events.map((event) => subscribe(event, subscriber));
-    return () => {
-      events.map((event) => unsubscribe(event, subscriber));
-    };
-  }, [events, subscriber, subscribe, unsubscribe]);
+  return {
+    subscribe: <Payload,>(
+      eventType: EventType,
+      eventHandler: (payload: Payload) => void,
+    ) => {
+      subscribe(eventType, {
+        id: subscriberId,
+        handleEvent: eventHandler,
+      });
+    },
+  };
 }

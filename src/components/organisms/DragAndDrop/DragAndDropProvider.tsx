@@ -1,8 +1,5 @@
 import { useCallback, useRef, type PropsWithChildren } from "react";
-import DragAndDropContext, {
-  type Subscriber,
-  type TAction,
-} from "./DragAndDropContext";
+import DragAndDropContext, { type Subscriber } from "./DragAndDropContext";
 import { EventType } from "./types";
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
@@ -31,12 +28,15 @@ const DragAndDropProvider = ({ children }: PropsWithChildren) => {
     [],
   );
 
-  const notify = useCallback((eventType: EventType, action: TAction) => {
-    const subscribers = topics.current.get(eventType);
-    if (subscribers) {
-      subscribers.forEach((subscriber) => action(subscriber));
-    }
-  }, []);
+  const notify = useCallback(
+    <Payload,>(eventType: EventType, payload: Payload) => {
+      const subscribers = topics.current.get(eventType);
+      if (subscribers) {
+        subscribers.forEach((subscriber) => subscriber.handleEvent(payload));
+      }
+    },
+    [],
+  );
 
   return (
     <DragAndDropContext.Provider

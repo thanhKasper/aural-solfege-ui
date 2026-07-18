@@ -1,13 +1,12 @@
 import type { SxProps, Theme } from "@mui/material";
 import { Box } from "@mui/material";
 import { useRef, type PropsWithChildren } from "react";
-import type { Subscriber } from "../DragAndDropContext";
-import useGhostDrag from "../hooks/useDrag";
+import useGhostDrag, { type GhostDragProps } from "../hooks/useDrag";
 
 interface IDraggableElementProps {
-  onMouseDown?: (domRect: DOMRect, subscriber: Subscriber) => void;
-  onDrop: (domRect: DOMRect, subscriber: Subscriber) => void;
-  onMove?: (domRect: DOMRect, subscriber: Subscriber) => void;
+  onMouseDown?: GhostDragProps["commandOnMouseDown"];
+  onDrop: GhostDragProps["commandOnMouseUp"];
+  onMove?: GhostDragProps["commandOnMouseMove"];
   sx?: SxProps<Theme>;
 }
 

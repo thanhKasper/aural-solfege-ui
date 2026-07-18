@@ -6,20 +6,27 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import type { Subscriber } from "../DragAndDropContext";
 import { EventType } from "../types";
 import useNotify from "./useNotify";
 import { useTheme } from "@mui/material";
 
-interface GhostDragProps {
-  commandOnMouseUp: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
-  commandOnMouseMove?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
-  commandOnMouseDown?: (ghostDomRect: DOMRect, subscriber: Subscriber) => void;
+export interface GhostDragProps {
+  commandOnMouseUp: (
+    ghostDomRect: DOMRect,
+    sendEvent: ReturnType<typeof useNotify>["notify"],
+  ) => void;
+  commandOnMouseMove?: (
+    ghostDomRect: DOMRect,
+    sendEvent: ReturnType<typeof useNotify>["notify"],
+  ) => void;
+  commandOnMouseDown?: (
+    ghostDomRect: DOMRect,
+    sendEvent: ReturnType<typeof useNotify>["notify"],
+  ) => void;
 }
 
 export default function useGhostDrag({
   commandOnMouseUp,
-  commandOnMouseMove,
   commandOnMouseDown,
 }: GhostDragProps) {
   const theme = useTheme();
@@ -75,17 +82,11 @@ export default function useGhostDrag({
             y: e.clientY - deviationRef.current.yDev,
           });
           const ghostBoundary = ghostRef.current.getBoundingClientRect();
-          notify(EventType.DRAG, (subscriber) => {
-            if (commandOnMouseMove) {
-              commandOnMouseMove(ghostBoundary, subscriber);
-            } else {
-              subscriber?.detectCollision(ghostBoundary);
-            }
-          });
+          notify(EventType.DRAG, ghostBoundary);
         }
       }
     },
-    [commandOnMouseMove, notify],
+    [notify],
   );
 
   const onDrop = useCallback(() => {
@@ -102,9 +103,7 @@ export default function useGhostDrag({
     window.removeEventListener("mousemove", onMove);
     if (ghostRef.current) {
       const boundRect = ghostRef.current.getBoundingClientRect();
-      notify(EventType.DROP, (subscriber) =>
-        commandOnMouseUp(boundRect, subscriber),
-      );
+      commandOnMouseUp(boundRect, notify);
     }
   }, [commandOnMouseUp, notify, onMove]);
 
@@ -147,9 +146,7 @@ export default function useGhostDrag({
   useLayoutEffect(() => {
     if (shouldNotifyStart && ghostRef.current) {
       const boundRect = ghostRef.current.getBoundingClientRect();
-      notify(EventType.START_DRAGGING, (subscriber) =>
-        commandOnMouseDown?.(boundRect, subscriber),
-      );
+      commandOnMouseDown?.(boundRect, notify);
       setShouldNotifyStart(null);
     }
   }, [shouldNotifyStart, commandOnMouseDown, notify]);
