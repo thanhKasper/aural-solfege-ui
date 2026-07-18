@@ -234,6 +234,7 @@ const DropContainer = ({
                 opacity: draggingItem === element.id ? 0 : 1,
                 display: draggingItem === element.id ? "none" : "block",
                 transition: "opacity 0.15s",
+                backgroundColor: theme.palette.canvas[100],
               }}
             >
               <RelocatableElement
