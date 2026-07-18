@@ -1,4 +1,4 @@
-import { Box, type SxProps, type Theme } from "@mui/material";
+import { Box, useTheme, type SxProps, type Theme } from "@mui/material";
 import React, {
   useCallback,
   useEffect,
@@ -46,6 +46,7 @@ const DropContainer = ({
   const [draggedElementHeight, setDraggedElementHeight] = useState<
     number | undefined
   >(undefined);
+  const theme = useTheme();
 
   const { subscribe } = useObservant(id);
 
@@ -201,9 +202,9 @@ const DropContainer = ({
   const placeholderSxResolved: SxProps<Theme> = {
     height: draggedElementHeight ?? 40,
     borderRadius: 1,
-    bgcolor: "secondary.light",
     opacity: 0.6,
     transition: "all 0.2s ease",
+    bgcolor: "canvas.400",
     ...placeholderSx,
   };
 
@@ -215,8 +216,9 @@ const DropContainer = ({
         minHeight: "500px",
         border: "1px dashed black",
         alignSelf: "stretch",
-        backgroundColor: containerCollision ? "secondary.light" : "transparent",
-        borderColor: containerCollision ? "blue" : "black",
+        backgroundColor: containerCollision ? "canvas.200" : "transparent",
+        borderColor: containerCollision ? "accent.300" : "canvas.400",
+        borderWidth: 2,
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
