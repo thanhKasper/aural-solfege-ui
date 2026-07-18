@@ -6,28 +6,12 @@ import type {
   IntervalEarTrainingConfiguration,
   TIntervalTrainingExercise,
 } from "./IntervalEarTraining.types";
-
-const INTERVALS = [
-  { value: "UNISON", label: "Unison (P0)" },
-  { value: "MINOR_2ND", label: "Minor 2nd (m2)" },
-  { value: "MAJOR_2ND", label: "Major 2nd (M2)" },
-  { value: "MINOR_3RD", label: "Minor 3rd (m3)" },
-  { value: "MAJOR_3RD", label: "Major 3rd (M3)" },
-  { value: "PERFECT_4TH", label: "Perfect 4th (P4)" },
-  { value: "TRITONE", label: "Diminished 5th (d5)" },
-  { value: "PERFECT_5TH", label: "Perfect 5th (P5)" },
-  { value: "MINOR_6TH", label: "Minor 6th (m6)" },
-  { value: "MAJOR_6TH", label: "Major 6th (M6)" },
-  { value: "MINOR_7TH", label: "Minor 7th (m7)" },
-  { value: "MAJOR_7TH", label: "Major 7th (M7)" },
-  { value: "PERFECT_8TH", label: "Perfect Octave (P8)" },
-];
-
-const TEXTURES = [
-  { value: "STACKED", label: "Stacked" },
-  { value: "ASCENDING", label: "Ascending" },
-  { value: "DESCENDING", label: "Descending" },
-];
+import { intervalMap } from "@/utils/retrieveMusicalInterval";
+import {
+  getIntervalTextureName,
+  INTERVAL_TEXTURE_MAP,
+} from "@/utils/intervalTexture";
+import type { INTERVAL_TEXTURE } from "@/constants";
 
 export const IntervalEarTrainingConfigurationContent = ({
   formRef,
@@ -59,11 +43,13 @@ export const IntervalEarTrainingConfigurationContent = ({
                 fullWidth
                 size="small"
               >
-                {INTERVALS.map((i) => (
-                  <MenuItem key={i.value} value={i.value}>
-                    {i.label}
-                  </MenuItem>
-                ))}
+                {Object.entries(intervalMap).map(
+                  ([key, { name, notation }]) => (
+                    <MenuItem key={key} value={key}>
+                      {`${name} (${notation})`}
+                    </MenuItem>
+                  ),
+                )}
               </Select>
             </InputLabel>
           )}
@@ -82,9 +68,9 @@ export const IntervalEarTrainingConfigurationContent = ({
                 fullWidth
                 size="small"
               >
-                {TEXTURES.map((t) => (
-                  <MenuItem key={t.value} value={t.value}>
-                    {t.label}
+                {Object.entries(INTERVAL_TEXTURE_MAP).map(([key]) => (
+                  <MenuItem key={key} value={key}>
+                    {getIntervalTextureName(key as INTERVAL_TEXTURE)}
                   </MenuItem>
                 ))}
               </Select>

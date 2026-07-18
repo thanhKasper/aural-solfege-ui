@@ -1,6 +1,6 @@
 import { MUSICAL_INTERVAL } from "@/constants";
 
-const intervalMap: Record<
+export const intervalMap: Record<
   MUSICAL_INTERVAL,
   { notation: string; name: string }
 > = {
