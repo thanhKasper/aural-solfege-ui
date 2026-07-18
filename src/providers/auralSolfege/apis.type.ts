@@ -1,4 +1,4 @@
-import type { EXERCISE_FORMAT } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
+import type { EXERCISE_FORMAT } from "@/constants";
 import type { MUSICAL_INTERVAL } from "@/constants";
 
 export type PageMetadata = {

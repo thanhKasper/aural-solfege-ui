@@ -1,8 +1,6 @@
-import type { TIntervalTrainingExercise } from "./IntervalEarTraining";
+import type { TIntervalTrainingExercise } from "./IntervalEarTraining/IntervalEarTraining.types";
 
-export enum EXERCISE_FORMAT {
-  SINGLE_INTERVAL = "SINGLE_INTERVAL",
-}
+export { EXERCISE_FORMAT } from "@/constants";
 
 export type TBaseExerciseFormat<T> = {
   id: string;

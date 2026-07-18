@@ -12,6 +12,10 @@ export const URL_PATH: Record<NAVIGATION_ENDPOINT, string> = {
   [NAVIGATION_ENDPOINT.SESSION]: "/sessions"
 };
 
+export enum EXERCISE_FORMAT {
+  SINGLE_INTERVAL = "SINGLE_INTERVAL",
+}
+
 export enum MUSICAL_INTERVAL {
   UNISON = "UNISON",
   MINOR_2ND = "MINOR_2ND",

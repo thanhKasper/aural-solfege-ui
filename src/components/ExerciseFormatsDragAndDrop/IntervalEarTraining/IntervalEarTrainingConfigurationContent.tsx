@@ -5,7 +5,7 @@ import InputLabel from "@/components/atoms/InputLabel";
 import type {
   IntervalEarTrainingConfiguration,
   TIntervalTrainingExercise,
-} from "./types";
+} from "./IntervalEarTraining.types";
 
 const INTERVALS = [
   { value: "UNISON", label: "Unison (P0)" },
