@@ -1,10 +1,10 @@
 import { Stack } from "@mui/material";
 import type { ReactElement } from "react";
-import Icon from "../atoms/Icon";
+import MultiValueTextContent from "../atoms/MultiValueTextContent";
 
 interface IconContentProps {
   icon: ReactElement;
-  content?: ReactElement[];
+  content?: string[];
 }
 
 const IconContent = ({ icon, content }: IconContentProps) => {
@@ -12,15 +12,7 @@ const IconContent = ({ icon, content }: IconContentProps) => {
     <Stack direction={"row"} spacing={1} sx={{ alignItems: "center" }}>
       {icon}
       <Stack direction={"row"} spacing={1} sx={{ alignItems: "center" }}>
-        {content?.map((info, idx) => {
-          if (idx === 0) return info;
-          return (
-            <>
-              <Icon icon="rest" color="disabled" fontSize="xs" />
-              {info}
-            </>
-          );
-        })}
+        <MultiValueTextContent multiValueText={content ?? []} />
       </Stack>
     </Stack>
   );
