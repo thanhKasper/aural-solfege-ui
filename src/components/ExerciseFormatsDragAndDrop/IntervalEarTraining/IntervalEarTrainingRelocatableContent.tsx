@@ -13,7 +13,7 @@ import type {
   TIntervalTrainingExercise,
 } from "./IntervalEarTraining.types";
 
-export const RelocatableElement = ({
+export const IntervalEarTrainingRelocatableContent = ({
   onRemove,
   onCreated,
   value,

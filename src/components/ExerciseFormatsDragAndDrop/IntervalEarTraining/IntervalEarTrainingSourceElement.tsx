@@ -1,6 +1,6 @@
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
 import { Box, Typography } from "@mui/material";
-import { RelocatableElement } from "./RelocatableElement";
+import { IntervalEarTrainingRelocatableContent } from "./IntervalEarTrainingRelocatableContent";
 import {
   EXERCISE_FORMAT,
   type IExerciseFormatSourceElement,
@@ -14,7 +14,7 @@ export const IntervalEarTrainingSourceElement = ({
   return (
     <SourceElement
       render={({ removeSelf, relocatableElementId, currentPosition }) => (
-        <RelocatableElement
+        <IntervalEarTrainingRelocatableContent
           onRemove={(data) => {
             onRemoved({
               ...data,

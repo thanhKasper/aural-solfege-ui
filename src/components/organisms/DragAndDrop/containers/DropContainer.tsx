@@ -113,6 +113,7 @@ const DropContainer = ({
       setPlaceholderIndex(null);
       setDraggingItem(null);
       setDraggedElementHeight(undefined);
+      setContainerCollision(false);
     },
     [placeholderIndex],
   );
