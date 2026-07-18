@@ -3,6 +3,7 @@ import { getExercise, getExerciseSession } from "@/providers/auralSolfege/apis";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
+import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
@@ -14,6 +15,14 @@ const ExerciseSessionPage = () => {
     queryKey: ["exerciseSession"],
     queryFn: async () => await getExerciseSession(exerciseId),
   });
+  console.log(
+    Array(exercise?.reps ?? 0).flatMap(() => {
+      return (exercise?.exerciseActivities ?? []).map((activity) => ({
+        title: activity.type,
+        content: `${activity.texture}`,
+      }));
+    }),
+  );
   return (
     <Container>
       <Typography variant="h1">{exercise?.title}</Typography>
@@ -23,15 +32,13 @@ const ExerciseSessionPage = () => {
         <Stepper
           orientation="vertical"
           activeStep={currentExerciseStep?.currentStep.activityPosition}
-          steps={(exercise?.exerciseActivities ?? []).map((activity) => ({
-            title: activity.type,
-            content: `${activity.interval} - ${activity.texture}`,
-          }))}
+          steps={buildExerciseSessionStep(exercise)}
         />
         <Stack direction={"column"} sx={{ flexGrow: 1 }}>
           <Stack direction={"column"}>
             <Typography variant="h2">
-              A placeholder that will be different depending on the type of step that we would handle
+              A placeholder that will be different depending on the type of step
+              that we would handle
             </Typography>
           </Stack>
           <Stack direction={"row"} sx={{ marginX: "auto" }}>

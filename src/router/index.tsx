@@ -4,7 +4,7 @@ import ExercisesPage from "@/pages/ExercisesPage";
 import OverviewPage from "@/pages/OverviewPage";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import ExerciseCreationPage from "@/pages/ExerciseCreationPage";
-import ExerciseSessionPage from "@/pages/ExerciseSessionPage";
+import ExerciseSessionPage from "@/pages/ExerciseSessionPage/ExerciseSessionPage";
 
 const router = createBrowserRouter(
   [
