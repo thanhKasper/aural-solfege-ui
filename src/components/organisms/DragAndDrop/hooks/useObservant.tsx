@@ -1,6 +1,6 @@
 import { useCallback, useContext } from "react";
 import DragAndDropContext from "../DragAndDropContext";
-import type { EventType } from "../types";
+import type { EventType } from "../DragAndDrop.types";
 
 export default function useObservant(subscriberId: string) {
   const { subscribe: globalSubscribe } = useContext(DragAndDropContext);

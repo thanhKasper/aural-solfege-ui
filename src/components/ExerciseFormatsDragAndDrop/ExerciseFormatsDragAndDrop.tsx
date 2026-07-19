@@ -1,11 +1,10 @@
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import DropContainer, {
-  type TElementPosition,
-} from "@/components/organisms/DragAndDrop/containers/DropContainer";
 import { Stack } from "@mui/material";
 import { useCallback, useRef } from "react";
 import type { TExerciseFormat } from "./ExerciseFormat.types";
 import { IntervalEarTrainingSourceElement } from "./IntervalEarTraining/IntervalEarTrainingSourceElement";
+import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
+import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -72,8 +71,9 @@ const ExerciseFormatsDragAndDrop = ({
             }}
           />
         </Stack>
-        <DropContainer
+        <DropContainer<TExerciseFormat>
           id="dropContainer1"
+          elements={value ?? []}
           onElementPositionChange={onElementPositionChangeCallback}
         />
       </Stack>

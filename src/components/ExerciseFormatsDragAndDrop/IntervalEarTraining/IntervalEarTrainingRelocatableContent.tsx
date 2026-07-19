@@ -1,111 +1,62 @@
-import { useRef, useState } from "react";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import useComponentFirstMount from "@/hooks/useComponentFirstMount";
-import useDialog from "@/services/dialog/useDialog";
-import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
-import type {
-  IntervalEarTrainingConfiguration,
-  IRelocatableElement,
-  TIntervalTrainingExercise,
-} from "./IntervalEarTraining.types";
-import { getIntervalName } from "@/utils/retrieveMusicalInterval";
 import type { INTERVAL_TEXTURE, MUSICAL_INTERVAL } from "@/constants";
 import { getIntervalTextureName } from "@/utils/intervalTexture";
+import { getIntervalName } from "@/utils/retrieveMusicalInterval";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
+import type { IRelocatableElement } from "./IntervalEarTraining.types";
 
 export const IntervalEarTrainingRelocatableContent = ({
   onRemove,
-  onCreated,
   value,
 }: IRelocatableElement) => {
-  const { open } = useDialog();
-  const configurationRef = useRef<IntervalEarTrainingConfiguration | null>(
-    null,
-  );
-  const [currentValue, setCurrentValue] = useState<
-    TIntervalTrainingExercise | undefined
-  >(undefined);
-
-  useComponentFirstMount(() => {
-    const close = open({
-      title: "Interval exercise training configuration",
-      content: (
-        <IntervalEarTrainingConfigurationContent
-          formRef={configurationRef}
-          defaultValue={value}
-        />
-      ),
-      buttons: [
-        {
-          label: "Cancel",
-          onClick: () => {
-            if (configurationRef.current) {
-              onRemove(configurationRef.current.getValues());
-            }
-            close();
-          },
-        },
-        {
-          label: "Submit",
-          onClick: () =>
-            configurationRef.current?.handleSubmit((data) => {
-              onCreated?.(data);
-              setCurrentValue(data);
-              close();
-            })(),
-        },
-      ],
-    });
-  });
-
   return (
-    <Stack
-      direction={"row"}
-      sx={{
-        justifyContent: "space-between",
-        padding: 2,
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.canvas[100],
-        },
-      }}
-    >
-      <Box>
-        <Typography variant="h6">Single interval exercise</Typography>
-        {currentValue?.interval && (
-          <Typography>
-            {getIntervalName(currentValue.interval as MUSICAL_INTERVAL)}
-          </Typography>
-        )}
-        {currentValue?.texture && (
-          <Typography>
-            {getIntervalTextureName(currentValue.texture as INTERVAL_TEXTURE)}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            if (configurationRef.current) {
-              onRemove(configurationRef.current.getValues());
-            }
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-        <IconButton>
-          <EditIcon />
-        </IconButton>
-        <IconButton>
-          <KeyboardArrowUpIcon />
-        </IconButton>
-        <IconButton>
-          <KeyboardArrowDownIcon />
-        </IconButton>
-      </Box>
-    </Stack>
+    value && (
+      <Stack
+        direction={"row"}
+        sx={{
+          justifyContent: "space-between",
+          padding: 2,
+          ":hover": {
+            backgroundColor: (theme) => theme.palette.canvas[100],
+          },
+        }}
+      >
+        <Box>
+          <Typography variant="h6">Single interval exercise</Typography>
+          {value?.interval && (
+            <Typography>
+              {getIntervalName(value.interval as MUSICAL_INTERVAL)}
+            </Typography>
+          )}
+          {value?.texture && (
+            <Typography>
+              {getIntervalTextureName(value.texture as INTERVAL_TEXTURE)}
+            </Typography>
+          )}
+        </Box>
+        <Box>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(value);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton onClick={() => {}}>
+            <EditIcon />
+          </IconButton>
+          <IconButton>
+            <KeyboardArrowUpIcon />
+          </IconButton>
+          <IconButton>
+            <KeyboardArrowDownIcon />
+          </IconButton>
+        </Box>
+      </Stack>
+    )
   );
 };

@@ -5,16 +5,63 @@ import {
   EXERCISE_FORMAT,
   type IExerciseFormatSourceElement,
 } from "../ExerciseFormat.types";
+import type {
+  IntervalEarTrainingConfiguration,
+  TIntervalTrainingExercise,
+} from "./IntervalEarTraining.types";
+import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
+import { useRef } from "react";
+import useDialog from "@/services/dialog/useDialog";
 
 export const IntervalEarTrainingSourceElement = ({
   onChanged,
   onCreated,
   onRemoved,
 }: IExerciseFormatSourceElement) => {
+  const { open } = useDialog();
+  const configurationRef = useRef<IntervalEarTrainingConfiguration | null>(
+    null,
+  );
+
+  const provideData = (data?: TIntervalTrainingExercise) => {
+    const close = open({
+      title: "Interval exercise training configuration",
+      content: (
+        <IntervalEarTrainingConfigurationContent
+          formRef={configurationRef}
+          defaultValue={data}
+        />
+      ),
+      buttons: [
+        {
+          label: "Cancel",
+          onClick: () => {
+            close();
+          },
+        },
+        {
+          label: "Submit",
+          onClick: () =>
+            configurationRef.current?.handleSubmit((data) => {
+              onCreated?.(data);
+              close();
+            })(),
+        },
+      ],
+    });
+  };
+
   return (
-    <SourceElement
-      render={({ removeSelf, relocatableElementId, currentPosition }) => (
+    <SourceElement<TIntervalTrainingExercise>
+      onBeforeRelocatableElementCreated={() => provideData()}
+      render={({
+        removeSelf,
+        relocatableElementId,
+        currentPosition,
+        value,
+      }) => (
         <IntervalEarTrainingRelocatableContent
+          value={value}
           onRemove={(data) => {
             onRemoved({
               ...data,

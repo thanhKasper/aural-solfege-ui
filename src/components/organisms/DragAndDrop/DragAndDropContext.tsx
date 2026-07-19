@@ -1,13 +1,5 @@
 import { createContext } from "react";
-import type { EventType } from "./types";
-
-export interface DragState {
-  x: number;
-  y: number;
-  isDrop: boolean;
-  ghostRect: DOMRect | null;
-  sourceId?: string;
-}
+import type { EventType } from "./DragAndDrop.types";
 
 export interface Subscriber<Payload> {
   id: string;

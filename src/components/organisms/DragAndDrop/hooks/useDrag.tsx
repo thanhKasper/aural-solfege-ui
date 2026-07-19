@@ -6,7 +6,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { EventType } from "../types";
+import { EventType } from "../DragAndDrop.types";
 import useNotify from "./useNotify";
 import { useTheme } from "@mui/material";
 

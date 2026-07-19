@@ -6,11 +6,17 @@ import React, {
   useRef,
   useState,
 } from "react";
-import useObservant from "../hooks/useObservant";
+
 import RelocatableElement from "../elements/RelocatableElement";
-import { EventType } from "../types";
+import useObservant from "../hooks/useObservant";
 import checkCollision from "../utils/checkCollision";
-import type { DragAndDropElement } from "./Container.types";
+import useNotify from "../hooks/useNotify";
+
+import {
+  EventType,
+  type DragAndDropContainerProps,
+  type DragAndDropElement,
+} from "../DragAndDrop.types";
 
 function isDragAbove(
   draggingPosition: DOMRect,
@@ -22,24 +28,16 @@ function isDragAbove(
   return draggingPosition.y < centerY;
 }
 
-export type TElementPosition = { elementId: string; position: number };
-
-interface DropContainerProps {
-  id: string;
-  placeholderSx?: SxProps<Theme>;
-  onElementPositionChange?: (updatedElements: TElementPosition[]) => void;
-}
-
-const DropContainer = ({
+const DropContainer = <ElementValue,>({
   id,
-  placeholderSx,
   onElementPositionChange,
-}: DropContainerProps) => {
+  elements,
+}: DragAndDropContainerProps<ElementValue>) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [containerCollision, setContainerCollision] = useState<boolean>(false);
   const [draggableElements, setDraggableElements] = useState<
-    DragAndDropElement[]
+    DragAndDropElement<ElementValue>[]
   >([]);
   const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
   const [draggingItem, setDraggingItem] = useState<string | null>(null);
@@ -49,6 +47,7 @@ const DropContainer = ({
   const theme = useTheme();
 
   const { subscribe } = useObservant(id);
+  const { notify } = useNotify();
 
   const indicateDropPosition = useCallback(
     (sourceId: string, domRect: DOMRect) => {
@@ -95,7 +94,7 @@ const DropContainer = ({
     (sourceId: string) => {
       if (placeholderIndex !== null) {
         let adjustedIndex: number | null = null;
-        let focusedElement: DragAndDropElement | undefined;
+        let focusedElement: DragAndDropElement<ElementValue> | undefined;
         setDraggableElements((old) => {
           focusedElement = old.find((el) => el.id === sourceId);
           const focusedElementIndex = old.findIndex((el) => el.id === sourceId);
@@ -119,21 +118,24 @@ const DropContainer = ({
     [placeholderIndex],
   );
 
-  const createRelocatableElement = (
-    dropPosition: DOMRect,
-    callbacks: Omit<DragAndDropElement, "id">,
-  ) => {
-    if (containerRef.current) {
-      const containerDomRect = containerRef.current.getBoundingClientRect();
-      if (checkCollision(dropPosition, containerDomRect)) {
-        setDraggableElements((old) => [
-          ...old,
-          { id: crypto.randomUUID(), ...callbacks },
-        ]);
-        setContainerCollision(false);
-      }
-    }
-  };
+  // const createRelocatableElement = useCallback(
+  //   (
+  //     dropPosition: DOMRect,
+  //     callbacks: Omit<DragAndDropElement<ElementValue>, "id">,
+  //   ) => {
+  //     if (containerRef.current) {
+  //       const containerDomRect = containerRef.current.getBoundingClientRect();
+  //       if (checkCollision(dropPosition, containerDomRect)) {
+  //         setDraggableElements((old) => [
+  //           ...old,
+  //           { id: crypto.randomUUID(), ...callbacks },
+  //         ]);
+  //         setContainerCollision(false);
+  //       }
+  //     }
+  //   },
+  //   [],
+  // );
 
   // Register event on first mounted
   useEffect(() => {
@@ -157,12 +159,18 @@ const DropContainer = ({
       EventType.DROP,
       ({
         dropPosition,
-        callbacks,
+        callback,
       }: {
         dropPosition: DOMRect;
-        callbacks: DragAndDropElement;
+        callback: () => void;
       }) => {
-        createRelocatableElement(dropPosition, callbacks);
+        if (containerRef.current) {
+          const containerDomRect = containerRef.current.getBoundingClientRect();
+          if (checkCollision(dropPosition, containerDomRect)) {
+            callback();
+            setContainerCollision(false);
+          }
+        }
       },
     );
 
@@ -172,10 +180,27 @@ const DropContainer = ({
         updateRelocatableElementPosition(sourceId);
       },
     );
+
+    subscribe<{
+      dndElement: DragAndDropElement<ElementValue>;
+      position: number;
+    }>(EventType.RENDER_ELEMENT, ({ dndElement, position }) => {
+      setDraggableElements((old) => [
+        ...old.slice(0, position),
+        dndElement,
+        ...old.slice(position + 1),
+      ]);
+    });
   }, [subscribe, indicateDropPosition, updateRelocatableElementPosition]);
 
+  useEffect(() => {
+    elements.map((element, idx) =>
+      notify(EventType.CONSTRUCT_ELEMENT, { element, position: idx }),
+    );
+  }, [elements, notify]);
+
   const updateElementPosition = useEffectEvent(
-    (draggableElements: DragAndDropElement[]) => {
+    (draggableElements: DragAndDropElement<ElementValue>[]) => {
       onElementPositionChange?.(
         draggableElements.map((element, idx) => ({
           elementId: element.id,
@@ -205,7 +230,6 @@ const DropContainer = ({
     opacity: 0.6,
     transition: "all 0.2s ease",
     bgcolor: "canvas.400",
-    ...placeholderSx,
   };
 
   return (
@@ -243,6 +267,7 @@ const DropContainer = ({
                 handleCancellation={() => handleRemoveElement(element.id)}
               >
                 {element.render({
+                  value: element.value,
                   relocatableElementId: element.id,
                   currentPosition: index,
                   moveDown: () => {},

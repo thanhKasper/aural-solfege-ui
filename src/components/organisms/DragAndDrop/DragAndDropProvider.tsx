@@ -1,6 +1,6 @@
 import { useCallback, useRef, type PropsWithChildren } from "react";
 import DragAndDropContext, { type Subscriber } from "./DragAndDropContext";
-import { EventType } from "./types";
+import { EventType } from "./DragAndDrop.types";
 
 const DragAndDropProvider = ({ children }: PropsWithChildren) => {
   const topics = useRef<Map<EventType, Subscriber<any>[]>>(new Map());

@@ -1,27 +1,51 @@
-import { type PropsWithChildren } from "react";
-import type { DragAndDropElement } from "../containers/Container.types";
+import { useEffect, useId, type PropsWithChildren } from "react";
 import DraggableElement from "./DraggableElement";
-import { EventType } from "../types";
+import { EventType, type DragAndDropElement } from "../DragAndDrop.types";
+import useObservant from "../hooks/useObservant";
+import useNotify from "../hooks/useNotify";
 
-interface ISourceElementProps {
-  onRelocatableElementCreated?: DragAndDropElement["onCreated"];
-  render: DragAndDropElement["render"];
+interface ISourceElementProps<TValue> {
+  onRelocatableElementCreated?: DragAndDropElement<TValue>["onCreated"];
+  onBeforeRelocatableElementCreated?: () => void;
+  render: DragAndDropElement<TValue>["render"];
 }
 
-const SourceElement = ({
+const SourceElement = <TValue,>({
   children,
   onRelocatableElementCreated,
+  onBeforeRelocatableElementCreated,
   render,
-}: PropsWithChildren<ISourceElementProps>) => {
+}: PropsWithChildren<ISourceElementProps<TValue>>) => {
+  const componentId = useId();
+  const { subscribe } = useObservant(componentId);
+  const { notify } = useNotify();
+
+  useEffect(() => {
+    subscribe<{ element: TValue; position: number }>(
+      EventType.CONSTRUCT_ELEMENT,
+      ({ element, position }) => {
+        notify<{ dndElement: DragAndDropElement<TValue>; position: number }>(
+          EventType.RENDER_ELEMENT,
+          {
+            dndElement: {
+              onCreated: onRelocatableElementCreated,
+              id: crypto.randomUUID(),
+              render,
+              value: element,
+            },
+            position,
+          },
+        );
+      },
+    );
+  }, [subscribe, notify, render, onRelocatableElementCreated]);
+
   return (
     <DraggableElement
       onDrop={(domRect, sendEvent) => {
         sendEvent(EventType.DROP, {
           dropPosition: domRect,
-          callbacks: {
-            onCreated: onRelocatableElementCreated,
-            render,
-          },
+          callback: onBeforeRelocatableElementCreated,
         });
       }}
     >
