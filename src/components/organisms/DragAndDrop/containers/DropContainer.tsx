@@ -1,11 +1,5 @@
 import { Box, useTheme, type SxProps, type Theme } from "@mui/material";
-import React, {
-  useCallback,
-  useEffect,
-  useEffectEvent,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import RelocatableElement from "../elements/RelocatableElement";
 import useObservant from "../hooks/useObservant";
@@ -107,6 +101,12 @@ const DropContainer = <ElementValue,>({
           const copy = [...old];
           const [movedItem] = copy.splice(focusedElementIndex, 1);
           copy.splice(adjustedIndex, 0, movedItem);
+          onElementPositionChange?.(
+            copy.map(({ value }, idx) => ({
+              position: idx,
+              value,
+            })),
+          );
           return copy;
         });
       }
@@ -115,27 +115,8 @@ const DropContainer = <ElementValue,>({
       setDraggedElementHeight(undefined);
       setContainerCollision(false);
     },
-    [placeholderIndex],
+    [placeholderIndex, onElementPositionChange],
   );
-
-  // const createRelocatableElement = useCallback(
-  //   (
-  //     dropPosition: DOMRect,
-  //     callbacks: Omit<DragAndDropElement<ElementValue>, "id">,
-  //   ) => {
-  //     if (containerRef.current) {
-  //       const containerDomRect = containerRef.current.getBoundingClientRect();
-  //       if (checkCollision(dropPosition, containerDomRect)) {
-  //         setDraggableElements((old) => [
-  //           ...old,
-  //           { id: crypto.randomUUID(), ...callbacks },
-  //         ]);
-  //         setContainerCollision(false);
-  //       }
-  //     }
-  //   },
-  //   [],
-  // );
 
   // Register event on first mounted
   useEffect(() => {
@@ -155,6 +136,9 @@ const DropContainer = <ElementValue,>({
       },
     );
 
+    /**
+     * Element dropped does not mean that the element is created, Therefore, the event DROP won't do any element creation.
+     */
     subscribe(
       EventType.DROP,
       ({
@@ -162,12 +146,12 @@ const DropContainer = <ElementValue,>({
         callback,
       }: {
         dropPosition: DOMRect;
-        callback: () => void;
+        callback?: (position: number) => void;
       }) => {
         if (containerRef.current) {
           const containerDomRect = containerRef.current.getBoundingClientRect();
           if (checkCollision(dropPosition, containerDomRect)) {
-            callback();
+            callback?.(draggableElements.length);
             setContainerCollision(false);
           }
         }
@@ -191,7 +175,12 @@ const DropContainer = <ElementValue,>({
         ...old.slice(position + 1),
       ]);
     });
-  }, [subscribe, indicateDropPosition, updateRelocatableElementPosition]);
+  }, [
+    subscribe,
+    indicateDropPosition,
+    updateRelocatableElementPosition,
+    draggableElements,
+  ]);
 
   useEffect(() => {
     elements.map((element, idx) =>
@@ -199,24 +188,24 @@ const DropContainer = <ElementValue,>({
     );
   }, [elements, notify]);
 
-  const updateElementPosition = useEffectEvent(
-    (draggableElements: DragAndDropElement<ElementValue>[]) => {
-      onElementPositionChange?.(
-        draggableElements.map((element, idx) => ({
-          elementId: element.id,
-          position: idx,
-        })),
-      );
-    },
-  );
+  // const updateElementPosition = useEffectEvent(
+  //   (draggableElements: DragAndDropElement<ElementValue>[]) => {
+  //     onElementPositionChange?.(
+  //       draggableElements.map((element, idx) => ({
+  //         elementId: element.id,
+  //         position: idx,
+  //       })),
+  //     );
+  //   },
+  // );
 
-  /**
-   * As long as the draggableElements is updated, it means there is a position change happening
-   * across elements inside the drop container
-   */
-  useEffect(() => {
-    updateElementPosition(draggableElements);
-  }, [draggableElements]);
+  // /**
+  //  * As long as the draggableElements is updated, it means there is a position change happening
+  //  * across elements inside the drop container
+  //  */
+  // useEffect(() => {
+  //   updateElementPosition(draggableElements);
+  // }, [draggableElements]);
 
   const handleRemoveElement = (elementId: string) => {
     setDraggableElements((old) =>
@@ -263,8 +252,9 @@ const DropContainer = <ElementValue,>({
             >
               <RelocatableElement
                 id={element.id}
-                onCreated={element.onCreated}
-                handleCancellation={() => handleRemoveElement(element.id)}
+                onCreated={() =>
+                  element.onCreated?.(element.id, index, element.value)
+                }
               >
                 {element.render({
                   value: element.value,

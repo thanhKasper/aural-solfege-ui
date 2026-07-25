@@ -15,14 +15,7 @@ const ExerciseSessionPage = () => {
     queryKey: ["exerciseSession"],
     queryFn: async () => await getExerciseSession(exerciseId),
   });
-  console.log(
-    Array(exercise?.reps ?? 0).flatMap(() => {
-      return (exercise?.exerciseActivities ?? []).map((activity) => ({
-        title: activity.type,
-        content: `${activity.texture}`,
-      }));
-    }),
-  );
+
   return (
     <Container>
       <Typography variant="h1">{exercise?.title}</Typography>

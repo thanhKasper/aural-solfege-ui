@@ -6,12 +6,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import type { IRelocatableElement } from "./IntervalEarTraining.types";
+import type { ISingleIntervalRelocatableContent } from "./IntervalEarTraining.types";
 
 export const IntervalEarTrainingRelocatableContent = ({
   onRemove,
   value,
-}: IRelocatableElement) => {
+}: ISingleIntervalRelocatableContent) => {
   return (
     value && (
       <Stack

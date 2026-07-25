@@ -23,14 +23,11 @@ export const IntervalEarTrainingSourceElement = ({
     null,
   );
 
-  const provideData = (data?: TIntervalTrainingExercise) => {
+  const provideData = (position: number) => {
     const close = open({
       title: "Interval exercise training configuration",
       content: (
-        <IntervalEarTrainingConfigurationContent
-          formRef={configurationRef}
-          defaultValue={data}
-        />
+        <IntervalEarTrainingConfigurationContent formRef={configurationRef} />
       ),
       buttons: [
         {
@@ -43,7 +40,12 @@ export const IntervalEarTrainingSourceElement = ({
           label: "Submit",
           onClick: () =>
             configurationRef.current?.handleSubmit((data) => {
-              onCreated?.(data);
+              onCreated({
+                ...data,
+                type: EXERCISE_FORMAT.SINGLE_INTERVAL,
+                position,
+                id: crypto.randomUUID(),
+              });
               close();
             })(),
         },
@@ -53,7 +55,7 @@ export const IntervalEarTrainingSourceElement = ({
 
   return (
     <SourceElement<TIntervalTrainingExercise>
-      onBeforeRelocatableElementCreated={() => provideData()}
+      onBeforeElementDrop={provideData}
       render={({
         removeSelf,
         relocatableElementId,
@@ -72,14 +74,6 @@ export const IntervalEarTrainingSourceElement = ({
             removeSelf();
           }}
           onChange={onChanged}
-          onCreated={(data) =>
-            onCreated({
-              ...data,
-              type: EXERCISE_FORMAT.SINGLE_INTERVAL,
-              id: relocatableElementId,
-              position: currentPosition,
-            })
-          }
         />
       )}
     >

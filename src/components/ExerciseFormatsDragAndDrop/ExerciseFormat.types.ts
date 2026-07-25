@@ -4,7 +4,6 @@ import type { TIntervalTrainingExercise } from "./IntervalEarTraining/IntervalEa
 export { EXERCISE_FORMAT } from "@/constants";
 
 export type TBaseExerciseFormat<T> = {
-  id: string;
   position: number; // zero-based index
   type: EXERCISE_FORMAT;
 } & T;

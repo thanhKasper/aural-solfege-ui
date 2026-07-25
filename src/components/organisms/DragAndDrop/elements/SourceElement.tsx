@@ -6,14 +6,14 @@ import useNotify from "../hooks/useNotify";
 
 interface ISourceElementProps<TValue> {
   onRelocatableElementCreated?: DragAndDropElement<TValue>["onCreated"];
-  onBeforeRelocatableElementCreated?: () => void;
+  onBeforeElementDrop?: (position: number) => void;
   render: DragAndDropElement<TValue>["render"];
 }
 
 const SourceElement = <TValue,>({
   children,
   onRelocatableElementCreated,
-  onBeforeRelocatableElementCreated,
+  onBeforeElementDrop,
   render,
 }: PropsWithChildren<ISourceElementProps<TValue>>) => {
   const componentId = useId();
@@ -43,9 +43,12 @@ const SourceElement = <TValue,>({
   return (
     <DraggableElement
       onDrop={(domRect, sendEvent) => {
-        sendEvent(EventType.DROP, {
+        sendEvent<{
+          dropPosition: DOMRect;
+          callback?: (position: number) => void;
+        }>(EventType.DROP, {
           dropPosition: domRect,
-          callback: onBeforeRelocatableElementCreated,
+          callback: onBeforeElementDrop,
         });
       }}
     >

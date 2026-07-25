@@ -1,30 +1,28 @@
 import { useEffect, useRef, type PropsWithChildren } from "react";
 import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
-import { EventType, type DragAndDropElement } from "../DragAndDrop.types";
+import { EventType } from "../DragAndDrop.types";
 
-interface IRelocatableElement<TValue> {
+interface IRelocatableElement {
   id: string;
   sx?: SxProps<Theme>;
-  handleCancellation?: () => void;
-  onCreated?: DragAndDropElement<TValue>["onCreated"];
+  onCreated?: () => void;
 }
 
-const RelocatableElement = <TValue,>({
+const RelocatableElement = ({
   id,
   sx,
-  handleCancellation = () => {},
   onCreated,
   children,
-}: PropsWithChildren<IRelocatableElement<TValue>>) => {
+}: PropsWithChildren<IRelocatableElement>) => {
   const firstRenderRef = useRef(false);
 
   useEffect(() => {
     if (!firstRenderRef.current) {
       firstRenderRef.current = true;
-      onCreated?.(handleCancellation);
+      onCreated?.();
     }
-  }, [onCreated, handleCancellation]);
+  }, [onCreated]);
 
   return (
     <DraggableElement

@@ -168,24 +168,31 @@ const ExerciseCreationPage = () => {
               render={({
                 field: { value, onChange },
                 fieldState: { error },
-              }) => (
-                <InputLabel label="Training plan" errorMessage={error?.message}>
-                  <ExerciseFormatsDragAndDrop
-                    value={(value ?? []).map((exerciseFormat) =>
-                      reverseTransformMap[exerciseFormat.type](exerciseFormat),
-                    )}
-                    onExerciseFormatsChange={(data) =>
-                      onChange(
-                        data.map((internalExerciseFormat) =>
-                          transformDataMap[internalExerciseFormat.type](
-                            internalExerciseFormat,
-                          ),
+              }) => {
+                return (
+                  <InputLabel
+                    label="Training plan"
+                    errorMessage={error?.message}
+                  >
+                    <ExerciseFormatsDragAndDrop
+                      value={(value ?? []).map((exerciseFormat) =>
+                        reverseTransformMap[exerciseFormat.type](
+                          exerciseFormat,
                         ),
-                      )
-                    }
-                  />
-                </InputLabel>
-              )}
+                      )}
+                      onExerciseFormatsChange={(data) =>
+                        onChange(
+                          data.map((internalExerciseFormat) =>
+                            transformDataMap[internalExerciseFormat.type](
+                              internalExerciseFormat,
+                            ),
+                          ),
+                        )
+                      }
+                    />
+                  </InputLabel>
+                );
+              }}
             />
           </Grid>
           <Grid size={12}>

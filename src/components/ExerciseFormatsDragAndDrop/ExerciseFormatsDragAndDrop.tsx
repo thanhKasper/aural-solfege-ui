@@ -35,10 +35,10 @@ const ExerciseFormatsDragAndDrop = ({
   };
 
   const onElementPositionChangeCallback = useCallback(
-    (newElementList: TElementPosition[]) => {
+    (newElementList: TElementPosition<TExerciseFormat>[]) => {
       const hashedElement: Record<string, number> = newElementList.reduce(
         (reduced, curr) => {
-          return { ...reduced, [curr.elementId]: curr.position };
+          return { ...reduced, [curr.value.id]: curr.position };
         },
         {},
       );

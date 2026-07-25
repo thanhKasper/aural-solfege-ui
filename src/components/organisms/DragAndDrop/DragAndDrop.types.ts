@@ -9,12 +9,12 @@ export enum EventType {
 }
 
 export interface DragAndDropElement<TValue> {
-  id: string;
-  value?: TValue;
-  onCreated?: (cancelCreation: () => void) => void;
-  onRemoved?: (cancelRemoval: () => void) => void;
+  id: string; // id here is very important, ensure that new id is created only when the element is created, not because it rerenders.
+  value: TValue;
+  onCreated?: (elementId: string, position: number, value: TValue) => void;
+  onRemoved?: (elementId: string, position: number, value: TValue) => void;
   render: (args: {
-    value?: TValue;
+    value: TValue;
     relocatableElementId: string;
     currentPosition: number;
     removeSelf: () => void;
@@ -23,10 +23,12 @@ export interface DragAndDropElement<TValue> {
   }) => ReactNode;
 }
 
-export type TElementPosition = { elementId: string; position: number };
+export type TElementPosition<TValue> = { value: TValue; position: number };
 
 export interface DragAndDropContainerProps<TValue> {
   id: string;
   elements: TValue[];
-  onElementPositionChange?: (updatedElements: TElementPosition[]) => void;
+  onElementPositionChange?: (
+    updatedElements: TElementPosition<TValue>[],
+  ) => void;
 }
