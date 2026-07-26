@@ -42,10 +42,14 @@ const DropContainer = <ElementValue,>({
     number | undefined
   >(undefined);
   const theme = useTheme();
+  const sortedElements = elements.sort((a, b) =>
+    a.position > b.position ? 1 : -1,
+  );
+  const valueList = sortedElements.map((element) => element.value);
   const isDataSync = useComponentDataSync<
     ElementValue[],
     DragAndDropElement<ElementValue>[]
-  >(elements, draggableElements, (elements, draggableElements) => {
+  >(valueList, draggableElements, (elements, draggableElements) => {
     const internalElementValues = draggableElements.map(
       (draggableElement) => draggableElement.value,
     );
@@ -196,20 +200,23 @@ const DropContainer = <ElementValue,>({
 
   useEffect(() => {
     if (!isDataSync) {
-      elements.map((element, idx) => {
+      sortedElements.map(({ value }, idx) => {
         const draggableElement = draggableElements[idx];
-        if (draggableElement && isEqual(element, draggableElement.value)) {
+        if (draggableElement && isEqual(value, draggableElement.value)) {
           notify(EventType.REBUILD_ELEMENT, {
             draggableElementId: draggableElement.id,
-            data: element,
+            data: value,
             position: idx,
           });
         } else {
-          notify(EventType.CONSTRUCT_ELEMENT, { data: element, position: idx });
+          notify(EventType.CONSTRUCT_ELEMENT, {
+            data: value,
+            position: idx,
+          });
         }
       });
     }
-  }, [elements, notify, isDataSync, draggableElements]);
+  }, [sortedElements, notify, isDataSync, draggableElements]);
 
   const handleRemoveElement = (elementId: string) => {
     setDraggableElements((old) =>

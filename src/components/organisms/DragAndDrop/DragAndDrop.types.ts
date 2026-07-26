@@ -28,7 +28,7 @@ export type TElementPosition<TValue> = { value: TValue; position: number };
 
 export interface DragAndDropContainerProps<TValue> {
   id: string;
-  elements: TValue[];
+  elements: TElementPosition<TValue>[];
   onElementPositionChange?: (
     updatedElements: TElementPosition<TValue>[],
   ) => void;

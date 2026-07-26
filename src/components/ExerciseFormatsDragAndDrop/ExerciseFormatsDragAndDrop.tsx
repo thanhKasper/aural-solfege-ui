@@ -74,7 +74,12 @@ const ExerciseFormatsDragAndDrop = ({
         </Stack>
         <DropContainer<TExerciseFormat>
           id="dropContainer1"
-          elements={value ?? []}
+          elements={
+            value.map((value) => ({
+              position: value.position,
+              value: value,
+            })) ?? []
+          }
           onElementPositionChange={onElementPositionChangeCallback}
         />
       </Stack>
