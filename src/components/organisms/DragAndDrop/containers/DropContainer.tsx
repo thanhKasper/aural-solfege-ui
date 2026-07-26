@@ -11,6 +11,7 @@ import {
   EventType,
   type DragAndDropContainerProps,
   type DragAndDropElement,
+  type TElementPosition,
 } from "../DragAndDrop.types";
 import useComponentDataSync from "@/hooks/useComponentDataSync";
 
@@ -97,6 +98,7 @@ const DropContainer = <ElementValue,>({
 
   const updateRelocatableElementPosition = useCallback(
     (sourceId: string) => {
+      let newUpdatedElements: TElementPosition<ElementValue>[] = [];
       if (placeholderIndex !== null) {
         let adjustedIndex: number | null = null;
         let focusedElement: DragAndDropElement<ElementValue> | undefined;
@@ -112,15 +114,14 @@ const DropContainer = <ElementValue,>({
           const copy = [...old];
           const [movedItem] = copy.splice(focusedElementIndex, 1);
           copy.splice(adjustedIndex, 0, movedItem);
-          onElementPositionChange?.(
-            copy.map(({ value }, idx) => ({
-              position: idx,
-              value,
-            })),
-          );
+          newUpdatedElements = copy.map((item, idx) => ({
+            position: idx,
+            value: item.value,
+          }));
           return copy;
         });
       }
+      onElementPositionChange?.(newUpdatedElements);
       setPlaceholderIndex(null);
       setDraggingItem(null);
       setDraggedElementHeight(undefined);
@@ -209,25 +210,6 @@ const DropContainer = <ElementValue,>({
       });
     }
   }, [elements, notify, isDataSync, draggableElements]);
-
-  // const updateElementPosition = useEffectEvent(
-  //   (draggableElements: DragAndDropElement<ElementValue>[]) => {
-  //     onElementPositionChange?.(
-  //       draggableElements.map((element, idx) => ({
-  //         elementId: element.id,
-  //         position: idx,
-  //       })),
-  //     );
-  //   },
-  // );
-
-  // /**
-  //  * As long as the draggableElements is updated, it means there is a position change happening
-  //  * across elements inside the drop container
-  //  */
-  // useEffect(() => {
-  //   updateElementPosition(draggableElements);
-  // }, [draggableElements]);
 
   const handleRemoveElement = (elementId: string) => {
     setDraggableElements((old) =>
