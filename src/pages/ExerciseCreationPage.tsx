@@ -46,7 +46,7 @@ const ExerciseCreationPage = () => {
 
   return (
     <Container>
-      <Typography variant="h3">Create new exercise</Typography>
+      <Typography variant="h1">Create new exercise</Typography>
       <Form control={control}>
         <Grid container sx={{ paddingTop: 4 }} spacing={4}>
           <Grid container size={12}>

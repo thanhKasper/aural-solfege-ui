@@ -118,9 +118,10 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           textTransform: "none",
-        },
+          backgroundColor: theme.palette.accent[300],
+        }),
       },
     },
     MuiTextField: {

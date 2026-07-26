@@ -76,7 +76,7 @@ export const Footer = () => {
       </Stack>
 
       {/* Right: Feedback form */}
-      <Stack direction={"column"} spacing={4}>
+      <Stack direction={"column"} spacing={2}>
         <Typography variant="subtitle1">Your opinion matters!</Typography>
 
         <TextField
