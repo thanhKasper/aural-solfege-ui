@@ -74,7 +74,7 @@ export const IntervalEarTrainingSourceElement = ({
           borderLeftWidth: 5,
           borderStyle: "solid",
           backgroundColor: "canvas.100",
-          borderColor: "canvas.400",
+          borderColor: "canvas.300",
         }}
       >
         <Typography>Interval Ear Training</Typography>

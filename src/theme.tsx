@@ -137,12 +137,20 @@ const theme = createTheme({
             backgroundColor: theme.palette.grey[100],
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.main,
+            borderColor: theme.palette.canvas[300],
             borderWidth: 1.5,
             borderRadius: 0,
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.dark,
+            borderColor: theme.palette.canvas[400],
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.canvas[400],
+          },
+
+          "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.canvas[400],
+            backgroundColor: theme.palette.canvas[200],
           },
         }),
       },
@@ -150,7 +158,10 @@ const theme = createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.secondary.main,
+          color: theme.palette.canvas[300],
+          "&.Mui-checked": {
+            color: theme.palette.canvas[400],
+          },
         }),
       },
       defaultProps: {
