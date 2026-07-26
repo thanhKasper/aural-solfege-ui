@@ -19,9 +19,7 @@ export const IntervalEarTrainingRelocatableContent = ({
         sx={{
           justifyContent: "space-between",
           padding: 2,
-          ":hover": {
-            backgroundColor: (theme) => theme.palette.canvas[100],
-          },
+          backgroundColor: "canvas.100",
         }}
       >
         <Box>
