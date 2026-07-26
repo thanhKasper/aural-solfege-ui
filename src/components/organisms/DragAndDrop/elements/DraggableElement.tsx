@@ -35,7 +35,7 @@ const DraggableElement = ({
           }
           baseMouseDown(e.nativeEvent, draggableElementRef);
         }}
-        sx={{ cursor: "grab", ...sx }}
+        sx={{ cursor: "grab", backgroundColor: "inherit", ...sx }}
       >
         {children}
       </Box>

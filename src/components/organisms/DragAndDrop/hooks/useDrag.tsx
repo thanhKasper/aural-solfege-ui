@@ -8,7 +8,7 @@ import {
 import { createPortal } from "react-dom";
 import { EventType } from "../DragAndDrop.types";
 import useNotify from "./useNotify";
-import { useTheme } from "@mui/material";
+import type { SxProps } from "@mui/material/styles";
 
 export interface GhostDragProps {
   commandOnMouseUp: (
@@ -23,28 +23,25 @@ export interface GhostDragProps {
     ghostDomRect: DOMRect,
     sendEvent: ReturnType<typeof useNotify>["notify"],
   ) => void;
+  ghostComponentStyle?: SxProps;
 }
 
 export default function useGhostDrag({
   commandOnMouseUp,
   commandOnMouseMove,
   commandOnMouseDown,
+  ghostComponentStyle,
 }: GhostDragProps) {
-  const theme = useTheme();
   const { notify } = useNotify();
   const [ghostHTML, setGhostHTML] = useState<{
     htmlString: string;
-    style: {
-      width: number;
-      height: number;
-      backgroundColor?: string;
-    };
+    style: SxProps;
   }>({
     htmlString: "",
     style: {
       width: 0,
       height: 0,
-      backgroundColor: theme.palette.canvas[200],
+      ...ghostComponentStyle,
     },
   });
 
