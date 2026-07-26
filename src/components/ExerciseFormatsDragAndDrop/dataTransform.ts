@@ -1,5 +1,5 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
-import { transformIntervalEarTraining } from "./IntervalEarTraining/intervalEarTrainingDataTransform";
+import { transformIntervalEarTraining } from "./SingleIntervalTraining/intervalEarTrainingDataTransform";
 import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
 
 export const transformDataMap: Record<

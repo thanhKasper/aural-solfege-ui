@@ -1,5 +1,5 @@
 import type { EXERCISE_FORMAT } from "@/constants";
-import type { TIntervalTrainingExercise } from "./IntervalEarTraining/IntervalEarTraining.types";
+import type { TIntervalTrainingExercise } from "./SingleIntervalTraining/IntervalEarTraining.types";
 
 export { EXERCISE_FORMAT } from "@/constants";
 

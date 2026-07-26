@@ -1,6 +1,6 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
 import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
-import { inverseTransformSingleIntervalTraining } from "./IntervalEarTraining/intervalEarTrainingReverseDataTransform";
+import { inverseTransformSingleIntervalTraining } from "./SingleIntervalTraining/intervalEarTrainingReverseDataTransform";
 
 export const reverseTransformMap: Record<
   EXERCISE_FORMAT,
