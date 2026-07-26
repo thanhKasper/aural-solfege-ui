@@ -3,15 +3,52 @@ import { getIntervalTextureName } from "@/utils/intervalTexture";
 import { getIntervalName } from "@/utils/retrieveMusicalInterval";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import type { ISingleIntervalRelocatableContent } from "./IntervalEarTraining.types";
+import type {
+  IntervalEarTrainingConfiguration,
+  ISingleIntervalRelocatableContent,
+} from "./IntervalEarTraining.types";
+import useDialog from "@/services/dialog/useDialog";
+import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
+import { useRef } from "react";
 
 export const IntervalEarTrainingRelocatableContent = ({
   onRemove,
+  onChange,
   value,
 }: ISingleIntervalRelocatableContent) => {
+  const { open } = useDialog();
+  const formRef = useRef<IntervalEarTrainingConfiguration>(null);
+
+  const handleDataChange = () => {
+    const close = open({
+      title: "Update data",
+      content: (
+        <IntervalEarTrainingConfigurationContent
+          defaultValue={value}
+          formRef={formRef}
+        />
+      ),
+      buttons: [
+        {
+          label: "Cancel",
+          onClick: () => {
+            close();
+          },
+        },
+        {
+          label: "Update",
+          onClick: () => {
+            formRef?.current?.handleSubmit((data) => {
+              onChange?.(data);
+            })();
+            close();
+          },
+        },
+      ],
+    });
+  };
+
   return (
     value && (
       <Stack
@@ -44,14 +81,8 @@ export const IntervalEarTrainingRelocatableContent = ({
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton onClick={() => {}}>
+          <IconButton onClick={handleDataChange}>
             <EditIcon />
-          </IconButton>
-          <IconButton>
-            <KeyboardArrowUpIcon />
-          </IconButton>
-          <IconButton>
-            <KeyboardArrowDownIcon />
           </IconButton>
         </Box>
       </Stack>
