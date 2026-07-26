@@ -6,6 +6,7 @@ export enum EventType {
   CHANGE_POSITION = "CHANGE_POSITION",
   CONSTRUCT_ELEMENT = "CONSTRUCT_ELEMENT",
   RENDER_ELEMENT = "RENDER_ELEMENT",
+  REBUILD_ELEMENT = "REBUILD_ELEMENT",
 }
 
 export interface DragAndDropElement<TValue> {

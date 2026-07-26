@@ -3,7 +3,7 @@ import { transformIntervalEarTraining } from "./IntervalEarTraining/intervalEarT
 import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
 
 export const transformDataMap: Record<
-  EXERCISE_FORMAT,
+  string,
   (data: TExerciseFormat) => ExerciseActivity
 > = {
   [EXERCISE_FORMAT.SINGLE_INTERVAL]: transformIntervalEarTraining,

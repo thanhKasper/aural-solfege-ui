@@ -15,6 +15,7 @@ const ExerciseFormatsDragAndDrop = ({
   onExerciseFormatsChange,
   value = [],
 }: IExerciseFormatDragAndDrop) => {
+  console.log(value);
   const exerciseFormatsRef = useRef(value);
   const handleElementChange = (data: TExerciseFormat) => {
     const value = exerciseFormatsRef.current;

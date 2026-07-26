@@ -21,9 +21,9 @@ const SourceElement = <TValue,>({
   const { notify } = useNotify();
 
   useEffect(() => {
-    subscribe<{ element: TValue; position: number }>(
+    subscribe<{ data: TValue; position: number }>(
       EventType.CONSTRUCT_ELEMENT,
-      ({ element, position }) => {
+      ({ data, position }) => {
         notify<{ dndElement: DragAndDropElement<TValue>; position: number }>(
           EventType.RENDER_ELEMENT,
           {
@@ -31,7 +31,25 @@ const SourceElement = <TValue,>({
               onCreated: onRelocatableElementCreated,
               id: crypto.randomUUID(),
               render,
-              value: element,
+              value: data,
+            },
+            position,
+          },
+        );
+      },
+    );
+
+    subscribe<{ draggableElementId: string; data: TValue; position: number }>(
+      EventType.REBUILD_ELEMENT,
+      ({ draggableElementId, data, position }) => {
+        notify<{ dndElement: DragAndDropElement<TValue>; position: number }>(
+          EventType.RENDER_ELEMENT,
+          {
+            dndElement: {
+              onCreated: onRelocatableElementCreated,
+              id: draggableElementId,
+              render,
+              value: data,
             },
             position,
           },

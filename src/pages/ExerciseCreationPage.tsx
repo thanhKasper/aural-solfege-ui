@@ -1,5 +1,5 @@
+import type { TExerciseFormat } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
 import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
-import { reverseTransformMap } from "@/components/ExerciseFormatsDragAndDrop/dataReverseTransform";
 import { transformDataMap } from "@/components/ExerciseFormatsDragAndDrop/dataTransform";
 import InputLabel from "@/components/atoms/InputLabel";
 import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionInput";
@@ -13,7 +13,11 @@ import { Controller, Form, useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 const ExerciseCreationPage = () => {
-  const { control, handleSubmit, setValue } = useForm<ExerciseDTO>();
+  const { control, handleSubmit, setValue } = useForm<
+    Omit<ExerciseDTO, "exerciseActivities"> & {
+      exerciseActivities: TExerciseFormat[];
+    }
+  >();
   const navigate = useNavigate();
   const isInfiniteLoop = useWatch({ control: control, name: "loop" });
   const { mutate, isSuccess } = useMutation({
@@ -23,7 +27,14 @@ const ExerciseCreationPage = () => {
   });
   const handleSave = () => {
     handleSubmit((exercise) => {
-      mutate(exercise);
+      const transformedExercise: ExerciseDTO = {
+        ...exercise,
+        exerciseActivities: exercise.exerciseActivities.map(
+          (exerciseActivity: TExerciseFormat) =>
+            transformDataMap[exerciseActivity.type](exerciseActivity),
+        ),
+      };
+      mutate(transformedExercise);
     })();
   };
 
@@ -175,20 +186,8 @@ const ExerciseCreationPage = () => {
                     errorMessage={error?.message}
                   >
                     <ExerciseFormatsDragAndDrop
-                      value={(value ?? []).map((exerciseFormat) =>
-                        reverseTransformMap[exerciseFormat.type](
-                          exerciseFormat,
-                        ),
-                      )}
-                      onExerciseFormatsChange={(data) =>
-                        onChange(
-                          data.map((internalExerciseFormat) =>
-                            transformDataMap[internalExerciseFormat.type](
-                              internalExerciseFormat,
-                            ),
-                          ),
-                        )
-                      }
+                      value={value ?? []}
+                      onExerciseFormatsChange={onChange}
                     />
                   </InputLabel>
                 );

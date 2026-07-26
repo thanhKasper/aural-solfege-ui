@@ -1,5 +1,6 @@
 import { Box, useTheme, type SxProps, type Theme } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { isEqual } from "lodash";
 
 import RelocatableElement from "../elements/RelocatableElement";
 import useObservant from "../hooks/useObservant";
@@ -11,6 +12,7 @@ import {
   type DragAndDropContainerProps,
   type DragAndDropElement,
 } from "../DragAndDrop.types";
+import useComponentDataSync from "@/hooks/useComponentDataSync";
 
 function isDragAbove(
   draggingPosition: DOMRect,
@@ -39,6 +41,15 @@ const DropContainer = <ElementValue,>({
     number | undefined
   >(undefined);
   const theme = useTheme();
+  const isDataSync = useComponentDataSync<
+    ElementValue[],
+    DragAndDropElement<ElementValue>[]
+  >(elements, draggableElements, (elements, draggableElements) => {
+    const internalElementValues = draggableElements.map(
+      (draggableElement) => draggableElement.value,
+    );
+    return isEqual(elements, internalElementValues);
+  });
 
   const { subscribe } = useObservant(id);
   const { notify } = useNotify();
@@ -183,10 +194,21 @@ const DropContainer = <ElementValue,>({
   ]);
 
   useEffect(() => {
-    elements.map((element, idx) =>
-      notify(EventType.CONSTRUCT_ELEMENT, { element, position: idx }),
-    );
-  }, [elements, notify]);
+    if (!isDataSync) {
+      elements.map((element, idx) => {
+        const draggableElement = draggableElements[idx];
+        if (draggableElement && isEqual(element, draggableElement.value)) {
+          notify(EventType.REBUILD_ELEMENT, {
+            draggableElementId: draggableElement.id,
+            data: element,
+            position: idx,
+          });
+        } else {
+          notify(EventType.CONSTRUCT_ELEMENT, { data: element, position: idx });
+        }
+      });
+    }
+  }, [elements, notify, isDataSync, draggableElements]);
 
   // const updateElementPosition = useEffectEvent(
   //   (draggableElements: DragAndDropElement<ElementValue>[]) => {
