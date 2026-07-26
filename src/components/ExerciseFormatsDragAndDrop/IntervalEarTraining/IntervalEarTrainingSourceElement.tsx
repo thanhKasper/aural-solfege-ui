@@ -56,21 +56,11 @@ export const IntervalEarTrainingSourceElement = ({
   return (
     <SourceElement<TIntervalTrainingExercise>
       onBeforeElementDrop={provideData}
-      render={({
-        removeSelf,
-        relocatableElementId,
-        currentPosition,
-        value,
-      }) => (
+      render={({ removeSelf, value }) => (
         <IntervalEarTrainingRelocatableContent
           value={value}
           onRemove={(data) => {
-            onRemoved({
-              ...data,
-              type: EXERCISE_FORMAT.SINGLE_INTERVAL,
-              id: relocatableElementId,
-              position: currentPosition,
-            });
+            onRemoved(data);
             removeSelf();
           }}
           onChange={onChanged}
