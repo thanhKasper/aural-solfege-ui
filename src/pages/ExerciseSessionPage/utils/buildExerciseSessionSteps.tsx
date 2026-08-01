@@ -37,7 +37,7 @@ export const buildExerciseSessionStep = (
     ? oneRoundSessionWithRest
     : [
         ...Array.from({
-          length: (exercise?.exerciseActivities?.length ?? 1) - 1,
+          length: (exercise?.reps ?? 1) - 1,
         }).flatMap(() => {
           return oneRoundSessionWithRest;
         }),
