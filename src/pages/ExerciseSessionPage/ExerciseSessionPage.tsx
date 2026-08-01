@@ -28,17 +28,16 @@ const ExerciseSessionPage = () => {
           activeStep={currentExerciseStep?.currentStep.activityPosition}
           steps={buildExerciseSessionStep(exercise)}
         />
-        <Stack direction={"column"} sx={{ flexGrow: 1 }}>
+        <Stack
+          direction={"column"}
+          sx={{ flexGrow: 1, justifyContent: "space-between" }}
+        >
           <Stack direction={"column"}>
-            <Typography variant="h2">
-              A placeholder that will be different depending on the type of step
-              that we would handle
-            </Typography>
             {currentExerciseStep && (
               <PracticeStepRenderer practiceStep={currentExerciseStep} />
             )}
           </Stack>
-          <Stack direction={"row"} sx={{ marginX: "auto" }}>
+          <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
             <Button>Previous</Button>
             <Button>Next</Button>
           </Stack>

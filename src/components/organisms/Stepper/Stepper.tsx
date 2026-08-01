@@ -116,7 +116,7 @@ const Stepper = (props: StepperProps & { steps: StepperContent[] }) => {
   const { steps } = props;
 
   return (
-    <Box sx={{ minWidth: 200 }}>
+    <Box>
       <MuiStepper {...props}>
         {steps.map((step, index) => (
           <ASfStep key={index}>
