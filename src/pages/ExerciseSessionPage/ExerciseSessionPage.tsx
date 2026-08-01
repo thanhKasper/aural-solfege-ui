@@ -32,11 +32,9 @@ const ExerciseSessionPage = () => {
           direction={"column"}
           sx={{ flexGrow: 1, justifyContent: "space-between" }}
         >
-          <Stack direction={"column"}>
-            {currentExerciseStep && (
-              <PracticeStepRenderer practiceStep={currentExerciseStep} />
-            )}
-          </Stack>
+          {currentExerciseStep && (
+            <PracticeStepRenderer practiceStep={currentExerciseStep} />
+          )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
             <Button>Previous</Button>
             <Button>Next</Button>
