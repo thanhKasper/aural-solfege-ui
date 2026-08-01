@@ -4,6 +4,7 @@ import { Button, Container, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
+import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepRenderer";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
@@ -33,6 +34,9 @@ const ExerciseSessionPage = () => {
               A placeholder that will be different depending on the type of step
               that we would handle
             </Typography>
+            {currentExerciseStep && (
+              <PracticeStepRenderer practiceStep={currentExerciseStep} />
+            )}
           </Stack>
           <Stack direction={"row"} sx={{ marginX: "auto" }}>
             <Button>Previous</Button>

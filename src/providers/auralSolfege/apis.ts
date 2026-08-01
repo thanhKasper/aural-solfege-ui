@@ -1,6 +1,6 @@
 import type {
   ExerciseDTO,
-  ExerciseSessionResponse,
+  PracticeStepResponse,
   Page,
   PagingParameters,
 } from "./apis.type";
@@ -33,7 +33,7 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
 
 export async function getExerciseSession(
   exerciseId: string,
-): Promise<ExerciseSessionResponse> {
+): Promise<PracticeStepResponse> {
   return auralSolfegeClient
     .post("/exercises/" + exerciseId + "/sessions")
     .then((response) => response.data);
