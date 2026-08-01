@@ -3,13 +3,11 @@ import DraggableElement from "./DraggableElement";
 import { EventType, type DragAndDropElement } from "../DragAndDrop.types";
 import useObservant from "../hooks/useObservant";
 import useNotify from "../hooks/useNotify";
-import type { SxProps } from "@mui/material/styles";
 
 interface ISourceElementProps<TValue> {
   onRelocatableElementCreated?: DragAndDropElement<TValue>["onCreated"];
   onBeforeElementDrop?: (position: number) => void;
   render: DragAndDropElement<TValue>["render"];
-  style?: SxProps;
 }
 
 const SourceElement = <TValue,>({
@@ -17,7 +15,6 @@ const SourceElement = <TValue,>({
   onRelocatableElementCreated,
   onBeforeElementDrop,
   render,
-  style,
 }: PropsWithChildren<ISourceElementProps<TValue>>) => {
   const componentId = useId();
   const { subscribe } = useObservant(componentId);
@@ -72,7 +69,6 @@ const SourceElement = <TValue,>({
           callback: onBeforeElementDrop,
         });
       }}
-      sx={style}
     >
       {children}
     </DraggableElement>

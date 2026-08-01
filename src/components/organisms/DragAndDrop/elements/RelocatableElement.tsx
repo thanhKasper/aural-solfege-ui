@@ -1,17 +1,14 @@
 import { useEffect, useRef, type PropsWithChildren } from "react";
-import type { SxProps, Theme } from "@mui/material";
 import DraggableElement from "./DraggableElement";
 import { EventType } from "../DragAndDrop.types";
 
 interface IRelocatableElement {
   id: string;
-  sx?: SxProps<Theme>;
   onCreated?: () => void;
 }
 
 const RelocatableElement = ({
   id,
-  sx,
   onCreated,
   children,
 }: PropsWithChildren<IRelocatableElement>) => {
@@ -44,7 +41,6 @@ const RelocatableElement = ({
           dropPosition,
         });
       }}
-      sx={sx}
     >
       {children}
     </DraggableElement>
