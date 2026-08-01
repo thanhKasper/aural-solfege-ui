@@ -8,6 +8,7 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   base: "/aural-solfege",
   server: {
+    host: "0.0.0.0",
     port: 3000,
     proxy: {
       "/aural-solfege/api": {
