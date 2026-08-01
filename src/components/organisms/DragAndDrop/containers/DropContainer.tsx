@@ -1,4 +1,4 @@
-import { Box, useTheme, type SxProps, type Theme } from "@mui/material";
+import { Box, type SxProps, type Theme } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash";
 
@@ -41,7 +41,6 @@ const DropContainer = <ElementValue,>({
   const [draggedElementHeight, setDraggedElementHeight] = useState<
     number | undefined
   >(undefined);
-  const theme = useTheme();
   const sortedElements = elements.sort((a, b) =>
     a.position > b.position ? 1 : -1,
   );

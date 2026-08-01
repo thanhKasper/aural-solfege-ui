@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link, type LinkProps } from "react-router";
 

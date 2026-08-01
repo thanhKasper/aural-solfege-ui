@@ -3,12 +3,12 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type CSSProperties,
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
 import { EventType } from "../DragAndDrop.types";
 import useNotify from "./useNotify";
-import type { SxProps } from "@mui/material/styles";
 
 export interface GhostDragProps {
   commandOnMouseUp: (
@@ -23,7 +23,7 @@ export interface GhostDragProps {
     ghostDomRect: DOMRect,
     sendEvent: ReturnType<typeof useNotify>["notify"],
   ) => void;
-  ghostComponentStyle?: SxProps;
+  ghostComponentStyle?: CSSProperties;
 }
 
 export default function useGhostDrag({
@@ -35,7 +35,7 @@ export default function useGhostDrag({
   const { notify } = useNotify();
   const [ghostHTML, setGhostHTML] = useState<{
     htmlString: string;
-    style: SxProps;
+    style: CSSProperties;
   }>({
     htmlString: "",
     style: {
