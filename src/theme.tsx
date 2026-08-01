@@ -118,11 +118,53 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: () => ({
           textTransform: "none",
-          backgroundColor: theme.palette.accent[300],
+          borderRadius: 0,
+          boxShadow: "none",
+          ":hover": {
+            boxShadow: "none",
+          },
         }),
+        sizeMedium: {
+          padding: "0.75rem 1.5rem",
+        },
       },
+      defaultProps: {
+        variant: "contained",
+      },
+      variants: [
+        {
+          props: { variant: "contained" },
+          style: ({ theme }) => ({
+            backgroundColor: theme.palette.accent[300],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[400],
+            },
+          }),
+        },
+        {
+          props: { variant: "outlined" },
+          style: ({ theme }) => ({
+            backgroundColor: "transparent",
+            borderColor: theme.palette.accent[300],
+            color: theme.palette.accent[300],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[50],
+            },
+          }),
+        },
+        {
+          props: { variant: "text" },
+          style: ({ theme }) => ({
+            backgroundColor: "transparent",
+            color: theme.palette.accent[400],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[50],
+            },
+          }),
+        },
+      ],
     },
     MuiTextField: {
       defaultProps: {

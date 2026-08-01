@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  cardHeaderClasses,
   Grid,
   IconButton,
   styled,
@@ -15,35 +16,47 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import Icon from "../atoms/Icon";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 
-const ExerciseCardContainer = styled(Card)(({ theme }) => {
+const ExerciseCardContainer = styled(Card)(({ theme: { palette } }) => {
   return {
     backgroundColor: "inherit",
     position: "relative",
+    borderRadius: 0,
+    shadow: "none",
+    transition: "all",
+    transitionDuration: "500ms",
     ":hover": {
-      backgroundColor: theme.palette.canvas[200],
-      "& > :first-child::after": {
+      transition: "all",
+      transitionDuration: "500ms",
+      backgroundColor: palette.canvas[200],
+      [`.${cardHeaderClasses.action}::after`]: {
+        transition: "all",
+        transitionDuration: "500ms",
         backgroundColor: "inherit",
       },
     },
-    borderRadius: 0,
-    shadow: "none",
   };
 });
 
 const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
   position: "relative",
-  "&::after": {
-    content: "''",
-    backgroundColor: theme.palette.secondary.main,
-    position: "absolute",
-    right: 0,
-    height: "100%",
-    width: "50%",
-    zIndex: 0,
-  },
-  "& > *": {
+  [`.${cardHeaderClasses.content}`]: {
     zIndex: 1,
+  },
+  [`.${cardHeaderClasses.action}`]: {
     position: "relative",
+    "&::after": {
+      content: "''",
+      backgroundColor: theme.palette.sage[100],
+      position: "absolute",
+      right: 0,
+      height: "100%",
+      width: "10rem",
+      top: "50%",
+      transform: "translateY(-50%)",
+    },
+    "& *": {
+      zIndex: 1,
+    },
   },
 }));
 
