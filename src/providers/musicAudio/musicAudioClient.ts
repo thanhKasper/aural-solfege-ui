@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const musicAudioClient = axios.create({
-  baseURL: "/api/intervals",
+  baseURL: "/sound-repo/api",
 });
 
 export default musicAudioClient;

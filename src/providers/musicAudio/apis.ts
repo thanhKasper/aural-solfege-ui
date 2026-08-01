@@ -1,6 +1,6 @@
 import musicAudioClient from "./musicAudioClient";
 
-export const getIntervalSound = ({
+export const getIntervalSound = async ({
   interval,
   texture,
   direction,
@@ -9,10 +9,12 @@ export const getIntervalSound = ({
   texture: string;
   direction: string;
 }): Promise<Blob> => {
-  return musicAudioClient.get(`/${interval}`, {
-    params: {
-      texture,
-      direction,
-    },
-  });
+  return musicAudioClient
+    .get(`/intervals/${interval}`, {
+      params: {
+        texture,
+        direction,
+      },
+    })
+    .then((data) => data.data);
 };
