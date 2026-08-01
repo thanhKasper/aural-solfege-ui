@@ -23,10 +23,10 @@ const ExerciseCardContainer = styled(Card)(({ theme: { palette } }) => {
     borderRadius: 0,
     shadow: "none",
     transition: "all",
-    transitionDuration: "500ms",
+    transitionDuration: "300ms",
     ":hover": {
       transition: "all",
-      transitionDuration: "500ms",
+      transitionDuration: "300ms",
       backgroundColor: palette.canvas[200],
       [`.${cardHeaderClasses.action}::after`]: {
         transition: "all",
@@ -45,6 +45,8 @@ const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
   [`.${cardHeaderClasses.action}`]: {
     position: "relative",
     "&::after": {
+      transition: "all",
+      transitionDuration: "500ms",
       content: "''",
       backgroundColor: theme.palette.sage[100],
       position: "absolute",
