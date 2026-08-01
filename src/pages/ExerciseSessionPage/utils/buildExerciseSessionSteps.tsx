@@ -30,7 +30,7 @@ export const buildExerciseSessionStep = (
     {
       icon: <Icon icon="quarter-rest" />,
       title: "Rest",
-      content: `Rest for ${exercise?.rest}`,
+      content: `Rest for ${exercise?.rest} seconds`,
     },
   ];
   return hasLoop
