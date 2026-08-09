@@ -80,7 +80,7 @@ type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
   position: number;
 };
 
-type TIntervalEarTrainingFormatDTO =
+export type TIntervalEarTrainingFormatDTO =
   TBaseExerciseFormat<EXERCISE_FORMAT.SINGLE_INTERVAL> & {
     intervals: MUSICAL_INTERVAL[];
     texture: string;
