@@ -14,6 +14,7 @@ export const URL_PATH: Record<NAVIGATION_ENDPOINT, string> = {
 
 export enum EXERCISE_FORMAT {
   SINGLE_INTERVAL = "SINGLE_INTERVAL",
+  COOL_DOWN = "COOL_DOWN",
 }
 
 export enum MUSICAL_INTERVAL {

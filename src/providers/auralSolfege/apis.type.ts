@@ -71,7 +71,9 @@ export type PracticeStepResponse = {
   apiCall: ApiCallInfo;
 };
 
-export type ExerciseActivity = TIntervalEarTrainingFormatDTO;
+export type ExerciseActivity =
+  | TIntervalEarTrainingFormatDTO
+  | TCoolDownActivityDTO;
 
 type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
   type: FORMAT_TYPE;
@@ -83,3 +85,7 @@ type TIntervalEarTrainingFormatDTO =
     intervals: MUSICAL_INTERVAL[];
     texture: string;
   };
+
+type TCoolDownActivityDTO = TBaseExerciseFormat<EXERCISE_FORMAT.COOL_DOWN> & {
+  restTime: number;
+};

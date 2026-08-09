@@ -1,6 +1,6 @@
-import Icon from "@/components/atoms/Icon";
 import MultiValueTextContent from "@/components/atoms/MultiValueTextContent";
 import type { StepperContent } from "@/components/organisms/Stepper/Stepper";
+import { EXERCISE_FORMAT } from "@/constants";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 import { Stack } from "@mui/material";
@@ -16,31 +16,27 @@ export const buildExerciseSessionStep = (
       title: activity.type,
       content: (
         <Stack>
-          <MultiValueTextContent
-            multiValueText={activity.intervals.map((interval) =>
-              getIntervalNotation(interval),
-            )}
-          />
+          {activity.type !== EXERCISE_FORMAT.COOL_DOWN ? (
+            <MultiValueTextContent
+              multiValueText={activity.intervals.map((interval) =>
+                getIntervalNotation(interval),
+              )}
+            />
+          ) : (
+            `Rest for ${activity.restTime} seconds`
+          )}
         </Stack>
       ),
     };
   });
-  const oneRoundSessionWithRest: StepperContent[] = [
-    ...oneRoundSession,
-    {
-      icon: <Icon icon="quarter-rest" />,
-      title: "Rest",
-      content: `Rest for ${exercise?.rest} seconds`,
-    },
-  ];
+
   return hasLoop
-    ? oneRoundSessionWithRest
+    ? oneRoundSession
     : [
         ...Array.from({
-          length: (exercise?.reps ?? 1) - 1,
+          length: exercise?.reps ?? 1,
         }).flatMap(() => {
-          return oneRoundSessionWithRest;
+          return oneRoundSession;
         }),
-        ...oneRoundSession,
       ];
 };
