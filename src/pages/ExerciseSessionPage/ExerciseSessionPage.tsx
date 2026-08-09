@@ -1,10 +1,15 @@
 import Stepper from "@/components/organisms/Stepper/Stepper";
-import { getExercise, getExerciseSession } from "@/providers/auralSolfege/apis";
+import {
+  getExercise,
+  getExerciseSession,
+  getNextExerciseSession,
+} from "@/providers/auralSolfege/apis";
 import { Button, Container, Stack, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
 import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepRenderer";
+import { useEffect } from "react";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
@@ -12,10 +17,23 @@ const ExerciseSessionPage = () => {
     queryKey: ["exercise"],
     queryFn: async () => await getExercise(exerciseId),
   });
-  const { data: currentExerciseStep } = useQuery({
+  const {
+    isSuccess: successFetchNextStep,
+    isPending: fetchingNextSessionStep,
+    mutate: getNextSessionStep,
+  } = useMutation({
+    mutationFn: getNextExerciseSession,
+  });
+  const { data: currentExerciseStep, refetch } = useQuery({
     queryKey: ["exerciseSession"],
     queryFn: async () => await getExerciseSession(exerciseId),
   });
+
+  useEffect(() => {
+    if (successFetchNextStep) {
+      refetch();
+    }
+  }, [successFetchNextStep, refetch]);
 
   return (
     <Container>
@@ -37,7 +55,16 @@ const ExerciseSessionPage = () => {
           )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
             <Button>Previous</Button>
-            <Button>Next</Button>
+            <Button
+              onClick={() => {
+                if (currentExerciseStep?.metadata.sessionId) {
+                  getNextSessionStep(currentExerciseStep.metadata.sessionId);
+                }
+              }}
+              disabled={fetchingNextSessionStep}
+            >
+              Next
+            </Button>
           </Stack>
         </Stack>
       </Stack>
