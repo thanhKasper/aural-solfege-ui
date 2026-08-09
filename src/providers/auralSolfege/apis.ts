@@ -38,3 +38,11 @@ export async function getExerciseSession(
     .post("/exercises/" + exerciseId + "/sessions")
     .then((response) => response.data);
 }
+
+export async function getNextExerciseSession(
+  sessionId: string,
+): Promise<PracticeStepResponse> {
+  return auralSolfegeClient
+    .post("/sessions/" + sessionId + "/advance")
+    .then((response) => response.data);
+}

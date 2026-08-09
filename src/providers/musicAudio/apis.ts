@@ -10,11 +10,12 @@ export const getIntervalSound = async ({
   direction: string;
 }): Promise<Blob> => {
   return musicAudioClient
-    .get(`/intervals/${interval}`, {
+    .get(`/interval-range/${interval}`, {
       params: {
         texture,
         direction,
       },
+      responseType: "blob",
     })
     .then((data) => data.data);
 };
