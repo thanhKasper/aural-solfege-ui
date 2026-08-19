@@ -34,6 +34,7 @@ export type ExerciseDTO = {
 type StepStatus = "ACTIVE" | "COMPLETED" | "PENDING";
 export enum StepType {
   LISTEN_INTERVAL = "LISTEN_INTERVAL",
+  COOL_DOWN = "COOL_DOWN",
 }
 type Direction = "UP" | "DOWN";
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -45,14 +46,21 @@ export type SessionMetadata = {
   hasNext: boolean;
 };
 
-export type PracticeStep = {
+export type PracticeStep<T> = {
   type: StepType;
   activityPosition: number;
   status: StepStatus;
+} & T;
+
+export type IntervalPracticeStep = PracticeStep<{
   interval: MUSICAL_INTERVAL;
   direction: Direction;
   texture: string;
-};
+}>;
+
+export type CoolDownPracticeStep = PracticeStep<{
+  restingTimeInSecond: number;
+}>;
 
 export type ApiCallInfo = {
   method: HttpMethod;
@@ -65,9 +73,9 @@ export type ApiCallInfo = {
   body: null | Record<string, unknown>;
 };
 
-export type PracticeStepResponse = {
+export type PracticeStepResponse<T> = {
   metadata: SessionMetadata;
-  currentStep: PracticeStep;
+  currentStep: PracticeStep<T>;
   apiCall: ApiCallInfo;
 };
 

@@ -33,7 +33,7 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
 
 export async function getExerciseSession(
   exerciseId: string,
-): Promise<PracticeStepResponse> {
+): Promise<PracticeStepResponse<any>> {
   return auralSolfegeClient
     .post("/exercises/" + exerciseId + "/sessions")
     .then((response) => response.data);
@@ -41,7 +41,7 @@ export async function getExerciseSession(
 
 export async function getNextExerciseSession(
   sessionId: string,
-): Promise<PracticeStepResponse> {
+): Promise<PracticeStepResponse<any>> {
   return auralSolfegeClient
     .post("/sessions/" + sessionId + "/advance")
     .then((response) => response.data);

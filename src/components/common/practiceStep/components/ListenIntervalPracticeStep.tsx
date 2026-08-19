@@ -1,11 +1,14 @@
-import type { PracticeStepResponse } from "@/providers/auralSolfege/apis.type";
+import type {
+  IntervalPracticeStep
+} from "@/providers/auralSolfege/apis.type";
 import { getIntervalSound } from "@/providers/musicAudio/apis";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, type FC } from "react";
+import { useEffect, useRef } from "react";
+import type { StepComponent } from "../practiceStepRegistry";
 
-const ListenIntervalPracticeStep: FC<PracticeStepResponse> = ({
+const ListenIntervalPracticeStep: StepComponent<IntervalPracticeStep> = ({
   currentStep,
 }) => {
   const { data } = useQuery({
