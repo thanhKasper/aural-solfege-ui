@@ -3,6 +3,7 @@ import type { StepperContent } from "@/components/organisms/Stepper/Stepper";
 import { EXERCISE_FORMAT } from "@/constants";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
+import { formatTimeText } from "@/utils/formatTime";
 import { Stack } from "@mui/material";
 
 export const buildExerciseSessionStep = (
@@ -23,7 +24,7 @@ export const buildExerciseSessionStep = (
               )}
             />
           ) : (
-            `Rest for ${activity.restTime} seconds`
+            `Rest for ${formatTimeText(activity.restTime)}`
           )}
         </Stack>
       ),
