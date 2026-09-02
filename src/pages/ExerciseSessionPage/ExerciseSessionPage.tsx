@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
 import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepRenderer";
+import { ExerciseSessionProvider } from "@/components/common/practiceStep/ExerciseSessionProvider";
 import { useEffect } from "react";
 
 const ExerciseSessionPage = () => {
@@ -41,6 +42,16 @@ const ExerciseSessionPage = () => {
     }
   }, [successFetchNextStep, refetch]);
 
+  const goNext = () => {
+    if (currentExerciseStep?.metadata.sessionId) {
+      getNextSessionStep(currentExerciseStep.metadata.sessionId);
+    }
+  };
+
+  const goPrevious = () => {
+    // TODO: implement previous session navigation when the API is available
+  };
+
   return (
     <Container>
       <Typography variant="h1">{exercise?.title}</Typography>
@@ -59,16 +70,14 @@ const ExerciseSessionPage = () => {
           sx={{ flexGrow: 1, justifyContent: "space-between" }}
         >
           {currentExerciseStep && (
-            <PracticeStepRenderer practiceStep={currentExerciseStep} />
+            <ExerciseSessionProvider goNext={goNext} goPrevious={goPrevious}>
+              <PracticeStepRenderer practiceStep={currentExerciseStep} />
+            </ExerciseSessionProvider>
           )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-            <Button>Previous</Button>
+            <Button onClick={goPrevious}>Previous</Button>
             <Button
-              onClick={() => {
-                if (currentExerciseStep?.metadata.sessionId) {
-                  getNextSessionStep(currentExerciseStep.metadata.sessionId);
-                }
-              }}
+              onClick={goNext}
               disabled={fetchingNextSessionStep}
             >
               Next
