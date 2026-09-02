@@ -28,6 +28,12 @@ const ExerciseSessionPage = () => {
     queryKey: ["exerciseSession"],
     queryFn: async () => await getExerciseSession(exerciseId),
   });
+  const stepsPerRepetition =
+    currentExerciseStep?.metadata.stepsPerRepetition ?? 1;
+  const currentIndex = currentExerciseStep?.metadata.currentStepIndex ?? 0;
+  const activityPosition = currentExerciseStep?.currentStep.activityPosition;
+  const currentRepetition = Math.floor(currentIndex / stepsPerRepetition);
+  const totalUniqueActivities = exercise?.exerciseActivities.length ?? 0;
 
   useEffect(() => {
     if (successFetchNextStep) {
@@ -43,7 +49,9 @@ const ExerciseSessionPage = () => {
       <Stack direction={"row"} sx={{ mt: 2 }} spacing={4}>
         <Stepper
           orientation="vertical"
-          activeStep={currentExerciseStep?.currentStep.activityPosition}
+          activeStep={
+            currentRepetition * totalUniqueActivities + activityPosition
+          }
           steps={buildExerciseSessionStep(exercise)}
         />
         <Stack

@@ -43,6 +43,9 @@ export type SessionMetadata = {
   sessionId: string;
   totalSteps: number;
   currentStepIndex: number;
+  repetitions: number;
+  isLoop: boolean;
+  stepsPerRepetition: number;
   hasNext: boolean;
 };
 
