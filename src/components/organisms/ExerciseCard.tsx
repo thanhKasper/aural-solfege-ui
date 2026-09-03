@@ -11,9 +11,7 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import IconContent from "../molecules/IconContent";
-import RepeatIcon from "@mui/icons-material/Repeat";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import Icon from "../atoms/Icon";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 
 const ExerciseCardContainer = styled(Card)(({ theme: { palette } }) => {
@@ -94,28 +92,6 @@ export const ExerciseCard = ({
                     </Typography>
                   )) ?? []
                 }
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} size={12}>
-            <Grid size="auto">
-              <IconContent
-                icon={<RepeatIcon fontSize="small" />}
-                content={[
-                  exercise.loop ? (
-                    <Icon icon="infinite" />
-                  ) : (
-                    <Typography variant="body1">{exercise.reps}</Typography>
-                  ),
-                ]}
-              />
-            </Grid>
-            <Grid size="auto">
-              <IconContent
-                icon={<Icon icon="quarter-rest" fontSize="small" />}
-                content={[
-                  <Typography variant="body1">{exercise.rest}s</Typography>,
-                ]}
               />
             </Grid>
           </Grid>
