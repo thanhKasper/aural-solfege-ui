@@ -27,7 +27,7 @@ const IntervalsComparisonRelocatableElement = ({
         }}
       >
         <Box>
-          <Typography variant="h6">Single interval exercise</Typography>
+          <Typography variant="h6">Intervals comparison</Typography>
           <Typography>
             {getIntervalName(value.firstInterval as MUSICAL_INTERVAL)}
           </Typography>

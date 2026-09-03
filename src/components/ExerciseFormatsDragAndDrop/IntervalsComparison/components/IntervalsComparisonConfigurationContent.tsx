@@ -3,9 +3,9 @@ import { Grid, MenuItem, Select } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
 import type {
-  SingleIntervalConfiguration,
-  TSingleIntervalTraining,
-} from "./SingleIntervalTraining.types";
+  IntervalsComparisonConfiguration,
+  TIntervalsComparison,
+} from "../IntervalsComparison.types";
 import { intervalMap } from "@/utils/retrieveMusicalInterval";
 import {
   getIntervalTextureName,
@@ -13,14 +13,16 @@ import {
 } from "@/utils/intervalTexture";
 import type { INTERVAL_TEXTURE } from "@/constants";
 
-export const SingleIntervalConfigurationContent = ({
+interface IntervalsComparisonConfigurationContentProps {
+  formRef: RefObject<IntervalsComparisonConfiguration | null>;
+  defaultValue?: TIntervalsComparison;
+}
+
+const IntervalsComparisonConfigurationContent = ({
   formRef,
   defaultValue,
-}: {
-  formRef: RefObject<SingleIntervalConfiguration | null>;
-  defaultValue?: TSingleIntervalTraining;
-}) => {
-  const form = useForm<TSingleIntervalTraining>({
+}: IntervalsComparisonConfigurationContentProps) => {
+  const form = useForm<TIntervalsComparison>({
     defaultValues: defaultValue,
   });
 
@@ -33,10 +35,35 @@ export const SingleIntervalConfigurationContent = ({
       <Grid size={12}>
         <Controller
           control={form.control}
-          name="interval"
+          name="firstInterval"
           rules={{ required: "This field is required" }}
           render={({ field, fieldState: { error } }) => (
-            <InputLabel label="Interval" errorMessage={error?.message}>
+            <InputLabel label="First interval" errorMessage={error?.message}>
+              <Select
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                fullWidth
+                size="small"
+              >
+                {Object.entries(intervalMap).map(
+                  ([key, { name, notation }]) => (
+                    <MenuItem key={key} value={key}>
+                      {`${name} (${notation})`}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+            </InputLabel>
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={form.control}
+          name="secondInterval"
+          rules={{ required: "This field is required" }}
+          render={({ field, fieldState: { error } }) => (
+            <InputLabel label="Second interval" errorMessage={error?.message}>
               <Select
                 value={field.value ?? ""}
                 onChange={field.onChange}
@@ -81,3 +108,5 @@ export const SingleIntervalConfigurationContent = ({
     </Grid>
   );
 };
+
+export default IntervalsComparisonConfigurationContent;

@@ -1,3 +1,4 @@
+import type { UseFormReturn } from "react-hook-form";
 import type { TBaseExerciseFormat } from "../ExerciseFormat.types";
 
 export type TIntervalsComparison = TBaseExerciseFormat<{
@@ -5,3 +6,6 @@ export type TIntervalsComparison = TBaseExerciseFormat<{
   secondInterval: string;
   texture: string;
 }>;
+
+export type IntervalsComparisonConfiguration =
+  UseFormReturn<TIntervalsComparison>;

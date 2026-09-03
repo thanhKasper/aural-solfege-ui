@@ -9,7 +9,7 @@ import type {
   ISingleIntervalRelocatableContent,
 } from "./SingleIntervalTraining.types";
 import useDialog from "@/services/dialog/useDialog";
-import { SingleIntervalConfigurationContent } from "./SingleIntervalConfigurationContent";
+import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";
 
 export const SingleIntervalRelocatableContent = ({

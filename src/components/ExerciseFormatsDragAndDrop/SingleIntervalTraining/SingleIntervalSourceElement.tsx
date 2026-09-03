@@ -9,7 +9,7 @@ import type {
   SingleIntervalConfiguration,
   TSingleIntervalTraining,
 } from "./SingleIntervalTraining.types";
-import { SingleIntervalConfigurationContent } from "./SingleIntervalConfigurationContent";
+import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";
 import useDialog from "@/services/dialog/useDialog";
 
