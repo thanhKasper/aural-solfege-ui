@@ -82,6 +82,12 @@ export type PracticeStepResponse<T> = {
   apiCall: ApiCallInfo;
 };
 
+export type SessionResultDTO = {
+  totalSteps: number;
+  completedSteps: number;
+  durationSeconds: number;
+};
+
 export type ExerciseActivity =
   | TIntervalEarTrainingFormatDTO
   | TCoolDownActivityDTO;

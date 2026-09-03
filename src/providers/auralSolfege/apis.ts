@@ -3,6 +3,7 @@ import type {
   PracticeStepResponse,
   Page,
   PagingParameters,
+  SessionResultDTO,
 } from "./apis.type";
 import auralSolfegeClient from "./auralSolfegeClient";
 
@@ -44,5 +45,13 @@ export async function getNextExerciseSession(
 ): Promise<PracticeStepResponse<any>> {
   return auralSolfegeClient
     .post("/sessions/" + sessionId + "/advance")
+    .then((response) => response.data);
+}
+
+export async function concludeExerciseSession(
+  sessionId: string,
+): Promise<SessionResultDTO> {
+  return auralSolfegeClient
+    .post("/sessions/" + sessionId + "/conclude")
     .then((response) => response.data);
 }
