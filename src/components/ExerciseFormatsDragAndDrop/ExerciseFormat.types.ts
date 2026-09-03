@@ -6,6 +6,7 @@ export { EXERCISE_FORMAT } from "@/constants";
 export type TBaseExerciseFormat<T> = {
   position: number; // zero-based index
   type: EXERCISE_FORMAT;
+  id: string;
 } & T;
 
 // @TODO: Add more new exercise activity type in the future.
