@@ -5,6 +5,7 @@ import type { TExerciseFormat } from "./ExerciseFormat.types";
 import { IntervalEarTrainingSourceElement } from "./SingleIntervalTraining/IntervalEarTrainingSourceElement";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
+import IntervalsComparisonSourceElement from "./IntervalsComparison/IntervalsComparisonSourceElement";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -69,6 +70,11 @@ const ExerciseFormatsDragAndDrop = ({
       <Stack direction="row" spacing={2}>
         <Stack sx={{ minWidth: "15%" }} spacing={1}>
           <IntervalEarTrainingSourceElement
+            onChanged={handleElementChange}
+            onCreated={handleElementChange}
+            onRemoved={handleRemoveActivity}
+          />
+          <IntervalsComparisonSourceElement
             onChanged={handleElementChange}
             onCreated={handleElementChange}
             onRemoved={handleRemoveActivity}

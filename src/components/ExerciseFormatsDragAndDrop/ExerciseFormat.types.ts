@@ -1,5 +1,6 @@
 import type { EXERCISE_FORMAT } from "@/constants";
 import type { TIntervalTrainingExercise } from "./SingleIntervalTraining/IntervalEarTraining.types";
+import type { TIntervalsComparison } from "./IntervalsComparison/IntervalsComparison.types";
 
 export { EXERCISE_FORMAT } from "@/constants";
 
@@ -10,7 +11,7 @@ export type TBaseExerciseFormat<T> = {
 } & T;
 
 // @TODO: Add more new exercise activity type in the future.
-export type TExerciseFormat = TIntervalTrainingExercise;
+export type TExerciseFormat = TIntervalTrainingExercise | TIntervalsComparison;
 
 export interface IExerciseFormatSourceElement {
   onCreated: (data: TExerciseFormat) => void;
