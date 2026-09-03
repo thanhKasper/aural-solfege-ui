@@ -16,6 +16,7 @@ const ExerciseFormatsDragAndDrop = ({
   value = [],
 }: IExerciseFormatDragAndDrop) => {
   const exerciseFormatsRef = useRef(value);
+
   const handleElementChange = (data: TExerciseFormat) => {
     const value = exerciseFormatsRef.current;
     const matchedExerciseFormat = value.find(
@@ -32,6 +33,14 @@ const ExerciseFormatsDragAndDrop = ({
     }
     onExerciseFormatsChange?.(finalArray);
     exerciseFormatsRef.current = finalArray;
+  };
+
+  const handleRemoveActivity = (data: TExerciseFormat) => {
+    const newArr = exerciseFormatsRef.current.filter(
+      (exerciseFormat) => exerciseFormat.id !== data?.id,
+    );
+    exerciseFormatsRef.current = newArr;
+    onExerciseFormatsChange?.(newArr);
   };
 
   const onElementPositionChangeCallback = useCallback(
@@ -62,13 +71,7 @@ const ExerciseFormatsDragAndDrop = ({
           <IntervalEarTrainingSourceElement
             onChanged={handleElementChange}
             onCreated={handleElementChange}
-            onRemoved={(data) => {
-              const newArr = exerciseFormatsRef.current.filter(
-                (exerciseFormat) => exerciseFormat.id !== data?.id,
-              );
-              exerciseFormatsRef.current = newArr;
-              onExerciseFormatsChange?.(newArr);
-            }}
+            onRemoved={handleRemoveActivity}
           />
         </Stack>
         <DropContainer<TExerciseFormat>
