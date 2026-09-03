@@ -54,6 +54,9 @@ export const SingleIntervalSourceElement = ({
   return (
     <SourceElement<TSingleIntervalTraining>
       onBeforeElementDrop={provideData}
+      shouldRender={(data) => {
+        return data.type === EXERCISE_FORMAT.SINGLE_INTERVAL
+      }}
       render={({ removeSelf, value }) => (
         <SingleIntervalRelocatableContent
           value={value}

@@ -8,6 +8,7 @@ interface ISourceElementProps<TValue> {
   onRelocatableElementCreated?: DragAndDropElement<TValue>["onCreated"];
   onBeforeElementDrop?: (position: number) => void;
   render: DragAndDropElement<TValue>["render"];
+  shouldRender: (data: TValue) => boolean;
 }
 
 const SourceElement = <TValue,>({
@@ -15,6 +16,7 @@ const SourceElement = <TValue,>({
   onRelocatableElementCreated,
   onBeforeElementDrop,
   render,
+  shouldRender,
 }: PropsWithChildren<ISourceElementProps<TValue>>) => {
   const componentId = useId();
   const { subscribe } = useObservant(componentId);
@@ -24,6 +26,9 @@ const SourceElement = <TValue,>({
     subscribe<{ data: TValue; position: number }>(
       EventType.CONSTRUCT_ELEMENT,
       ({ data, position }) => {
+        if (!shouldRender(data)) {
+          return;
+        }
         notify<{ dndElement: DragAndDropElement<TValue>; position: number }>(
           EventType.RENDER_ELEMENT,
           {
@@ -42,6 +47,9 @@ const SourceElement = <TValue,>({
     subscribe<{ draggableElementId: string; data: TValue; position: number }>(
       EventType.REBUILD_ELEMENT,
       ({ draggableElementId, data, position }) => {
+        if (!shouldRender(data)) {
+          return;
+        }
         notify<{ dndElement: DragAndDropElement<TValue>; position: number }>(
           EventType.RENDER_ELEMENT,
           {

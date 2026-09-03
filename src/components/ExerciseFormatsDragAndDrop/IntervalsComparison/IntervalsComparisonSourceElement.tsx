@@ -53,6 +53,9 @@ const IntervalsComparisonSourceElement = ({
   return (
     <SourceElement<TIntervalsComparison>
       onBeforeElementDrop={provideData}
+      shouldRender={(data) => {
+        return data.type === EXERCISE_FORMAT.INTERVALS_COMPARISON;
+      }}
       render={({ value, removeSelf }) => (
         <IntervalsComparisonRelocatableElement
           value={value}
