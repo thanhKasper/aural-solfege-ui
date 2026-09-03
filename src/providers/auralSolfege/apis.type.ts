@@ -89,7 +89,7 @@ export type SessionResultDTO = {
 };
 
 export type ExerciseActivity =
-  | TIntervalEarTrainingFormatDTO
+  | TSingleIntervalFormatDTO
   | TCoolDownActivityDTO;
 
 type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
@@ -97,7 +97,7 @@ type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
   position: number;
 };
 
-export type TIntervalEarTrainingFormatDTO =
+export type TSingleIntervalFormatDTO =
   TBaseExerciseFormat<EXERCISE_FORMAT.SINGLE_INTERVAL> & {
     intervals: MUSICAL_INTERVAL[];
     texture: string;

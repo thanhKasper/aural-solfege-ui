@@ -1,13 +1,13 @@
 import type {
   ExerciseActivity,
-  TIntervalEarTrainingFormatDTO,
+  TSingleIntervalFormatDTO,
 } from "@/providers/auralSolfege/apis.type";
-import type { TIntervalTrainingExercise } from "./IntervalEarTraining.types";
+import type { TSingleIntervalTraining } from "../SingleIntervalTraining.types";
 
 export const inverseTransformSingleIntervalTraining: (
   data: ExerciseActivity,
-) => TIntervalTrainingExercise = (data) => {
-  const singleIntervalData = data as TIntervalEarTrainingFormatDTO;
+) => TSingleIntervalTraining = (data) => {
+  const singleIntervalData = data as TSingleIntervalFormatDTO;
   return {
     ...singleIntervalData,
     interval: singleIntervalData.intervals[0],

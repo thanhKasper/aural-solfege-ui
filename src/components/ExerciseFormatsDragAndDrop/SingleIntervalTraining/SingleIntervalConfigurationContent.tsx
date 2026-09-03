@@ -3,9 +3,9 @@ import { Grid, MenuItem, Select } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
 import type {
-  IntervalEarTrainingConfiguration,
-  TIntervalTrainingExercise,
-} from "./IntervalEarTraining.types";
+  SingleIntervalConfiguration,
+  TSingleIntervalTraining,
+} from "./SingleIntervalTraining.types";
 import { intervalMap } from "@/utils/retrieveMusicalInterval";
 import {
   getIntervalTextureName,
@@ -13,14 +13,14 @@ import {
 } from "@/utils/intervalTexture";
 import type { INTERVAL_TEXTURE } from "@/constants";
 
-export const IntervalEarTrainingConfigurationContent = ({
+export const SingleIntervalConfigurationContent = ({
   formRef,
   defaultValue,
 }: {
-  formRef: RefObject<IntervalEarTrainingConfiguration | null>;
-  defaultValue?: TIntervalTrainingExercise;
+  formRef: RefObject<SingleIntervalConfiguration | null>;
+  defaultValue?: TSingleIntervalTraining;
 }) => {
-  const form = useForm<TIntervalTrainingExercise>({
+  const form = useForm<TSingleIntervalTraining>({
     defaultValues: defaultValue,
   });
 

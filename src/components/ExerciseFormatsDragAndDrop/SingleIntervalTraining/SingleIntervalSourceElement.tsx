@@ -1,33 +1,31 @@
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
 import { Box, Typography } from "@mui/material";
-import { IntervalEarTrainingRelocatableContent } from "./IntervalEarTrainingRelocatableContent";
+import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableContent";
 import {
   EXERCISE_FORMAT,
   type IExerciseFormatSourceElement,
 } from "../ExerciseFormat.types";
 import type {
-  IntervalEarTrainingConfiguration,
-  TIntervalTrainingExercise,
-} from "./IntervalEarTraining.types";
-import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
+  SingleIntervalConfiguration,
+  TSingleIntervalTraining,
+} from "./SingleIntervalTraining.types";
+import { SingleIntervalConfigurationContent } from "./SingleIntervalConfigurationContent";
 import { useRef } from "react";
 import useDialog from "@/services/dialog/useDialog";
 
-export const IntervalEarTrainingSourceElement = ({
+export const SingleIntervalSourceElement = ({
   onChanged,
   onCreated,
   onRemoved,
 }: IExerciseFormatSourceElement) => {
   const { open } = useDialog();
-  const configurationRef = useRef<IntervalEarTrainingConfiguration | null>(
-    null,
-  );
+  const configurationRef = useRef<SingleIntervalConfiguration | null>(null);
 
   const provideData = (position: number) => {
     const close = open({
-      title: "Interval exercise training configuration",
+      title: "Single interval configuration",
       content: (
-        <IntervalEarTrainingConfigurationContent formRef={configurationRef} />
+        <SingleIntervalConfigurationContent formRef={configurationRef} />
       ),
       buttons: [
         {
@@ -54,10 +52,10 @@ export const IntervalEarTrainingSourceElement = ({
   };
 
   return (
-    <SourceElement<TIntervalTrainingExercise>
+    <SourceElement<TSingleIntervalTraining>
       onBeforeElementDrop={provideData}
       render={({ removeSelf, value }) => (
-        <IntervalEarTrainingRelocatableContent
+        <SingleIntervalRelocatableContent
           value={value}
           onRemove={(data) => {
             onRemoved(data);
@@ -77,7 +75,7 @@ export const IntervalEarTrainingSourceElement = ({
           borderColor: "canvas.300",
         }}
       >
-        <Typography>Interval Ear Training</Typography>
+        <Typography>Single Interval Training</Typography>
       </Box>
     </SourceElement>
   );

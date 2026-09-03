@@ -5,26 +5,26 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import type {
-  IntervalEarTrainingConfiguration,
+  SingleIntervalConfiguration,
   ISingleIntervalRelocatableContent,
-} from "./IntervalEarTraining.types";
+} from "./SingleIntervalTraining.types";
 import useDialog from "@/services/dialog/useDialog";
-import { IntervalEarTrainingConfigurationContent } from "./IntervalEarTrainingConfigurationContent";
+import { SingleIntervalConfigurationContent } from "./SingleIntervalConfigurationContent";
 import { useRef } from "react";
 
-export const IntervalEarTrainingRelocatableContent = ({
+export const SingleIntervalRelocatableContent = ({
   onRemove,
   onChange,
   value,
 }: ISingleIntervalRelocatableContent) => {
   const { open } = useDialog();
-  const formRef = useRef<IntervalEarTrainingConfiguration>(null);
+  const formRef = useRef<SingleIntervalConfiguration>(null);
 
   const handleDataChange = () => {
     const close = open({
       title: "Update data",
       content: (
-        <IntervalEarTrainingConfigurationContent
+        <SingleIntervalConfigurationContent
           defaultValue={value}
           formRef={formRef}
         />

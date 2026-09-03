@@ -2,7 +2,7 @@ import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropP
 import { Stack } from "@mui/material";
 import { useCallback, useRef } from "react";
 import type { TExerciseFormat } from "./ExerciseFormat.types";
-import { IntervalEarTrainingSourceElement } from "./SingleIntervalTraining/IntervalEarTrainingSourceElement";
+import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import IntervalsComparisonSourceElement from "./IntervalsComparison/IntervalsComparisonSourceElement";
@@ -69,7 +69,7 @@ const ExerciseFormatsDragAndDrop = ({
     <DragAndDropProvider>
       <Stack direction="row" spacing={2}>
         <Stack sx={{ minWidth: "15%" }} spacing={1}>
-          <IntervalEarTrainingSourceElement
+          <SingleIntervalSourceElement
             onChanged={handleElementChange}
             onCreated={handleElementChange}
             onRemoved={handleRemoveActivity}
