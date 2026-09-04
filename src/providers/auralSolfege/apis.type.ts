@@ -90,7 +90,8 @@ export type SessionResultDTO = {
 
 export type ExerciseActivity =
   | TSingleIntervalFormatDTO
-  | TCoolDownActivityDTO;
+  | TCoolDownActivityDTO
+  | TIntervalsComparisonFormatDTO;
 
 type TBaseExerciseFormat<FORMAT_TYPE extends EXERCISE_FORMAT> = {
   type: FORMAT_TYPE;
@@ -106,3 +107,9 @@ export type TSingleIntervalFormatDTO =
 type TCoolDownActivityDTO = TBaseExerciseFormat<EXERCISE_FORMAT.COOL_DOWN> & {
   restTime: number;
 };
+
+export type TIntervalsComparisonFormatDTO =
+  TBaseExerciseFormat<EXERCISE_FORMAT.INTERVALS_COMPARISON> & {
+    intervals: MUSICAL_INTERVAL[];
+    texture: string;
+  };
