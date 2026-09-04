@@ -3,9 +3,9 @@ import { Grid, MenuItem, Select } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputLabel from "@/components/atoms/InputLabel";
 import type {
-  IntervalsComparisonConfiguration,
-  TIntervalsComparison,
-} from "../IntervalsComparison.types";
+  IntervalPitchComparisonConfiguration,
+  TIntervalPitchComparison,
+} from "../IntervalPitchComparison.types";
 import { intervalMap } from "@/utils/retrieveMusicalInterval";
 import {
   getIntervalTextureName,
@@ -13,16 +13,16 @@ import {
 } from "@/utils/intervalTexture";
 import type { INTERVAL_TEXTURE } from "@/constants";
 
-interface IntervalsComparisonConfigurationContentProps {
-  formRef: RefObject<IntervalsComparisonConfiguration | null>;
-  defaultValue?: TIntervalsComparison;
+interface IntervalPitchComparisonConfigurationContentProps {
+  formRef: RefObject<IntervalPitchComparisonConfiguration | null>;
+  defaultValue?: TIntervalPitchComparison;
 }
 
-const IntervalsComparisonConfigurationContent = ({
+const IntervalPitchComparisonConfigurationContent = ({
   formRef,
   defaultValue,
-}: IntervalsComparisonConfigurationContentProps) => {
-  const form = useForm<TIntervalsComparison>({
+}: IntervalPitchComparisonConfigurationContentProps) => {
+  const form = useForm<TIntervalPitchComparison>({
     defaultValues: defaultValue,
   });
 
@@ -109,4 +109,4 @@ const IntervalsComparisonConfigurationContent = ({
   );
 };
 
-export default IntervalsComparisonConfigurationContent;
+export default IntervalPitchComparisonConfigurationContent;

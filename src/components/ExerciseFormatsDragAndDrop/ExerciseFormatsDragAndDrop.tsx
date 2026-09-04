@@ -5,7 +5,7 @@ import type { TExerciseFormat } from "./ExerciseFormat.types";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
-import IntervalsComparisonSourceElement from "./IntervalsComparison/IntervalsComparisonSourceElement";
+import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -74,7 +74,7 @@ const ExerciseFormatsDragAndDrop = ({
             onCreated={handleElementChange}
             onRemoved={handleRemoveActivity}
           />
-          <IntervalsComparisonSourceElement
+          <IntervalPitchComparisonSourceElement
             onChanged={handleElementChange}
             onCreated={handleElementChange}
             onRemoved={handleRemoveActivity}

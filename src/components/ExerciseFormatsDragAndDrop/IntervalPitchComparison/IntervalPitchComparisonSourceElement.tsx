@@ -1,30 +1,30 @@
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
 import type { IExerciseFormatSourceElement } from "../ExerciseFormat.types";
-import IntervalsComparisonRelocatableElement from "./IntervalsComparisonRelocatableElement";
+import IntervalPitchComparisonRelocatableElement from "./IntervalPitchComparisonRelocatableElement";
 import type {
-  IntervalsComparisonConfiguration,
-  TIntervalsComparison,
-} from "./IntervalsComparison.types";
-import IntervalsComparisonConfigurationContent from "./components/IntervalsComparisonConfigurationContent";
+  IntervalPitchComparisonConfiguration,
+  TIntervalPitchComparison,
+} from "./IntervalPitchComparison.types";
+import IntervalPitchComparisonConfigurationContent from "./components/IntervalPitchComparisonConfigurationContent";
 import { Box, Typography } from "@mui/material";
 import { useRef } from "react";
 import useDialog from "@/services/dialog/useDialog";
 import { EXERCISE_FORMAT } from "../ExerciseFormat.types";
 
-const IntervalsComparisonSourceElement = ({
+const IntervalPitchComparisonSourceElement = ({
   onCreated,
   onRemoved,
 }: IExerciseFormatSourceElement) => {
   const { open } = useDialog();
-  const configurationRef = useRef<IntervalsComparisonConfiguration | null>(
+  const configurationRef = useRef<IntervalPitchComparisonConfiguration | null>(
     null,
   );
 
   const provideData = (position: number) => {
     const close = open({
-      title: "Intervals comparison configuration",
+      title: "Interval pitch comparison configuration",
       content: (
-        <IntervalsComparisonConfigurationContent formRef={configurationRef} />
+        <IntervalPitchComparisonConfigurationContent formRef={configurationRef} />
       ),
       buttons: [
         {
@@ -39,7 +39,7 @@ const IntervalsComparisonSourceElement = ({
             configurationRef.current?.handleSubmit((data) => {
               onCreated({
                 ...data,
-                type: EXERCISE_FORMAT.INTERVALS_COMPARISON,
+                type: EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON,
                 position,
                 id: crypto.randomUUID(),
               });
@@ -51,13 +51,13 @@ const IntervalsComparisonSourceElement = ({
   };
 
   return (
-    <SourceElement<TIntervalsComparison>
+    <SourceElement<TIntervalPitchComparison>
       onBeforeElementDrop={provideData}
       shouldRender={(data) => {
-        return data.type === EXERCISE_FORMAT.INTERVALS_COMPARISON;
+        return data.type === EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON;
       }}
       render={({ value, removeSelf }) => (
-        <IntervalsComparisonRelocatableElement
+        <IntervalPitchComparisonRelocatableElement
           value={value}
           onRemove={() => {
             onRemoved(value);
@@ -76,10 +76,10 @@ const IntervalsComparisonSourceElement = ({
           borderColor: "canvas.300",
         }}
       >
-        <Typography>Intervals Comparison</Typography>
+        <Typography>Interval Pitch Comparison</Typography>
       </Box>
     </SourceElement>
   );
 };
 
-export default IntervalsComparisonSourceElement;
+export default IntervalPitchComparisonSourceElement;
