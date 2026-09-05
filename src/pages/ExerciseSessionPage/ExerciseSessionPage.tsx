@@ -30,19 +30,19 @@ const ExerciseSessionPage = () => {
   } = useMutation({
     mutationFn: getNextExerciseSession,
   });
-  const {
-    isPending: concludingSession,
-    mutate: concludeSession,
-  } = useMutation({
-    mutationFn: concludeExerciseSession,
-    onSuccess: (result) => setSessionResult(result),
-  });
+  const { isPending: concludingSession, mutate: concludeSession } = useMutation(
+    {
+      mutationFn: concludeExerciseSession,
+      onSuccess: (result) => setSessionResult(result),
+    },
+  );
   const { data: currentExerciseStep, refetch } = useQuery({
     queryKey: ["exerciseSession", exerciseId],
     queryFn: async () => await getExerciseSession(exerciseId),
   });
-  const [sessionResult, setSessionResult] =
-    useState<SessionResultDTO | null>(null);
+  const [sessionResult, setSessionResult] = useState<SessionResultDTO | null>(
+    null,
+  );
   const stepsPerRepetition =
     currentExerciseStep?.metadata.stepsPerRepetition ?? 1;
   const currentIndex = currentExerciseStep?.metadata.currentStepIndex ?? 0;
@@ -110,6 +110,7 @@ const ExerciseSessionPage = () => {
         <Stack
           direction={"column"}
           sx={{ flexGrow: 1, justifyContent: "space-between" }}
+          spacing={8}
         >
           {currentExerciseStep && (
             <ExerciseSessionProvider goNext={goNext} goPrevious={goPrevious}>
@@ -117,7 +118,9 @@ const ExerciseSessionPage = () => {
             </ExerciseSessionProvider>
           )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-            <Button onClick={goPrevious}>Previous</Button>
+            <Button onClick={goPrevious} variant="outlined">
+              Conclude
+            </Button>
             <Button
               onClick={goNext}
               disabled={fetchingNextSessionStep || concludingSession}

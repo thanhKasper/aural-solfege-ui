@@ -1,4 +1,4 @@
-import type { EXERCISE_FORMAT } from "@/constants";
+import type { EXERCISE_FORMAT, INTERVAL_TEXTURE } from "@/constants";
 import type { MUSICAL_INTERVAL } from "@/constants";
 
 export type PageMetadata = {
@@ -35,6 +35,7 @@ type StepStatus = "ACTIVE" | "COMPLETED" | "PENDING";
 export enum StepType {
   LISTEN_INTERVAL = "LISTEN_INTERVAL",
   COOL_DOWN = "COOL_DOWN",
+  INTERVAL_SOUND_COMPARISON = "INTERVAL_SOUND_COMPARISON",
 }
 type Direction = "UP" | "DOWN";
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -63,6 +64,14 @@ export type IntervalPracticeStep = PracticeStep<{
 
 export type CoolDownPracticeStep = PracticeStep<{
   restingTimeInSecond: number;
+}>;
+
+export type IntervalPitchComparisonPracticeStep = PracticeStep<{
+  firstInterval: MUSICAL_INTERVAL;
+  secondInterval: MUSICAL_INTERVAL;
+  texture: INTERVAL_TEXTURE;
+  totalQuestions: number;
+  currentQuestionNumber: number;
 }>;
 
 export type ApiCallInfo = {
