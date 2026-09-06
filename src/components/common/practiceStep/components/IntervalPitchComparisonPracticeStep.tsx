@@ -9,10 +9,9 @@ import {
 } from "@/utils/retrieveMusicalInterval";
 import type { StepComponent } from "../practiceStepRegistry";
 import type { MUSICAL_INTERVAL } from "@/constants";
-import { getRandomIntInclusive } from "@/utils/getRandomIntInclusive";
+import { useQuery } from "@tanstack/react-query";
 
 type AnswerOption = "first" | "same" | "second";
-type ExpectResult = "lower" | "higher" | "same";
 
 const ANSWER_OPTIONS: { value: AnswerOption; label: string }[] = [
   { value: "first", label: "The first" },
@@ -20,17 +19,22 @@ const ANSWER_OPTIONS: { value: AnswerOption; label: string }[] = [
   { value: "second", label: "The second" },
 ];
 
-const getRandomExpectResult = (
-  firstInterval: MUSICAL_INTERVAL,
-  secondInterval: MUSICAL_INTERVAL,
-): ExpectResult => {
-  if (firstInterval === secondInterval) {
-    return "same";
-  }
-  return (["lower", "higher"] as ExpectResult[]).at(
-    getRandomIntInclusive(0, 1),
-  )!;
+const getExpectResult = (calculatedComparison: number): AnswerOption => {
+  if (calculatedComparison > 0) return "first";
+  if (calculatedComparison < 0) return "second";
+  return "same";
 };
+
+const playIntervalSound = (blob: Blob): Promise<void> =>
+  new Promise((resolve) => {
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+      resolve();
+    };
+    void audio.play();
+  });
 
 const IntervalPitchComparisonStep: StepComponent<
   IntervalDistanceComparisonPracticeStep
@@ -39,35 +43,49 @@ const IntervalPitchComparisonStep: StepComponent<
     firstInterval,
     secondInterval,
     texture,
+    calculatedComparison,
     currentQuestionNumber,
     totalQuestions,
   },
 }) => {
+  const { data: firstIntervalSound } = useQuery({
+    queryKey: [
+      `${getIntervalNotation(firstInterval)}:${texture}:first`,
+    ],
+    queryFn: async () =>
+      await getRandomIntervalSound({
+        interval: getIntervalNotation(firstInterval),
+        texture,
+      }),
+  });
+  const { data: secondIntervalSound } = useQuery({
+    queryKey: [
+      `${getIntervalNotation(secondInterval)}:${texture}:second`,
+    ],
+    queryFn: async () =>
+      await getRandomIntervalSound({
+        interval: getIntervalNotation(secondInterval),
+        texture,
+      }),
+  });
+
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerOption | null>(
     null,
   );
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [expectingResult] = useState(
-    getRandomExpectResult(firstInterval, secondInterval),
-  );
-  const questionText =
-    expectingResult === "lower"
-      ? "Which interval is shorter, or they are the same?"
-      : "Which interval is longer, or they are the same?";
+  const expectingResult = getExpectResult(calculatedComparison);
+  const questionText = "Which interval is longer, or they are the same?";
 
   const handleAnswerSelect = (answer: AnswerOption) => {
     setSelectedAnswer(answer);
-    // TODO: Replace with API call to check answer
-    // For now, mock the result
-    setIsCorrect(answer === "first");
+    setIsCorrect(answer === expectingResult);
   };
 
   const handlePlayInterval = async (interval: MUSICAL_INTERVAL) => {
-    const response = await getRandomIntervalSound({
-      interval: getIntervalNotation(interval),
-      texture,
-    });
-    console.log(response);
+    const sound =
+      interval === firstInterval ? firstIntervalSound : secondIntervalSound;
+    if (!sound) return;
+    await playIntervalSound(sound);
   };
 
   const handlePlayIntervals = async () => {
