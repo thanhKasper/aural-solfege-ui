@@ -1,7 +1,8 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import type { IntervalPitchComparisonPracticeStep } from "@/providers/auralSolfege/apis.type";
+import type { IntervalDistanceComparisonPracticeStep } from "@/providers/auralSolfege/apis.type";
+import { getRandomIntervalSound } from "@/providers/musicAudio/apis";
 import {
   getIntervalName,
   getIntervalNotation,
@@ -32,11 +33,12 @@ const getRandomExpectResult = (
 };
 
 const IntervalPitchComparisonStep: StepComponent<
-  IntervalPitchComparisonPracticeStep
+  IntervalDistanceComparisonPracticeStep
 > = ({
   currentStep: {
     firstInterval,
     secondInterval,
+    texture,
     currentQuestionNumber,
     totalQuestions,
   },
@@ -60,6 +62,19 @@ const IntervalPitchComparisonStep: StepComponent<
     setIsCorrect(answer === "first");
   };
 
+  const handlePlayInterval = async (interval: MUSICAL_INTERVAL) => {
+    const response = await getRandomIntervalSound({
+      interval: getIntervalNotation(interval),
+      texture,
+    });
+    console.log(response);
+  };
+
+  const handlePlayIntervals = async () => {
+    await handlePlayInterval(firstInterval);
+    await handlePlayInterval(secondInterval);
+  };
+
   const firstIntervalName = getIntervalName(firstInterval);
   const firstIntervalNotation = getIntervalNotation(firstInterval);
   const secondIntervalName = getIntervalName(secondInterval);
@@ -76,7 +91,7 @@ const IntervalPitchComparisonStep: StepComponent<
       <Stack direction={"row"} spacing={2} sx={{ justifyContent: "center" }}>
         <Button
           variant="outlined"
-          onClick={() => {}}
+          onClick={handlePlayIntervals}
           startIcon={<VolumeUpIcon />}
         >
           Play intervals
@@ -113,7 +128,11 @@ const IntervalPitchComparisonStep: StepComponent<
               The first interval is {firstIntervalName} ({firstIntervalNotation}
               )
             </Typography>
-            <Button variant="text" size="small" onClick={() => {}}>
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => handlePlayInterval(firstInterval)}
+            >
               Play
             </Button>
           </Stack>
@@ -122,7 +141,11 @@ const IntervalPitchComparisonStep: StepComponent<
               The second interval is {secondIntervalName} (
               {secondIntervalNotation})
             </Typography>
-            <Button variant="text" size="small" onClick={() => {}}>
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => handlePlayInterval(secondInterval)}
+            >
               Play
             </Button>
           </Stack>

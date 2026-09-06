@@ -66,11 +66,12 @@ export type CoolDownPracticeStep = PracticeStep<{
   restingTimeInSecond: number;
 }>;
 
-export type IntervalPitchComparisonPracticeStep = PracticeStep<{
+export type IntervalDistanceComparisonPracticeStep = PracticeStep<{
   firstInterval: MUSICAL_INTERVAL;
   secondInterval: MUSICAL_INTERVAL;
   texture: INTERVAL_TEXTURE;
   totalQuestions: number;
+  calculatedComparison: number;
   currentQuestionNumber: number;
 }>;
 

@@ -19,3 +19,20 @@ export const getIntervalSound = async ({
     })
     .then((data) => data.data);
 };
+
+export const getRandomIntervalSound = async ({
+  interval,
+  texture,
+}: {
+  interval: string;
+  texture: string;
+}): Promise<Blob> => {
+  const { data } = await musicAudioClient.get<Blob>(
+    `/intervals/${interval}/random`,
+    {
+      params: { texture },
+      responseType: "blob",
+    },
+  );
+  return data;
+};
