@@ -9,7 +9,6 @@ import { Stack } from "@mui/material";
 export const buildExerciseSessionStep = (
   exercise?: ExerciseDTO,
 ): StepperContent[] => {
-  const hasLoop = exercise?.loop ?? false;
   const oneRoundSession: StepperContent[] = (
     exercise?.exerciseActivities ?? []
   ).map((activity) => {
@@ -31,13 +30,11 @@ export const buildExerciseSessionStep = (
     };
   });
 
-  return hasLoop
-    ? oneRoundSession
-    : [
-        ...Array.from({
-          length: exercise?.reps ?? 1,
-        }).flatMap(() => {
-          return oneRoundSession;
-        }),
-      ];
+  return [
+    ...Array.from({
+      length: exercise?.reps ?? 1,
+    }).flatMap(() => {
+      return oneRoundSession;
+    }),
+  ];
 };

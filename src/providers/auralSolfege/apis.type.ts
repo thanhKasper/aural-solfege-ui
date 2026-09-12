@@ -25,7 +25,6 @@ export type ExerciseDTO = {
   exerciseId: string;
   reps?: number;
   rest: number;
-  loop: boolean;
   trainingMethodology: string;
   intervals?: MUSICAL_INTERVAL[]; // Optional since this field won't be send during the exercise creation phase
   exerciseActivities: ExerciseActivity[];
@@ -45,7 +44,6 @@ export type SessionMetadata = {
   totalSteps: number;
   currentStepIndex: number;
   repetitions: number;
-  isLoop: boolean;
   stepsPerRepetition: number;
   hasNext: boolean;
 };

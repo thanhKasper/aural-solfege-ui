@@ -9,17 +9,16 @@ import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { Controller, Form, useForm, useWatch } from "react-hook-form";
+import { Controller, Form, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 const ExerciseCreationPage = () => {
-  const { control, handleSubmit, setValue } = useForm<
+  const { control, handleSubmit } = useForm<
     Omit<ExerciseDTO, "exerciseActivities"> & {
       exerciseActivities: TExerciseFormat[];
     }
   >();
   const navigate = useNavigate();
-  const isInfiniteLoop = useWatch({ control: control, name: "loop" });
   const { mutate, isSuccess } = useMutation({
     mutationFn: (newExercise: ExerciseDTO) => {
       return createNewExercise(newExercise);
@@ -74,16 +73,7 @@ const ExerciseCreationPage = () => {
                 control={control}
                 name="reps"
                 rules={{
-                  validate: {
-                    repetitionRequired: (fieldValue, data) => {
-                      if (data.loop) {
-                        return true;
-                      }
-                      return fieldValue !== undefined
-                        ? true
-                        : "This field is required";
-                    },
-                  },
+                  required: "This field is required",
                 }}
                 render={({
                   field: { value, onChange },
@@ -92,7 +82,6 @@ const ExerciseCreationPage = () => {
                   <InputLabel label="Repeat" errorMessage={error?.message}>
                     <ExerciseRepetitionInput
                       value={value?.toString() ?? ""}
-                      isLoop={isInfiniteLoop}
                       onTextChange={(v) => {
                         if (v === "") {
                           onChange(undefined);
@@ -102,10 +91,6 @@ const ExerciseCreationPage = () => {
                         if (!Number.isNaN(num)) {
                           onChange(num);
                         }
-                      }}
-                      onRepetitionChecked={(checked) => {
-                        setValue("loop", checked);
-                        onChange(undefined);
                       }}
                     />
                   </InputLabel>

@@ -5,7 +5,7 @@ export const intervalMap: Record<
   { notation: string; name: string }
 > = {
   [MUSICAL_INTERVAL.UNISON]: {
-    notation: "P1",
+    notation: "P0",
     name: "Unison",
   },
   [MUSICAL_INTERVAL.MINOR_2ND]: {
