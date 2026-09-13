@@ -59,3 +59,5 @@ export class EventObserver extends EventTarget {
     this.dispatchEvent(new CustomEvent(eventName, { detail: payload }));
   }
 }
+
+export const eventBus = EventObserver.init();

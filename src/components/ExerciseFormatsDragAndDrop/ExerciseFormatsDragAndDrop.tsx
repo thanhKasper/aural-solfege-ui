@@ -1,11 +1,13 @@
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import { Stack } from "@mui/material";
-import { useCallback, useRef } from "react";
+import { Box, Stack } from "@mui/material";
+import { useCallback, useContext, useRef } from "react";
 import type { TExerciseFormat } from "./ExerciseFormat.types";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
+import DragAndDrop from "../organisms/DragAndDrop/DragAndDrop";
+import { DragAndDropContext } from "../organisms/DragAndDrop/DragAndDropContextV2";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -66,32 +68,49 @@ const ExerciseFormatsDragAndDrop = ({
   );
 
   return (
-    <DragAndDropProvider>
-      <Stack direction="row" spacing={2}>
-        <Stack sx={{ minWidth: "15%" }} spacing={1}>
-          <SingleIntervalSourceElement
-            onChanged={handleElementChange}
-            onCreated={handleElementChange}
-            onRemoved={handleRemoveActivity}
-          />
-          <IntervalPitchComparisonSourceElement
-            onChanged={handleElementChange}
-            onCreated={handleElementChange}
-            onRemoved={handleRemoveActivity}
+    <>
+      <DragAndDropProvider>
+        <Stack direction="row" spacing={2}>
+          <Stack sx={{ minWidth: "15%" }} spacing={1}>
+            <SingleIntervalSourceElement
+              onChanged={handleElementChange}
+              onCreated={handleElementChange}
+              onRemoved={handleRemoveActivity}
+            />
+            <IntervalPitchComparisonSourceElement
+              onChanged={handleElementChange}
+              onCreated={handleElementChange}
+              onRemoved={handleRemoveActivity}
+            />
+          </Stack>
+          <DropContainer<TExerciseFormat>
+            id="dropContainer1"
+            elements={
+              value.map((value) => ({
+                position: value.position,
+                value: value,
+              })) ?? []
+            }
+            onElementPositionChange={onElementPositionChangeCallback}
           />
         </Stack>
-        <DropContainer<TExerciseFormat>
-          id="dropContainer1"
-          elements={
-            value.map((value) => ({
-              position: value.position,
-              value: value,
-            })) ?? []
-          }
-          onElementPositionChange={onElementPositionChangeCallback}
-        />
-      </Stack>
-    </DragAndDropProvider>
+      </DragAndDropProvider>
+      <DragAndDrop>
+        <Box>
+          <TestShowGhost />
+        </Box>
+      </DragAndDrop>
+    </>
+  );
+};
+
+const TestShowGhost = () => {
+  const { showGhostComponent } = useContext(DragAndDropContext);
+
+  return (
+    <div onMouseDown={() => showGhostComponent(<div>Hello world</div>)}>
+      Display Ghost Component
+    </div>
   );
 };
 
