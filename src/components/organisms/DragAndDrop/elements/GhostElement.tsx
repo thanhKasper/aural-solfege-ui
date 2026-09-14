@@ -7,6 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { DragAndDropContext } from "../DragAndDropContextV2";
+import { useEventBus } from "@/hooks/useEventBus";
+import { DRAG_AND_DROP_EVENT } from "../constants";
 
 interface GhostElementProps {
   view?: ReactNode;
@@ -15,31 +17,35 @@ interface GhostElementProps {
 export const GhostElement = ({ view }: GhostElementProps) => {
   const { hideGhostComponent } = useContext(DragAndDropContext);
   const ghostComponentRef = useRef<HTMLElement | undefined>(undefined);
+  const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
 
-  const handleMouseDown = () => {
+  const handleMouseHold = () => {
     console.log("Mouse down, rendering ghost element");
   };
 
-  const handleMouseMove = () => {
-    console.log("Mouse move");
-  };
+  const handleMouseMove = useCallback(() => {
+    const boundClientRect = ghostComponentRef.current?.getBoundingClientRect();
+    if (boundClientRect) {
+      dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, boundClientRect);
+    }
+  }, [dispatch]);
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseRelease = useCallback(() => {
     console.log("Mouse up");
     hideGhostComponent();
   }, [hideGhostComponent]);
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mousedown", handleMouseHold);
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseup", handleMouseRelease);
     return () => {
       console.log("Clean up registered event listener");
-      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mousedown", handleMouseHold);
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseRelease);
     };
-  }, [handleMouseUp]);
+  }, [handleMouseRelease, handleMouseMove]);
 
   return <Box ref={ghostComponentRef}>{view}</Box>;
 };
