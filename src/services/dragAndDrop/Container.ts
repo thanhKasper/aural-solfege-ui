@@ -21,6 +21,10 @@ export class Container {
     return this.elements.splice(deleteElementIdx, 1)[0];
   }
 
+  updateElements(elements: DropElement[]) {
+    this.elements = elements;
+  }
+
   updateElementPosition(elementId: string, newPosition: number) {
     const elementIdx = this.elements.findIndex(
       (element) => element.id === elementId,
