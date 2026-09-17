@@ -8,6 +8,7 @@ import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import DragAndDrop from "../organisms/DragAndDrop/DragAndDrop";
 import { DragAndDropContext } from "../organisms/DragAndDrop/DragAndDropContextV2";
+import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -96,8 +97,9 @@ const ExerciseFormatsDragAndDrop = ({
         </Stack>
       </DragAndDropProvider>
       <DragAndDrop>
-        <Box>
+        <Box sx={{ display: "flex" }}>
           <TestShowGhost />
+          <VerticalStackedContainer />
         </Box>
       </DragAndDrop>
     </>
