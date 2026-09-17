@@ -1,4 +1,9 @@
-import { useState, type PropsWithChildren, type ReactNode } from "react";
+import {
+  useState,
+  type PropsWithChildren,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { GhostElement } from "./elements/GhostElement";
 import { Box } from "@mui/material";
 import { DragAndDropContext } from "./DragAndDropContextV2";
@@ -8,8 +13,13 @@ const DragAndDrop = ({ children }: PropsWithChildren) => {
     undefined,
   );
 
-  const showGhostComponent = (view: ReactNode) => {
-    setGhostComponent(<GhostElement view={view} />);
+  const showGhostComponent = (
+    view: ReactNode,
+    componentRef: RefObject<HTMLElement | null>,
+  ) => {
+    setGhostComponent(
+      <GhostElement view={view} bindingComponentRef={componentRef} />,
+    );
   };
 
   const hideGhostComponent = () => {
