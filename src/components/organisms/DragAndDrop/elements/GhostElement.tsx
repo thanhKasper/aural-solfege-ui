@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   type ReactNode,
-  type RefObject,
 } from "react";
 import { DragAndDropContext } from "../DragAndDropContextV2";
 import { useEventBus } from "@/hooks/useEventBus";
@@ -14,7 +13,7 @@ import { DRAG_AND_DROP_EVENT } from "../constants";
 
 interface GhostElementProps {
   view: ReactNode;
-  bindingComponentRef: RefObject<HTMLElement | null>;
+  bindingElement: HTMLElement;
 }
 
 type Coordination = {
@@ -24,10 +23,9 @@ type Coordination = {
 
 export const GhostElement = ({
   view,
-  bindingComponentRef,
+  bindingElement: bindingComponentRef,
 }: GhostElementProps) => {
   const { hideGhostComponent } = useContext(DragAndDropContext);
-  const ghostComponentRef = useRef<HTMLElement | undefined>(undefined);
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
   const [coordination, setCoordination] = useState<Coordination>({
     x: 0,
@@ -38,9 +36,9 @@ export const GhostElement = ({
   const handleMouseHold = useCallback(
     (e: MouseEvent) => {
       const target = e.target as Node;
-      if (!bindingComponentRef.current?.contains(target)) return;
+      if (!bindingComponentRef.contains(target)) return;
 
-      const bindingRect = bindingComponentRef.current.getBoundingClientRect();
+      const bindingRect = bindingComponentRef.getBoundingClientRect();
       grabOffsetRef.current = {
         x: e.clientX - bindingRect.x,
         y: e.clientY - bindingRect.y,
@@ -61,13 +59,9 @@ export const GhostElement = ({
         y: e.clientY - grabOffsetRef.current.y,
       });
 
-      const boundClientRect =
-        ghostComponentRef.current?.getBoundingClientRect();
-      if (boundClientRect) {
-        dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, boundClientRect);
-      }
+      dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, bindingComponentRef);
     },
-    [dispatch],
+    [dispatch, bindingComponentRef],
   );
 
   const handleMouseRelease = useCallback(() => {
@@ -88,10 +82,7 @@ export const GhostElement = ({
   }, [handleMouseRelease, handleMouseMove, handleMouseHold]);
 
   return (
-    <Box
-      ref={ghostComponentRef}
-      sx={{ position: "fixed", top: coordination.y, left: coordination.x }}
-    >
+    <Box sx={{ position: "fixed", top: coordination.y, left: coordination.x }}>
       {view}
     </Box>
   );
