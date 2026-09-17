@@ -1,20 +1,13 @@
-import { useContext, useRef, type ReactNode, type RefObject } from "react";
+import { useContext } from "react";
 import { DragAndDropContext } from "../DragAndDropContextV2";
-
-type RelocatableActions = {
-  remove: () => void;
-  update: () => void;
-  moveUp: () => void;
-  moveDown: () => void;
-};
+import type { RelocatableContentRenderer } from "./types";
 
 interface RelocatableProps {
-  children: (actions: RelocatableActions) => ReactNode;
+  children: RelocatableContentRenderer;
 }
 
 const Relocatable = ({ children }: RelocatableProps) => {
   const { showGhostComponent } = useContext(DragAndDropContext);
-  const relocatableRef = useRef<HTMLElement | null>(null);
 
   const remove = () => {};
   const update = () => {};
@@ -24,8 +17,9 @@ const Relocatable = ({ children }: RelocatableProps) => {
   const renderedComponent = children({ remove, update, moveUp, moveDown });
   return (
     <div
-      ref={relocatableRef as RefObject<HTMLDivElement>}
-      onMouseDown={() => showGhostComponent(renderedComponent, relocatableRef)}
+      onMouseDown={(e) =>
+        showGhostComponent(renderedComponent, e.currentTarget)
+      }
     >
       {renderedComponent}
     </div>
