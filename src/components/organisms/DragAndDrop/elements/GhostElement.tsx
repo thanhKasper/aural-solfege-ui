@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import {
   useCallback,
   useContext,
@@ -22,10 +21,7 @@ type Coordination = {
   y: number;
 };
 
-export const GhostElement = ({
-  element,
-  onSuccessDrop,
-}: GhostElementProps) => {
+export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
   const { hideGhostComponent } = useContext(DragAndDropContext);
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
   const [coordination, setCoordination] = useState<Coordination>({
@@ -33,20 +29,18 @@ export const GhostElement = ({
     y: 0,
   });
   const grabOffsetRef = useRef<Coordination>({ x: 0, y: 0 });
-  const ghostRef = useRef<HTMLElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
+  const ghostRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    const rect = element.getBoundingClientRect();
-    if (ghostRef.current) {
-      ghostRef.current.style.width = `${rect.width}px`;
-      ghostRef.current.style.height = `${rect.height}px`;
-    }
+    const ghostNode = ghostRef.current;
+    if (!ghostNode) return;
 
-    const contentNode = contentRef.current;
-    if (!contentNode) return;
+    const rect = element.getBoundingClientRect();
+    ghostNode.style.width = `${rect.width}px`;
+    ghostNode.style.height = `${rect.height}px`;
+
     const clonedView = element.cloneNode(true) as HTMLElement;
-    contentNode.appendChild(clonedView);
+    ghostNode.appendChild(clonedView);
     return () => {
       clonedView.remove();
     };
@@ -105,11 +99,9 @@ export const GhostElement = ({
   }, [handleMouseRelease, handleMouseMove, handleMouseHold]);
 
   return (
-    <Box
+    <div
       ref={ghostRef}
-      sx={{ position: "fixed", top: coordination.y, left: coordination.x }}
-    >
-      <div ref={contentRef} />
-    </Box>
+      style={{ position: "fixed", top: coordination.y, left: coordination.x }}
+    />
   );
 };
