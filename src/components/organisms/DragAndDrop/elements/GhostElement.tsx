@@ -65,7 +65,6 @@ export const GhostElement = ({
   );
 
   const handleMouseRelease = useCallback(() => {
-    console.log("Mouse up");
     hideGhostComponent();
   }, [hideGhostComponent]);
 
