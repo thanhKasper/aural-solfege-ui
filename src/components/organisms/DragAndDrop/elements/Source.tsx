@@ -3,6 +3,7 @@ import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import type { RelocatableContentRenderer } from "./types";
 import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
+import type { DropEventPayload } from "../events";
 
 interface SourceProps extends PropsWithChildren {
   onBeforeRelocatableCreated?: () => void;
@@ -14,7 +15,9 @@ const Source = ({ children, onBeforeRelocatableCreated }: SourceProps) => {
   const { dispatch } = useEventBus();
 
   const handleMouseRelease = useCallback(() => {
-    dispatch(DRAG_AND_DROP_EVENT.ELEMENT_DROP, { onBeforeRelocatableCreated });
+    dispatch<DropEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_DROP, {
+      dropCallback: onBeforeRelocatableCreated,
+    });
   }, [dispatch, onBeforeRelocatableCreated]);
 
   useEffect(() => {
