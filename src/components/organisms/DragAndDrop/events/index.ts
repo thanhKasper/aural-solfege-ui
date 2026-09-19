@@ -4,5 +4,5 @@ export type DropEventPayload = {
 };
 
 export type MoveEventPayload = {
-  element: HTMLElement;
+  element: DOMRect;
 };

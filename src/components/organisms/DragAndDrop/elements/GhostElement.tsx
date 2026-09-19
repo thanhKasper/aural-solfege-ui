@@ -67,14 +67,18 @@ export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
+      if (!ghostRef.current) return;
+
       setCoordination({
         x: e.clientX - grabOffsetRef.current.x,
         y: e.clientY - grabOffsetRef.current.y,
       });
 
-      dispatch<MoveEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, { element });
+      dispatch<MoveEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, {
+        element: ghostRef.current.getBoundingClientRect(),
+      });
     },
-    [dispatch, element],
+    [dispatch],
   );
 
   const handleMouseRelease = useCallback(() => {

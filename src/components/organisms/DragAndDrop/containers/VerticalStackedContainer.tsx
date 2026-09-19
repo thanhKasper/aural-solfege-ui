@@ -16,10 +16,7 @@ function isCollidingWithContainer(
   containerElement: HTMLDivElement | null,
 ): boolean {
   if (!containerElement) return false;
-  return checkCollision(
-    elementRect,
-    containerElement.getBoundingClientRect(),
-  );
+  return checkCollision(elementRect, containerElement.getBoundingClientRect());
 }
 
 const VerticalStackedContainer = ({
@@ -39,7 +36,12 @@ const VerticalStackedContainer = ({
       DRAG_AND_DROP_EVENT.ELEMENT_DROP,
       ({ componentDomRect, dropCallback }) => {
         console.log("Receive dom rect", componentDomRect);
-        if (isCollidingWithContainer(componentDomRect, containerElementRef.current)) {
+        if (
+          isCollidingWithContainer(
+            componentDomRect,
+            containerElementRef.current,
+          )
+        ) {
           dropCallback?.();
         }
       },
@@ -48,10 +50,7 @@ const VerticalStackedContainer = ({
       DRAG_AND_DROP_EVENT.ELEMENT_MOVE,
       ({ element }) => {
         setContainerCollision(
-          isCollidingWithContainer(
-            element.getBoundingClientRect(),
-            containerElementRef.current,
-          ),
+          isCollidingWithContainer(element, containerElementRef.current),
         );
       },
     );
