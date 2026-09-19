@@ -8,9 +8,17 @@ const DragAndDrop = ({ children }: PropsWithChildren) => {
     undefined,
   );
 
-  const showGhostComponent = (view: ReactNode, htmlElement: HTMLElement) => {
+  const showGhostComponent = (
+    view: ReactNode,
+    htmlElement: HTMLElement,
+    onSuccessDrop?: () => void,
+  ) => {
     setGhostComponent(
-      <GhostElement view={view} bindingElement={htmlElement} />,
+      <GhostElement
+        view={view}
+        bindingElement={htmlElement}
+        onSuccessDrop={onSuccessDrop}
+      />,
     );
   };
 

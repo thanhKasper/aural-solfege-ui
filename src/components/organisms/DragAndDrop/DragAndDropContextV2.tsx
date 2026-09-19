@@ -4,6 +4,7 @@ interface DragAndDropContextProps {
   showGhostComponent: (
     view: ReactNode,
     bindingComponentRef: HTMLElement,
+    onSuccessDrop?: () => void,
   ) => void;
   hideGhostComponent: () => void;
 }

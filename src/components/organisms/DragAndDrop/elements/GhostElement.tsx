@@ -10,10 +10,12 @@ import {
 import { DragAndDropContext } from "../DragAndDropContextV2";
 import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
+import type { DropEventPayload } from "../events";
 
 interface GhostElementProps {
   view: ReactNode;
   bindingElement: HTMLElement;
+  onSuccessDrop?: () => void;
 }
 
 type Coordination = {
@@ -24,6 +26,7 @@ type Coordination = {
 export const GhostElement = ({
   view,
   bindingElement: bindingComponentRef,
+  onSuccessDrop,
 }: GhostElementProps) => {
   const { hideGhostComponent } = useContext(DragAndDropContext);
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
@@ -32,6 +35,7 @@ export const GhostElement = ({
     y: 0,
   });
   const grabOffsetRef = useRef<Coordination>({ x: 0, y: 0 });
+  const ghostRef = useRef<HTMLElement | null>(null);
 
   const handleMouseHold = useCallback(
     (e: MouseEvent) => {
@@ -65,8 +69,13 @@ export const GhostElement = ({
   );
 
   const handleMouseRelease = useCallback(() => {
+    if (!ghostRef.current) return;
+    dispatch<DropEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_DROP, {
+      dropCallback: onSuccessDrop,
+      componentDomRect: ghostRef.current.getBoundingClientRect(),
+    });
     hideGhostComponent();
-  }, [hideGhostComponent]);
+  }, [hideGhostComponent, dispatch, onSuccessDrop]);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseHold);
@@ -81,7 +90,10 @@ export const GhostElement = ({
   }, [handleMouseRelease, handleMouseMove, handleMouseHold]);
 
   return (
-    <Box sx={{ position: "fixed", top: coordination.y, left: coordination.x }}>
+    <Box
+      ref={ghostRef}
+      sx={{ position: "fixed", top: coordination.y, left: coordination.x }}
+    >
       {view}
     </Box>
   );
