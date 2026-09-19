@@ -9,7 +9,7 @@ import {
 import { DragAndDropContext } from "../DragAndDropContextV2";
 import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
-import type { DropEventPayload } from "../events";
+import type { DropEventPayload, MoveEventPayload } from "../events";
 
 interface GhostElementProps {
   element: HTMLElement;
@@ -72,7 +72,7 @@ export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
         y: e.clientY - grabOffsetRef.current.y,
       });
 
-      dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, element);
+      dispatch<MoveEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, { element });
     },
     [dispatch, element],
   );
