@@ -9,16 +9,11 @@ const DragAndDrop = ({ children }: PropsWithChildren) => {
   );
 
   const showGhostComponent = (
-    view: ReactNode,
-    htmlElement: HTMLElement,
+    element: HTMLElement,
     onSuccessDrop?: () => void,
   ) => {
     setGhostComponent(
-      <GhostElement
-        view={view}
-        bindingElement={htmlElement}
-        onSuccessDrop={onSuccessDrop}
-      />,
+      <GhostElement element={element} onSuccessDrop={onSuccessDrop} />,
     );
   };
 

@@ -3,9 +3,9 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import { DragAndDropContext } from "../DragAndDropContextV2";
 import { useEventBus } from "@/hooks/useEventBus";
@@ -13,8 +13,7 @@ import { DRAG_AND_DROP_EVENT } from "../constants";
 import type { DropEventPayload } from "../events";
 
 interface GhostElementProps {
-  view: ReactNode;
-  bindingElement: HTMLElement;
+  element: HTMLElement;
   onSuccessDrop?: () => void;
 }
 
@@ -24,8 +23,7 @@ type Coordination = {
 };
 
 export const GhostElement = ({
-  view,
-  bindingElement: bindingComponentRef,
+  element,
   onSuccessDrop,
 }: GhostElementProps) => {
   const { hideGhostComponent } = useContext(DragAndDropContext);
@@ -36,13 +34,30 @@ export const GhostElement = ({
   });
   const grabOffsetRef = useRef<Coordination>({ x: 0, y: 0 });
   const ghostRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const rect = element.getBoundingClientRect();
+    if (ghostRef.current) {
+      ghostRef.current.style.width = `${rect.width}px`;
+      ghostRef.current.style.height = `${rect.height}px`;
+    }
+
+    const contentNode = contentRef.current;
+    if (!contentNode) return;
+    const clonedView = element.cloneNode(true) as HTMLElement;
+    contentNode.appendChild(clonedView);
+    return () => {
+      clonedView.remove();
+    };
+  }, [element]);
 
   const handleMouseHold = useCallback(
     (e: MouseEvent) => {
       const target = e.target as Node;
-      if (!bindingComponentRef.contains(target)) return;
+      if (!element.contains(target)) return;
 
-      const bindingRect = bindingComponentRef.getBoundingClientRect();
+      const bindingRect = element.getBoundingClientRect();
       grabOffsetRef.current = {
         x: e.clientX - bindingRect.x,
         y: e.clientY - bindingRect.y,
@@ -53,7 +68,7 @@ export const GhostElement = ({
         y: bindingRect.y,
       });
     },
-    [bindingComponentRef],
+    [element],
   );
 
   const handleMouseMove = useCallback(
@@ -63,9 +78,9 @@ export const GhostElement = ({
         y: e.clientY - grabOffsetRef.current.y,
       });
 
-      dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, bindingComponentRef);
+      dispatch(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, element);
     },
-    [dispatch, bindingComponentRef],
+    [dispatch, element],
   );
 
   const handleMouseRelease = useCallback(() => {
@@ -94,7 +109,7 @@ export const GhostElement = ({
       ref={ghostRef}
       sx={{ position: "fixed", top: coordination.y, left: coordination.x }}
     >
-      {view}
+      <div ref={contentRef} />
     </Box>
   );
 };

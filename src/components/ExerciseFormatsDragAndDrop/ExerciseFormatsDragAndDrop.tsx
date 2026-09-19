@@ -1,14 +1,14 @@
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import { Box, Stack } from "@mui/material";
-import { useCallback, useContext, useRef } from "react";
-import type { TExerciseFormat } from "./ExerciseFormat.types";
-import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
+import { Box, Stack, Typography } from "@mui/material";
+import { useCallback, useRef } from "react";
+import DragAndDrop from "../organisms/DragAndDrop/DragAndDrop";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
-import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
-import DragAndDrop from "../organisms/DragAndDrop/DragAndDrop";
-import { DragAndDropContext } from "../organisms/DragAndDrop/DragAndDropContextV2";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
+import Source from "../organisms/DragAndDrop/elements/Source";
+import type { TExerciseFormat } from "./ExerciseFormat.types";
+import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
+import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -107,12 +107,25 @@ const ExerciseFormatsDragAndDrop = ({
 };
 
 const TestShowGhost = () => {
-  const { showGhostComponent } = useContext(DragAndDropContext);
-
   return (
-    <div onMouseDown={() => showGhostComponent(<div>Hello world</div>)}>
-      Display Ghost Component
-    </div>
+    <Source
+      onBeforeRelocatableCreated={() => {
+        console.log("An element is dropped");
+      }}
+    >
+      <Box
+        sx={{
+          padding: 2,
+          borderWidth: 1,
+          borderLeftWidth: 5,
+          borderStyle: "solid",
+          backgroundColor: "canvas.100",
+          borderColor: "canvas.300",
+        }}
+      >
+        <Typography>Single Interval Training</Typography>
+      </Box>
+    </Source>
   );
 };
 

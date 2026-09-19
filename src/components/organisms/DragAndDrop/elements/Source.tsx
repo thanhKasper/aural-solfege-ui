@@ -14,11 +14,7 @@ const Source = ({ children, onBeforeRelocatableCreated }: SourceProps) => {
   return (
     <div
       onMouseDown={(e) =>
-        showGhostComponent(
-          children,
-          e.currentTarget,
-          onBeforeRelocatableCreated,
-        )
+        showGhostComponent(e.currentTarget, onBeforeRelocatableCreated)
       }
     >
       {children}

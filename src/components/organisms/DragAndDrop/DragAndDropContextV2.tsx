@@ -1,9 +1,8 @@
-import { createContext, type ReactNode } from "react";
+import { createContext } from "react";
 
 interface DragAndDropContextProps {
   showGhostComponent: (
-    view: ReactNode,
-    bindingComponentRef: HTMLElement,
+    element: HTMLElement,
     onSuccessDrop?: () => void,
   ) => void;
   hideGhostComponent: () => void;

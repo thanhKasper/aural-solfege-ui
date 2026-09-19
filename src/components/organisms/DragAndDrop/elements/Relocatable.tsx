@@ -17,9 +17,7 @@ const Relocatable = ({ children }: RelocatableProps) => {
   const renderedComponent = children({ remove, update, moveUp, moveDown });
   return (
     <div
-      onMouseDown={(e) =>
-        showGhostComponent(renderedComponent, e.currentTarget)
-      }
+      onMouseDown={(e) => showGhostComponent(e.currentTarget)}
     >
       {renderedComponent}
     </div>
