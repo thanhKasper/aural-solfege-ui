@@ -1,4 +1,4 @@
-import { useRef, type PropsWithChildren, type RefObject } from "react";
+import { type PropsWithChildren } from "react";
 
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import type { RelocatableContentRenderer } from "./types";
@@ -10,11 +10,9 @@ interface SourceProps extends PropsWithChildren {
 
 const Source = ({ children, onBeforeRelocatableCreated }: SourceProps) => {
   const { showGhostComponent } = useDragAndDrop();
-  const sourceComponentRef = useRef<HTMLElement | null>(null);
 
   return (
     <div
-      ref={sourceComponentRef as RefObject<HTMLDivElement>}
       onMouseDown={(e) =>
         showGhostComponent(
           children,
