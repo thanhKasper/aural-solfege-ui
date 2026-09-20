@@ -35,11 +35,12 @@ export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
     const ghostNode = ghostRef.current;
     if (!ghostNode) return;
 
-    const rect = element.getBoundingClientRect();
+    const contentElement = element.firstElementChild ?? element;
+    const rect = contentElement.getBoundingClientRect();
     ghostNode.style.width = `${rect.width}px`;
     ghostNode.style.height = `${rect.height}px`;
 
-    const clonedView = element.cloneNode(true) as HTMLElement;
+    const clonedView = contentElement.cloneNode(true) as HTMLElement;
     ghostNode.appendChild(clonedView);
     return () => {
       clonedView.remove();
