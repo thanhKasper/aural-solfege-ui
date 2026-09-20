@@ -1,49 +1,34 @@
-import { useRef, type PropsWithChildren } from "react";
+import { useCallback, type PropsWithChildren } from "react";
 
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
-import type { RelocatableContentRenderer } from "./types";
-import { DropElement } from "@/services/dragAndDrop/DropElement";
 
-interface SourceProps<T> extends PropsWithChildren {
-  onBeforeRelocatableCreated?: (
-    position: number,
-    next: (payload: T) => void,
-  ) => void;
-  renderRelocatableContent?: RelocatableContentRenderer;
+interface SourceProps extends PropsWithChildren {
+  /**
+   * Called with the drop position when the source is dropped inside a supported container.
+   * The parent owns the element list, so it decides what element to create and how to add it.
+   */
+  onBeforeRelocatableCreated?: (position: number) => void;
 }
 
-const Source = <T,>({
-  children,
-  onBeforeRelocatableCreated,
-  renderRelocatableContent,
-}: SourceProps<T>) => {
-  const { showGhostComponent, addElement } = useDragAndDrop();
-  const targetedContainerRef = useRef<string | undefined>(undefined);
+const Source = ({ children, onBeforeRelocatableCreated }: SourceProps) => {
+  const { showGhostComponent } = useDragAndDrop();
 
-  const handleNext = <T,>(payload: T) => {
-    const dropElement = new DropElement(
-      payload,
-      renderRelocatableContent ?? (() => <></>),
-    );
-    if (targetedContainerRef.current) {
-      addElement(targetedContainerRef.current, dropElement);
-    }
-  };
-
-  const handleSuccessDrop = (dropPosition: number, containerId?: string) => {
-    targetedContainerRef.current = containerId;
-    onBeforeRelocatableCreated?.(dropPosition, handleNext);
-  };
-
-  return (
-    <div
-      onMouseDown={(e) =>
-        showGhostComponent(e.currentTarget, handleSuccessDrop)
-      }
-    >
-      {children}
-    </div>
+  const handleSuccessDrop = useCallback(
+    (dropPosition: number) => {
+      onBeforeRelocatableCreated?.(dropPosition);
+    },
+    [onBeforeRelocatableCreated],
   );
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("button, a")) {
+      return;
+    }
+    showGhostComponent(e.currentTarget, handleSuccessDrop);
+  };
+
+  return <div onMouseDown={handleMouseDown}>{children}</div>;
 };
 
 export default Source;

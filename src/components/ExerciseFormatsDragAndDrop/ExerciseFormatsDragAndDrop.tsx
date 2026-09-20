@@ -1,14 +1,15 @@
-import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useCallback, useRef } from "react";
 import DragAndDrop from "../organisms/DragAndDrop/providers/DragAndDrop";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
-import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
-import Source from "../organisms/DragAndDrop/elements/Source";
-import type { TExerciseFormat } from "./ExerciseFormat.types";
+import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
+import { intervalPitchComparisonActions } from "./IntervalPitchComparison/IntervalPitchComparison.actions";
+import type { TIntervalPitchComparison } from "./IntervalPitchComparison/IntervalPitchComparison.types";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
+import type { TSingleIntervalTraining } from "./SingleIntervalTraining/SingleIntervalTraining.types";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
+import { singleIntervalTrainingActions } from "./SingleIntervalTraining/SingleIntervalTraining.actions";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -22,16 +23,18 @@ const ExerciseFormatsDragAndDrop = ({
   const exerciseFormatsRef = useRef(value);
 
   const handleElementChange = (data: TExerciseFormat) => {
-    const value = exerciseFormatsRef.current;
-    const matchedExerciseFormat = value.find(
+    const currentValue = exerciseFormatsRef.current;
+    const matchedExerciseFormat = currentValue.find(
       (exerciseFormat) => exerciseFormat.id === data.id,
     );
     let finalArray = [];
     if (!matchedExerciseFormat) {
-      finalArray = [...value, data];
+      finalArray = [...currentValue, data];
     } else {
       finalArray = [
-        ...value.filter((exerciseFormat) => exerciseFormat.id !== data.id),
+        ...currentValue.filter(
+          (exerciseFormat) => exerciseFormat.id !== data.id,
+        ),
         data,
       ];
     }
@@ -68,64 +71,49 @@ const ExerciseFormatsDragAndDrop = ({
     [onExerciseFormatsChange],
   );
 
+  const renderActivity = (activity: TExerciseFormat) => {
+    const updateData = (data: TExerciseFormat) =>
+      handleElementChange({ ...activity, ...data });
+    const onRemove = () => handleRemoveActivity(activity);
+
+    switch (activity.type) {
+      case EXERCISE_FORMAT.SINGLE_INTERVAL:
+        return singleIntervalTrainingActions.renderRelocatable({
+          value: activity as TSingleIntervalTraining,
+          updateData,
+          onRemove,
+        });
+      case EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON:
+        return intervalPitchComparisonActions.renderRelocatable({
+          value: activity as TIntervalPitchComparison,
+          updateData,
+          onRemove,
+        });
+      default:
+        return null;
+    }
+  };
+
   return (
-    <>
-      <DragAndDropProvider>
-        <Stack direction="row" spacing={2}>
-          <Stack sx={{ minWidth: "15%" }} spacing={1}>
-            <SingleIntervalSourceElement
-              onChanged={handleElementChange}
-              onCreated={handleElementChange}
-              onRemoved={handleRemoveActivity}
-            />
-            <IntervalPitchComparisonSourceElement
-              onChanged={handleElementChange}
-              onCreated={handleElementChange}
-              onRemoved={handleRemoveActivity}
-            />
-          </Stack>
-          <DropContainer<TExerciseFormat>
-            id="dropContainer1"
-            elements={
-              value.map((value) => ({
-                position: value.position,
-                value: value,
-              })) ?? []
-            }
-            onElementPositionChange={onElementPositionChangeCallback}
+    <DragAndDrop>
+      <Stack direction="row" spacing={2}>
+        <Stack sx={{ minWidth: "15%" }} spacing={1}>
+          <SingleIntervalSourceElement onCreated={handleElementChange} />
+          <IntervalPitchComparisonSourceElement
+            onCreated={handleElementChange}
           />
         </Stack>
-      </DragAndDropProvider>
-      <DragAndDrop>
-        <Box sx={{ display: "flex" }}>
-          <TestShowGhost />
-          <VerticalStackedContainer />
-        </Box>
-      </DragAndDrop>
-    </>
-  );
-};
-
-const TestShowGhost = () => {
-  return (
-    <Source
-      onBeforeRelocatableCreated={() => {
-        console.log("An element is dropped");
-      }}
-    >
-      <Box
-        sx={{
-          padding: 2,
-          borderWidth: 1,
-          borderLeftWidth: 5,
-          borderStyle: "solid",
-          backgroundColor: "canvas.100",
-          borderColor: "canvas.300",
-        }}
-      >
-        <Typography>Single Interval Training</Typography>
-      </Box>
-    </Source>
+        <VerticalStackedContainer<TExerciseFormat>
+          id="dropContainer1"
+          elements={value.map((activity) => ({
+            value: activity,
+            position: activity.position,
+          }))}
+          onElementPositionChange={onElementPositionChangeCallback}
+          renderElement={renderActivity}
+        />
+      </Stack>
+    </DragAndDrop>
   );
 };
 

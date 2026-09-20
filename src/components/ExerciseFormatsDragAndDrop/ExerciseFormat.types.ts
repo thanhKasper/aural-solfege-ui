@@ -14,12 +14,6 @@ export type TBaseExerciseFormat<T> = {
 // @TODO: Add more new exercise activity type in the future.
 export type TExerciseFormat = TSingleIntervalTraining | TIntervalPitchComparison;
 
-export interface IExerciseFormatSourceElement {
-  onCreated: (data: TExerciseFormat) => void;
-  onChanged: (data: TExerciseFormat) => void;
-  onRemoved: (data: TExerciseFormat) => void;
-}
-
 export interface ExerciseFormatActions<TPayload> {
   renderRelocatable: (deps: {
     value: TPayload;

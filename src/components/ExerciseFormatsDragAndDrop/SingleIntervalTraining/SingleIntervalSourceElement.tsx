@@ -1,72 +1,20 @@
-import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
+import Source from "@/components/organisms/DragAndDrop/elements/Source";
 import { Box, Typography } from "@mui/material";
-import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableContent";
-import {
-  EXERCISE_FORMAT,
-  type IExerciseFormatSourceElement,
-} from "../ExerciseFormat.types";
-import type {
-  SingleIntervalConfiguration,
-  TSingleIntervalTraining,
-} from "./SingleIntervalTraining.types";
-import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
-import { useRef } from "react";
-import useDialog from "@/hooks/useDialog";
+import type { TExerciseFormat } from "../ExerciseFormat.types";
+import { singleIntervalTrainingActions } from "./SingleIntervalTraining.actions";
+
+interface ISingleIntervalSourceElementProps {
+  onCreated: (data: TExerciseFormat) => void;
+}
 
 export const SingleIntervalSourceElement = ({
-  onChanged,
   onCreated,
-  onRemoved,
-}: IExerciseFormatSourceElement) => {
-  const { open } = useDialog();
-  const configurationRef = useRef<SingleIntervalConfiguration | null>(null);
-
-  const provideData = (position: number) => {
-    const close = open({
-      title: "Single interval configuration",
-      content: (
-        <SingleIntervalConfigurationContent formRef={configurationRef} />
-      ),
-      buttons: [
-        {
-          label: "Cancel",
-          onClick: () => {
-            close();
-          },
-        },
-        {
-          label: "Submit",
-          onClick: () =>
-            configurationRef.current?.handleSubmit((data) => {
-              onCreated({
-                ...data,
-                type: EXERCISE_FORMAT.SINGLE_INTERVAL,
-                position,
-                id: crypto.randomUUID(),
-              });
-              close();
-            })(),
-        },
-      ],
-    });
-  };
-
+}: ISingleIntervalSourceElementProps) => {
   return (
-    <SourceElement<TSingleIntervalTraining>
-      onBeforeElementDrop={provideData}
-      shouldRender={(data) => {
-        return data.type === EXERCISE_FORMAT.SINGLE_INTERVAL
-      }}
-      render={({ removeSelf, value }) => (
-        <SingleIntervalRelocatableContent
-          value={value}
-          onRemove={(data) => {
-            onRemoved(data);
-            removeSelf();
-          }}
-          onChange={onChanged}
-        />
-      )}
+    <Source
+      onBeforeRelocatableCreated={(position) =>
+        singleIntervalTrainingActions.openCreateDialog({ position, onCreated })
+      }
     >
       <Box
         sx={{
@@ -80,6 +28,6 @@ export const SingleIntervalSourceElement = ({
       >
         <Typography>Single Interval Training</Typography>
       </Box>
-    </SourceElement>
+    </Source>
   );
 };

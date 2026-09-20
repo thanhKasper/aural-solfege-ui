@@ -95,7 +95,6 @@ export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseRelease);
     return () => {
-      console.log("Clean up registered event listener");
       window.removeEventListener("mousedown", handleMouseHold);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseRelease);
