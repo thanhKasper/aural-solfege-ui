@@ -1,7 +1,7 @@
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
 import { Box, Stack, Typography } from "@mui/material";
 import { useCallback, useRef } from "react";
-import DragAndDrop from "../organisms/DragAndDrop/DragAndDrop";
+import DragAndDrop from "../organisms/DragAndDrop/providers/DragAndDrop";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";

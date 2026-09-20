@@ -1,13 +1,12 @@
-import { useContext } from "react";
-import { DragAndDropContext } from "../DragAndDropContextV2";
 import type { RelocatableContentRenderer } from "./types";
+import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 interface RelocatableProps {
   children: RelocatableContentRenderer;
 }
 
 const Relocatable = ({ children }: RelocatableProps) => {
-  const { showGhostComponent } = useContext(DragAndDropContext);
+  const { showGhostComponent } = useDragAndDrop();
 
   const remove = () => {};
   const update = () => {};
@@ -16,9 +15,7 @@ const Relocatable = ({ children }: RelocatableProps) => {
 
   const renderedComponent = children({ remove, update, moveUp, moveDown });
   return (
-    <div
-      onMouseDown={(e) => showGhostComponent(e.currentTarget)}
-    >
+    <div onMouseDown={(e) => showGhostComponent(e.currentTarget)}>
       {renderedComponent}
     </div>
   );

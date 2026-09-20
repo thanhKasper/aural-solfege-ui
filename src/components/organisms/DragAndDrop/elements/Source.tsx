@@ -2,19 +2,35 @@ import { type PropsWithChildren } from "react";
 
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import type { RelocatableContentRenderer } from "./types";
+// import { DropElement } from "@/services/dragAndDrop/DropElement";
 
 interface SourceProps extends PropsWithChildren {
-  onBeforeRelocatableCreated?: () => void;
+  onBeforeRelocatableCreated?: <T>(next: (payload: T) => void) => void;
   renderRelocatableContent?: RelocatableContentRenderer;
 }
 
-const Source = ({ children, onBeforeRelocatableCreated }: SourceProps) => {
+const Source = ({
+  children,
+  onBeforeRelocatableCreated,
+  // renderRelocatableContent,
+}: SourceProps) => {
   const { showGhostComponent } = useDragAndDrop();
+
+  const handleNext = () => {
+    // const dropElement = new DropElement(
+    //   payload,
+    //   renderRelocatableContent ?? (() => <></>),
+    // );
+  };
+
+  const handleSuccessDrop = () => {
+    onBeforeRelocatableCreated?.(handleNext);
+  };
 
   return (
     <div
       onMouseDown={(e) =>
-        showGhostComponent(e.currentTarget, onBeforeRelocatableCreated)
+        showGhostComponent(e.currentTarget, handleSuccessDrop)
       }
     >
       {children}

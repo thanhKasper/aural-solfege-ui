@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { DragAndDropContext } from "../DragAndDropContextV2";
+import { DragAndDropContext } from "../providers/DragAndDropContextV2";
+import { GhostElement } from "../elements/GhostElement";
 
 export const useDragAndDrop = () => {
   const ctx = useContext(DragAndDropContext);
@@ -7,5 +8,21 @@ export const useDragAndDrop = () => {
     throw Error("useDragAndDrop is used outside of the drag and drop context");
   }
 
-  return ctx;
+  const { setGhost } = ctx;
+
+  const showGhostComponent = (
+    element: HTMLElement,
+    onSuccessDrop?: () => void,
+  ) => {
+    setGhost(<GhostElement element={element} onSuccessDrop={onSuccessDrop} />);
+  };
+
+  const hideGhostComponent = () => {
+    setGhost(undefined);
+  };
+
+  return {
+    showGhostComponent,
+    hideGhostComponent,
+  };
 };

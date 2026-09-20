@@ -1,15 +1,14 @@
 import {
   useCallback,
-  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import { DragAndDropContext } from "../DragAndDropContextV2";
 import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import type { DropEventPayload, MoveEventPayload } from "../events";
+import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 interface GhostElementProps {
   element: HTMLElement;
@@ -22,7 +21,7 @@ type Coordination = {
 };
 
 export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
-  const { hideGhostComponent } = useContext(DragAndDropContext);
+  const { hideGhostComponent } = useDragAndDrop();
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
   const [coordination, setCoordination] = useState<Coordination>({
     x: 0,
