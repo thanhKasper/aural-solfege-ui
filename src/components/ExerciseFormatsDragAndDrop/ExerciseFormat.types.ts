@@ -1,4 +1,5 @@
-import type { EXERCISE_FORMAT } from "@/constants";
+import { EXERCISE_FORMAT } from "@/constants";
+import type { ReactNode } from "react";
 import type { TSingleIntervalTraining } from "./SingleIntervalTraining/SingleIntervalTraining.types";
 import type { TIntervalPitchComparison } from "./IntervalPitchComparison/IntervalPitchComparison.types";
 
@@ -18,3 +19,26 @@ export interface IExerciseFormatSourceElement {
   onChanged: (data: TExerciseFormat) => void;
   onRemoved: (data: TExerciseFormat) => void;
 }
+
+export interface ExerciseFormatActions<TPayload> {
+  renderRelocatable: (deps: {
+    value: TPayload;
+    updateData: (data: TPayload) => void;
+    onRemove: (data: TPayload) => void;
+  }) => ReactNode;
+
+  openCreateDialog: (deps: {
+    position: number;
+    onCreated: (data: TPayload) => void;
+  }) => void;
+
+  openEditDialog: (deps: {
+    value: TPayload;
+    onChange: (data: TPayload) => void;
+  }) => void;
+}
+
+export type ExerciseFormatActionsMap = {
+  [EXERCISE_FORMAT.SINGLE_INTERVAL]: ExerciseFormatActions<TSingleIntervalTraining>;
+  [EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON]: ExerciseFormatActions<TIntervalPitchComparison>;
+};
