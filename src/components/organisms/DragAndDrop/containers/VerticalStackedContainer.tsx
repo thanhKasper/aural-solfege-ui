@@ -71,8 +71,15 @@ const VerticalStackedContainer = ({
       }}
     >
       {dropElements.map((element) => {
-        const renderedComponent = element.render();
-        return renderedComponent;
+        const RelocatableComponent = element.render();
+        return (
+          <RelocatableComponent
+            moveDown={() => {}}
+            moveUp={() => {}}
+            remove={() => {}}
+            update={() => {}}
+          />
+        );
       })}
     </Box>
   );
