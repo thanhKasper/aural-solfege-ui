@@ -47,7 +47,7 @@ const VerticalStackedContainer = ({
             containerElementRef.current,
           )
         ) {
-          dropCallback?.(containerRef.current.id);
+          dropCallback?.(dropElements.length, containerRef.current.id);
         }
         setContainerCollision(false);
       },

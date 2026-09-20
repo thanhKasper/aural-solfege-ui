@@ -4,16 +4,19 @@ import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import type { RelocatableContentRenderer } from "./types";
 import { DropElement } from "@/services/dragAndDrop/DropElement";
 
-interface SourceProps extends PropsWithChildren {
-  onBeforeRelocatableCreated?: <T>(next: (payload: T) => void) => void;
+interface SourceProps<T> extends PropsWithChildren {
+  onBeforeRelocatableCreated?: (
+    position: number,
+    next: (payload: T) => void,
+  ) => void;
   renderRelocatableContent?: RelocatableContentRenderer;
 }
 
-const Source = ({
+const Source = <T,>({
   children,
   onBeforeRelocatableCreated,
   renderRelocatableContent,
-}: SourceProps) => {
+}: SourceProps<T>) => {
   const { showGhostComponent, addElement } = useDragAndDrop();
   const targetedContainerRef = useRef<string | undefined>(undefined);
 
@@ -27,9 +30,9 @@ const Source = ({
     }
   };
 
-  const handleSuccessDrop = (containerId?: string) => {
+  const handleSuccessDrop = (dropPosition: number, containerId?: string) => {
     targetedContainerRef.current = containerId;
-    onBeforeRelocatableCreated?.(handleNext);
+    onBeforeRelocatableCreated?.(dropPosition, handleNext);
   };
 
   return (
