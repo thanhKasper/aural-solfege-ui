@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import { type MoveEventPayload, type DropEventPayload } from "../events";
 import checkCollision from "../utils/checkCollision";
+import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 interface VerticalStackedContainerProps {
   dropElements?: DropElement[];
@@ -26,10 +27,15 @@ const VerticalStackedContainer = ({
   const containerElementRef = useRef<HTMLDivElement>(null);
   const [containerCollision, setContainerCollision] = useState(false);
   const { register } = useEventBus();
+  const { addContainer } = useDragAndDrop();
 
   useEffect(() => {
     containerRef.current.updateElements(dropElements);
   }, [dropElements]);
+
+  useEffect(() => {
+    addContainer(containerRef.current);
+  }, [addContainer]);
 
   useEffect(() => {
     register<DropEventPayload>(
