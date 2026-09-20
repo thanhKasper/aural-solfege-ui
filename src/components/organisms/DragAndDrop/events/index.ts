@@ -1,5 +1,5 @@
 export type DropEventPayload = {
-  dropCallback?: () => void;
+  dropCallback?: (containerId?: string) => void;
   componentDomRect: DOMRect;
 };
 

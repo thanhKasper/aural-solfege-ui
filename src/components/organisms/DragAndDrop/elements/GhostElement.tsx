@@ -12,7 +12,7 @@ import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 interface GhostElementProps {
   element: HTMLElement;
-  onSuccessDrop?: () => void;
+  onSuccessDrop?: DropEventPayload["dropCallback"];
 }
 
 type Coordination = {
