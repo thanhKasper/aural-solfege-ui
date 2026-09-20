@@ -8,7 +8,7 @@ import type {
 import IntervalPitchComparisonConfigurationContent from "./components/IntervalPitchComparisonConfigurationContent";
 import { Box, Typography } from "@mui/material";
 import { useRef } from "react";
-import useDialog from "@/services/dialog/useDialog";
+import useDialog from "@/hooks/useDialog";
 import { EXERCISE_FORMAT } from "../ExerciseFormat.types";
 
 const IntervalPitchComparisonSourceElement = ({

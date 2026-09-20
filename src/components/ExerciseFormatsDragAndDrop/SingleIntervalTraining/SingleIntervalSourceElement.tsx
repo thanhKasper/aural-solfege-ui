@@ -11,7 +11,7 @@ import type {
 } from "./SingleIntervalTraining.types";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";
-import useDialog from "@/services/dialog/useDialog";
+import useDialog from "@/hooks/useDialog";
 
 export const SingleIntervalSourceElement = ({
   onChanged,

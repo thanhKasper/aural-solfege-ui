@@ -8,7 +8,7 @@ import type {
   SingleIntervalConfiguration,
   ISingleIntervalRelocatableContent,
 } from "./SingleIntervalTraining.types";
-import useDialog from "@/services/dialog/useDialog";
+import useDialog from "@/hooks/useDialog";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";
 
