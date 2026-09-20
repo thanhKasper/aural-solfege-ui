@@ -35,7 +35,6 @@ const VerticalStackedContainer = ({
     register<DropEventPayload>(
       DRAG_AND_DROP_EVENT.ELEMENT_DROP,
       ({ componentDomRect, dropCallback }) => {
-        console.log("Receive dom rect", componentDomRect);
         if (
           isCollidingWithContainer(
             componentDomRect,
@@ -44,6 +43,7 @@ const VerticalStackedContainer = ({
         ) {
           dropCallback?.();
         }
+        setContainerCollision(false);
       },
     );
     register<MoveEventPayload>(
