@@ -2,9 +2,15 @@ import type { DropElement } from "./DropElement";
 
 export class Container {
   private elements: DropElement[];
+  private _id: string;
 
   constructor(elements: DropElement[]) {
     this.elements = elements;
+    this._id = "Container-" + crypto.randomUUID();
+  }
+
+  get id() {
+    return this._id;
   }
 
   addElement(element: DropElement, addPosition: number) {
