@@ -1,6 +1,5 @@
 import { useEventBus } from "@/hooks/useEventBus";
-import { Container } from "@/services/dragAndDrop/Container";
-import type { DropElement } from "@/services/dragAndDrop/DropElement";
+import type { DropElementData } from "@/services/dragAndDrop/types";
 import { Box } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { DRAG_AND_DROP_EVENT } from "../constants";
@@ -9,7 +8,7 @@ import checkCollision from "../utils/checkCollision";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 
 interface VerticalStackedContainerProps {
-  dropElements?: DropElement[];
+  dropElements?: DropElementData[];
 }
 
 function isCollidingWithContainer(
@@ -23,18 +22,14 @@ function isCollidingWithContainer(
 const VerticalStackedContainer = ({
   dropElements = [],
 }: VerticalStackedContainerProps) => {
-  const containerRef = useRef<Container>(new Container(dropElements));
+  const containerIdRef = useRef<string>(`container-${crypto.randomUUID()}`);
   const containerElementRef = useRef<HTMLDivElement>(null);
   const [containerCollision, setContainerCollision] = useState(false);
   const { register } = useEventBus();
   const { addContainer } = useDragAndDrop();
 
   useEffect(() => {
-    containerRef.current.updateElements(dropElements);
-  }, [dropElements]);
-
-  useEffect(() => {
-    addContainer(containerRef.current);
+    addContainer(containerIdRef.current);
   }, [addContainer]);
 
   useEffect(() => {
@@ -47,7 +42,7 @@ const VerticalStackedContainer = ({
             containerElementRef.current,
           )
         ) {
-          dropCallback?.(dropElements.length, containerRef.current.id);
+          dropCallback?.(dropElements.length, containerIdRef.current);
         }
         setContainerCollision(false);
       },
@@ -76,17 +71,16 @@ const VerticalStackedContainer = ({
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
-      {dropElements.map((element) => {
-        const RelocatableComponent = element.render();
-        return (
-          <RelocatableComponent
-            moveDown={() => {}}
-            moveUp={() => {}}
-            remove={() => {}}
-            update={() => {}}
-          />
-        );
-      })}
+      {dropElements.map((element) => (
+        <div key={element.id}>
+          {element.render({
+            moveDown: () => {},
+            moveUp: () => {},
+            remove: () => {},
+            update: () => {},
+          })}
+        </div>
+      ))}
     </Box>
   );
 };

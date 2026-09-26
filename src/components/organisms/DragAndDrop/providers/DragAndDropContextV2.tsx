@@ -1,4 +1,4 @@
-import type { Container } from "@/services/dragAndDrop/Container";
+import type { DropElementData } from "@/services/dragAndDrop/types";
 import {
   createContext,
   type Dispatch,
@@ -9,7 +9,7 @@ import {
 
 interface DragAndDropContextProps {
   setGhost: Dispatch<SetStateAction<ReactNode>>;
-  containersRef?: RefObject<Map<string, Container>>;
+  containersRef?: RefObject<Map<string, DropElementData[]>>;
 }
 
 export const DragAndDropContext = createContext<DragAndDropContextProps>({
