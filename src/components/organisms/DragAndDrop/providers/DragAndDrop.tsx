@@ -6,13 +6,12 @@ import {
 } from "react";
 import { Box } from "@mui/material";
 import { DragAndDropContext } from "./DragAndDropContextV2";
-import type { DropElementData } from "@/services/dragAndDrop/types";
 
 const DragAndDrop = ({ children }: PropsWithChildren) => {
   const [ghostComponent, setGhostComponent] = useState<ReactNode | undefined>(
     undefined,
   );
-  const containersMap = useRef<Map<string, DropElementData[]>>(new Map());
+  const containersMap = useRef<Map<string, any[]>>(new Map());
 
   return (
     <DragAndDropContext.Provider

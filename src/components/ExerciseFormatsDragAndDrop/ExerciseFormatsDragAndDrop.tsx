@@ -68,6 +68,10 @@ const ExerciseFormatsDragAndDrop = ({
     [onExerciseFormatsChange],
   );
 
+  const handleContentRender = () => {
+    return () => null;
+  };
+
   return (
     <>
       <DragAndDropProvider>
@@ -99,7 +103,7 @@ const ExerciseFormatsDragAndDrop = ({
       <DragAndDrop>
         <Box sx={{ display: "flex" }}>
           <TestShowGhost />
-          <VerticalStackedContainer />
+          <VerticalStackedContainer renderContent={handleContentRender} />
         </Box>
       </DragAndDrop>
     </>

@@ -1,33 +1,24 @@
 import { useRef, type PropsWithChildren } from "react";
 
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
-import type { RelocatableContentRenderer } from "./types";
-import type { DropElementData } from "@/services/dragAndDrop/types";
 
 interface SourceProps<T> extends PropsWithChildren {
   onBeforeRelocatableCreated?: (
     position: number,
     next: (payload: T) => void,
   ) => void;
-  renderRelocatableContent?: RelocatableContentRenderer;
 }
 
 const Source = <T,>({
   children,
   onBeforeRelocatableCreated,
-  renderRelocatableContent,
 }: SourceProps<T>) => {
   const { showGhostComponent, addElement } = useDragAndDrop();
   const targetedContainerRef = useRef<string | undefined>(undefined);
 
   const handleNext = <T,>(payload: T) => {
-    const dropElement: DropElementData<T> = {
-      id: `drop-element-${crypto.randomUUID()}`,
-      payload,
-      render: renderRelocatableContent ?? (() => <></>),
-    };
     if (targetedContainerRef.current) {
-      addElement(targetedContainerRef.current, dropElement);
+      addElement(targetedContainerRef.current, payload);
     }
   };
 

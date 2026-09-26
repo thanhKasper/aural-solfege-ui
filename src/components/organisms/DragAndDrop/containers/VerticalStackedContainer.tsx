@@ -1,14 +1,16 @@
 import { useEventBus } from "@/hooks/useEventBus";
-import type { DropElementData } from "@/services/dragAndDrop/types";
 import { Box } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import { type MoveEventPayload, type DropEventPayload } from "../events";
 import checkCollision from "../utils/checkCollision";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import Relocatable from "../elements/Relocatable";
+import type { RelocatableContentRenderer } from "../elements/types";
 
-interface VerticalStackedContainerProps {
-  dropElements?: DropElementData[];
+interface VerticalStackedContainerProps<T = unknown> {
+  dropElements?: T[];
+  renderContent: (element: T) => RelocatableContentRenderer;
 }
 
 function isCollidingWithContainer(
@@ -19,9 +21,10 @@ function isCollidingWithContainer(
   return checkCollision(elementRect, containerElement.getBoundingClientRect());
 }
 
-const VerticalStackedContainer = ({
+const VerticalStackedContainer = <T = unknown,>({
   dropElements = [],
-}: VerticalStackedContainerProps) => {
+  renderContent,
+}: VerticalStackedContainerProps<T>) => {
   const containerIdRef = useRef<string>(`container-${crypto.randomUUID()}`);
   const containerElementRef = useRef<HTMLDivElement>(null);
   const [containerCollision, setContainerCollision] = useState(false);
@@ -71,16 +74,14 @@ const VerticalStackedContainer = ({
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
-      {dropElements.map((element) => (
-        <div key={element.id}>
-          {element.render({
-            moveDown: () => {},
-            moveUp: () => {},
-            remove: () => {},
-            update: () => {},
-          })}
-        </div>
-      ))}
+      {dropElements.map((element) => {
+        const RelocatableContent = renderContent(element);
+        return (
+          <Relocatable>
+            {(actions) => <RelocatableContent {...actions} />}
+          </Relocatable>
+        );
+      })}
     </Box>
   );
 };

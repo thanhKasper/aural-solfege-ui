@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { DragAndDropContext } from "../providers/DragAndDropContextV2";
 import { GhostElement } from "../elements/GhostElement";
-import type { DropElementData } from "@/services/dragAndDrop/types";
 import type { DropEventPayload } from "../events";
 
 export const useDragAndDrop = () => {
@@ -33,8 +32,8 @@ export const useDragAndDrop = () => {
     containers.set(containerId, []);
   };
 
-  const addElement = (containerId: string, element: DropElementData) => {
-    const elements = containersRef?.current?.get(containerId);
+  const addElement = <T,>(containerId: string, element: T) => {
+    const elements = containersRef?.current?.get(containerId) as T[] | undefined;
 
     if (!elements) return;
 
