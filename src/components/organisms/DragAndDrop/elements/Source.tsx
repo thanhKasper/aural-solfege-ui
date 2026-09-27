@@ -1,6 +1,7 @@
 import { useRef, type PropsWithChildren } from "react";
 
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { useDraggable } from "../hooks/useDraggable";
 
 interface SourceProps<T> extends PropsWithChildren {
   onBeforeRelocatableCreated?: (
@@ -13,7 +14,7 @@ const Source = <T,>({
   children,
   onBeforeRelocatableCreated,
 }: SourceProps<T>) => {
-  const { showGhostComponent, addElement } = useDragAndDrop();
+  const { addElement } = useDragAndDrop();
   const targetedContainerRef = useRef<string | undefined>(undefined);
 
   const handleNext = <T,>(payload: T) => {
@@ -27,15 +28,9 @@ const Source = <T,>({
     onBeforeRelocatableCreated?.(dropPosition, handleNext);
   };
 
-  return (
-    <div
-      onMouseDown={(e) =>
-        showGhostComponent(e.currentTarget, handleSuccessDrop)
-      }
-    >
-      {children}
-    </div>
-  );
+  const draggable = useDraggable(handleSuccessDrop);
+
+  return <div {...draggable}>{children}</div>;
 };
 
 export default Source;

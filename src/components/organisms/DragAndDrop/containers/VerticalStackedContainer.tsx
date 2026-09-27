@@ -10,7 +10,7 @@ import type { RelocatableContentRenderer } from "../elements/types";
 
 interface VerticalStackedContainerProps<T = unknown> {
   dropElements?: T[];
-  renderContent: (element: T) => RelocatableContentRenderer;
+  renderContent: (element: T) => RelocatableContentRenderer | undefined;
 }
 
 function isCollidingWithContainer(
@@ -21,7 +21,7 @@ function isCollidingWithContainer(
   return checkCollision(elementRect, containerElement.getBoundingClientRect());
 }
 
-const VerticalStackedContainer = <T = unknown,>({
+const VerticalStackedContainer = <T,>({
   dropElements = [],
   renderContent,
 }: VerticalStackedContainerProps<T>) => {
@@ -74,10 +74,14 @@ const VerticalStackedContainer = <T = unknown,>({
         transition: "background-color 0.2s, border-color 0.2s",
       }}
     >
-      {dropElements.map((element) => {
+      {dropElements.map((element, idx) => {
         const RelocatableContent = renderContent(element);
+        if (!RelocatableContent) {
+          return;
+        }
+
         return (
-          <Relocatable>
+          <Relocatable key={idx} value={element}>
             {(actions) => <RelocatableContent {...actions} />}
           </Relocatable>
         );

@@ -13,10 +13,10 @@ const configurationRef: RefObject<IntervalPitchComparisonConfiguration | null> =
 };
 
 export const intervalPitchComparisonActions: ExerciseFormatActions<TIntervalPitchComparison> = {
-  renderRelocatable: ({ value, onRemove }) => (
+  renderRelocatable: ({ value, remove }) => (
     <IntervalPitchComparisonRelocatableElement
-      value={value}
-      onRemove={() => onRemove(value)}
+      value={value as TIntervalPitchComparison}
+      onRemove={remove}
     />
   ),
 

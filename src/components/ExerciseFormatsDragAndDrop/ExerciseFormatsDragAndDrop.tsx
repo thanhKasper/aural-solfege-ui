@@ -9,6 +9,7 @@ import Source from "../organisms/DragAndDrop/elements/Source";
 import type { TExerciseFormat } from "./ExerciseFormat.types";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
+import { exerciseFormatActionsMap } from "./exerciseFormatActions";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -68,8 +69,8 @@ const ExerciseFormatsDragAndDrop = ({
     [onExerciseFormatsChange],
   );
 
-  const handleContentRender = () => {
-    return () => null;
+  const handleContentRender = (element: TExerciseFormat) => {
+    return exerciseFormatActionsMap[element.type]?.renderRelocatable;
   };
 
   return (
@@ -102,19 +103,29 @@ const ExerciseFormatsDragAndDrop = ({
       </DragAndDropProvider>
       <DragAndDrop>
         <Box sx={{ display: "flex" }}>
-          <TestShowGhost />
-          <VerticalStackedContainer renderContent={handleContentRender} />
+          <TestShowGhost onDataCreated={handleElementChange} />
+          <VerticalStackedContainer
+            dropElements={value}
+            renderContent={handleContentRender}
+          />
         </Box>
       </DragAndDrop>
     </>
   );
 };
 
-const TestShowGhost = () => {
+const TestShowGhost = ({ onDataCreated }: { onDataCreated: any }) => {
+  const singleIntervalActions = exerciseFormatActionsMap["SINGLE_INTERVAL"];
   return (
     <Source
-      onBeforeRelocatableCreated={() => {
-        console.log("An element is dropped");
+      onBeforeRelocatableCreated={(position, next) => {
+        singleIntervalActions?.openCreateDialog({
+          position,
+          onCreated: (data) => {
+            onDataCreated(data);
+            next(data);
+          },
+        });
       }}
     >
       <Box

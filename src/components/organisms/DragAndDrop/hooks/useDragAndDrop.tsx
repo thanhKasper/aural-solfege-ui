@@ -1,26 +1,70 @@
-import { useContext } from "react";
-import { DragAndDropContext } from "../providers/DragAndDropContextV2";
-import { GhostElement } from "../elements/GhostElement";
-import type { DropEventPayload } from "../events";
+import { useCallback } from "react";
+import { useEventBus } from "@/hooks/useEventBus";
+import { DRAG_AND_DROP_EVENT } from "../constants";
+import type { DropEventPayload, MoveEventPayload } from "../events";
+import { getPreviewNode } from "../utils/getPreviewNode";
+import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
+
+export type DragStart = {
+  element: HTMLElement;
+  pointer: { x: number; y: number };
+  onSuccessDrop?: DropEventPayload["dropCallback"];
+};
 
 export const useDragAndDrop = () => {
-  const ctx = useContext(DragAndDropContext);
-  if (!ctx) {
-    throw Error("useDragAndDrop is used outside of the drag and drop context");
-  }
+  const { sessionRef, ghostRef, setDraggedElement, containersRef } =
+    useDragAndDropContext();
+  const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
 
-  const { setGhost, containersRef } = ctx;
+  const startDrag = useCallback(
+    ({ element, pointer, onSuccessDrop }: DragStart) => {
+      const rect = getPreviewNode(element).getBoundingClientRect();
+      sessionRef.current = {
+        offset: { x: pointer.x - rect.left, y: pointer.y - rect.top },
+        position: { x: rect.left, y: rect.top },
+        onSuccessDrop,
+      };
+      setDraggedElement(element);
+    },
+    [sessionRef, setDraggedElement],
+  );
 
-  const showGhostComponent = (
-    element: HTMLElement,
-    onSuccessDrop?: DropEventPayload["dropCallback"],
-  ) => {
-    setGhost(<GhostElement element={element} onSuccessDrop={onSuccessDrop} />);
-  };
+  const moveDrag = useCallback(
+    (x: number, y: number) => {
+      const session = sessionRef.current;
+      if (!session) return;
+      session.position = { x: x - session.offset.x, y: y - session.offset.y };
 
-  const hideGhostComponent = () => {
-    setGhost(undefined);
-  };
+      // The ghost mounts one render after startDrag and reads session.position itself.
+      const ghost = ghostRef.current;
+      if (!ghost) return;
+      ghost.style.transform = `translate(${session.position.x}px, ${session.position.y}px)`;
+      dispatch<MoveEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, {
+        element: ghost.getBoundingClientRect(),
+      });
+    },
+    [sessionRef, ghostRef, dispatch],
+  );
+
+  const finishDrag = useCallback(
+    (accepted: boolean) => {
+      const session = sessionRef.current;
+      const ghost = ghostRef.current;
+      if (session && ghost) {
+        dispatch<DropEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_DROP, {
+          // A cancel still dispatches, without a callback, so containers clear their highlight.
+          dropCallback: accepted ? session.onSuccessDrop : undefined,
+          componentDomRect: ghost.getBoundingClientRect(),
+        });
+      }
+      sessionRef.current = null;
+      setDraggedElement(null);
+    },
+    [sessionRef, ghostRef, setDraggedElement, dispatch],
+  );
+
+  const endDrag = useCallback(() => finishDrag(true), [finishDrag]);
+  const cancelDrag = useCallback(() => finishDrag(false), [finishDrag]);
 
   const addContainer = (containerId: string) => {
     if (!containersRef) return;
@@ -41,8 +85,10 @@ export const useDragAndDrop = () => {
   };
 
   return {
-    showGhostComponent,
-    hideGhostComponent,
+    startDrag,
+    moveDrag,
+    endDrag,
+    cancelDrag,
     addContainer,
     addElement,
   };

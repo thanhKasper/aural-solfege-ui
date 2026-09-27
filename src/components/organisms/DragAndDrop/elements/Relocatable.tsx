@@ -1,11 +1,12 @@
 import type { RelocatableContentRenderer } from "./types";
-import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { useDraggable } from "../hooks/useDraggable";
 
 interface RelocatableProps {
   children: RelocatableContentRenderer;
   onRemove?: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  value: unknown;
 }
 
 const Relocatable = ({
@@ -13,18 +14,18 @@ const Relocatable = ({
   onRemove = () => {},
   onMoveDown = () => {},
   onMoveUp = () => {},
+  value,
 }: RelocatableProps) => {
-  const { showGhostComponent } = useDragAndDrop();
+  const draggable = useDraggable();
 
   const renderedComponent = children({
+    value,
     remove: onRemove,
     moveDown: onMoveDown,
     moveUp: onMoveUp,
   });
   return (
-    <div onMouseDown={(e) => showGhostComponent(e.currentTarget)}>
-      {renderedComponent}
-    </div>
+    <div {...draggable}>{renderedComponent}</div>
   );
 };
 

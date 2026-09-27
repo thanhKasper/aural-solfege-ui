@@ -1,7 +1,7 @@
 import { EXERCISE_FORMAT } from "@/constants";
-import type { ReactNode } from "react";
 import type { TSingleIntervalTraining } from "./SingleIntervalTraining/SingleIntervalTraining.types";
 import type { TIntervalPitchComparison } from "./IntervalPitchComparison/IntervalPitchComparison.types";
+import type { RelocatableContentRenderer } from "../organisms/DragAndDrop/elements/types";
 
 export { EXERCISE_FORMAT } from "@/constants";
 
@@ -12,7 +12,9 @@ export type TBaseExerciseFormat<T> = {
 } & T;
 
 // @TODO: Add more new exercise activity type in the future.
-export type TExerciseFormat = TSingleIntervalTraining | TIntervalPitchComparison;
+export type TExerciseFormat =
+  | TSingleIntervalTraining
+  | TIntervalPitchComparison;
 
 export interface IExerciseFormatSourceElement {
   onCreated: (data: TExerciseFormat) => void;
@@ -21,11 +23,7 @@ export interface IExerciseFormatSourceElement {
 }
 
 export interface ExerciseFormatActions<TPayload> {
-  renderRelocatable: (deps: {
-    value: TPayload;
-    updateData: (data: TPayload) => void;
-    onRemove: (data: TPayload) => void;
-  }) => ReactNode;
+  renderRelocatable: RelocatableContentRenderer;
 
   openCreateDialog: (deps: {
     position: number;

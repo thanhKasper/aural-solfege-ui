@@ -1,111 +1,33 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { useEventBus } from "@/hooks/useEventBus";
-import { DRAG_AND_DROP_EVENT } from "../constants";
-import type { DropEventPayload, MoveEventPayload } from "../events";
-import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { useLayoutEffect } from "react";
+import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
+import { getPreviewNode } from "../utils/getPreviewNode";
 
-interface GhostElementProps {
-  element: HTMLElement;
-  onSuccessDrop?: DropEventPayload["dropCallback"];
-}
+export const GhostElement = ({ element }: { element: HTMLElement }) => {
+  const { ghostRef, sessionRef } = useDragAndDropContext();
 
-type Coordination = {
-  x: number;
-  y: number;
-};
-
-export const GhostElement = ({ element, onSuccessDrop }: GhostElementProps) => {
-  const { hideGhostComponent } = useDragAndDrop();
-  const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
-  const [coordination, setCoordination] = useState<Coordination>({
-    x: 0,
-    y: 0,
-  });
-  const grabOffsetRef = useRef<Coordination>({ x: 0, y: 0 });
-  const ghostRef = useRef<HTMLDivElement | null>(null);
-
+  // Before first paint, so the ghost appears at the grab point instead of (0,0).
   useLayoutEffect(() => {
-    const ghostNode = ghostRef.current;
-    if (!ghostNode) return;
+    const ghost = ghostRef.current;
+    const session = sessionRef.current;
+    if (!ghost || !session) return;
 
-    const contentElement = element.firstElementChild ?? element;
-    const rect = contentElement.getBoundingClientRect();
-    ghostNode.style.width = `${rect.width}px`;
-    ghostNode.style.height = `${rect.height}px`;
+    const preview = getPreviewNode(element);
+    const rect = preview.getBoundingClientRect();
+    ghost.style.width = `${rect.width}px`;
+    ghost.style.height = `${rect.height}px`;
+    ghost.style.transform = `translate(${session.position.x}px, ${session.position.y}px)`;
 
-    const clonedView = contentElement.cloneNode(true) as HTMLElement;
-    ghostNode.appendChild(clonedView);
+    const clone = preview.cloneNode(true) as HTMLElement;
+    ghost.appendChild(clone);
     return () => {
-      clonedView.remove();
+      clone.remove();
     };
-  }, [element]);
-
-  const handleMouseHold = useCallback(
-    (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (!element.contains(target)) return;
-
-      const bindingRect = element.getBoundingClientRect();
-      grabOffsetRef.current = {
-        x: e.clientX - bindingRect.x,
-        y: e.clientY - bindingRect.y,
-      };
-
-      setCoordination({
-        x: bindingRect.x,
-        y: bindingRect.y,
-      });
-    },
-    [element],
-  );
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!ghostRef.current) return;
-
-      setCoordination({
-        x: e.clientX - grabOffsetRef.current.x,
-        y: e.clientY - grabOffsetRef.current.y,
-      });
-
-      dispatch<MoveEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_MOVE, {
-        element: ghostRef.current.getBoundingClientRect(),
-      });
-    },
-    [dispatch],
-  );
-
-  const handleMouseRelease = useCallback(() => {
-    if (!ghostRef.current) return;
-    dispatch<DropEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_DROP, {
-      dropCallback: onSuccessDrop,
-      componentDomRect: ghostRef.current.getBoundingClientRect(),
-    });
-    hideGhostComponent();
-  }, [hideGhostComponent, dispatch, onSuccessDrop]);
-
-  useEffect(() => {
-    window.addEventListener("mousedown", handleMouseHold);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseRelease);
-    return () => {
-      console.log("Clean up registered event listener");
-      window.removeEventListener("mousedown", handleMouseHold);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseRelease);
-    };
-  }, [handleMouseRelease, handleMouseMove, handleMouseHold]);
+  }, [element, ghostRef, sessionRef]);
 
   return (
     <div
       ref={ghostRef}
-      style={{ position: "fixed", top: coordination.y, left: coordination.x }}
+      style={{ position: "fixed", top: 0, left: 0, pointerEvents: "none" }}
     />
   );
 };

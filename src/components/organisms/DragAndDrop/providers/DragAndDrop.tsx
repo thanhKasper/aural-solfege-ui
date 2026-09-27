@@ -1,25 +1,31 @@
-import {
-  useRef,
-  useState,
-  type PropsWithChildren,
-  type ReactNode,
-} from "react";
+import { useMemo, useRef, useState, type PropsWithChildren } from "react";
 import { Box } from "@mui/material";
-import { DragAndDropContext } from "./DragAndDropContextV2";
+import { GhostElement } from "../elements/GhostElement";
+import { DragAndDropContext, type DragSession } from "./DragAndDropContextV2";
 
 const DragAndDrop = ({ children }: PropsWithChildren) => {
-  const [ghostComponent, setGhostComponent] = useState<ReactNode | undefined>(
-    undefined,
+  const [draggedElement, setDraggedElement] = useState<HTMLElement | null>(
+    null,
   );
+  const sessionRef = useRef<DragSession | null>(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
   const containersMap = useRef<Map<string, any[]>>(new Map());
 
+  const value = useMemo(
+    () => ({
+      sessionRef,
+      ghostRef,
+      setDraggedElement,
+      containersRef: containersMap,
+    }),
+    [],
+  );
+
   return (
-    <DragAndDropContext.Provider
-      value={{ setGhost: setGhostComponent, containersRef: containersMap }}
-    >
+    <DragAndDropContext.Provider value={value}>
       <Box style={{ userSelect: "none" }}>
         {children}
-        {ghostComponent}
+        {draggedElement && <GhostElement element={draggedElement} />}
       </Box>
     </DragAndDropContext.Provider>
   );
