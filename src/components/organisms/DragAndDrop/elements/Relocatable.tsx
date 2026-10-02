@@ -16,7 +16,7 @@ const Relocatable = ({
   onMoveUp = () => {},
   value,
 }: RelocatableProps) => {
-  const draggable = useDraggable();
+  const { hideComponent, ...draggable } = useDraggable({ shouldHideSelf: true });
 
   const renderedComponent = children({
     value,
@@ -25,7 +25,12 @@ const Relocatable = ({
     moveUp: onMoveUp,
   });
   return (
-    <div {...draggable}>{renderedComponent}</div>
+    <div
+      {...draggable}
+      style={{ ...draggable.style, display: hideComponent ? "none" : undefined }}
+    >
+      {renderedComponent}
+    </div>
   );
 };
 

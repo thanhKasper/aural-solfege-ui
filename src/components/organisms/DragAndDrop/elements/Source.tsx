@@ -28,7 +28,7 @@ const Source = <T,>({
     onBeforeRelocatableCreated?.(dropPosition, handleNext);
   };
 
-  const draggable = useDraggable(handleSuccessDrop);
+  const draggable = useDraggable({ onSuccessDrop: handleSuccessDrop });
 
   return <div {...draggable}>{children}</div>;
 };

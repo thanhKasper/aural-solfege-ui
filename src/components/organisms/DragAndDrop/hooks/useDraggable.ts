@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type PointerEvent } from "react";
+import { useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import type { DropEventPayload } from "../events";
 import { useDragAndDrop } from "./useDragAndDrop";
 
@@ -6,17 +6,25 @@ const DRAG_THRESHOLD_PX = 4;
 
 type Press = { pointerId: number; x: number; y: number; element: HTMLElement };
 
-export const useDraggable = (
-  onSuccessDrop?: DropEventPayload["dropCallback"],
-) => {
+type DraggableOptions = {
+  onSuccessDrop?: DropEventPayload["dropCallback"];
+  shouldHideSelf?: boolean;
+};
+
+export const useDraggable = ({
+  onSuccessDrop,
+  shouldHideSelf = false,
+}: DraggableOptions = {}) => {
   const { startDrag, moveDrag, endDrag, cancelDrag } = useDragAndDrop();
   const pressRef = useRef<Press | null>(null);
   const draggingRef = useRef(false);
   const justDraggedRef = useRef(false);
+  const [hideComponent, setHideComponent] = useState(false);
 
   const reset = () => {
     pressRef.current = null;
     draggingRef.current = false;
+    setHideComponent(false);
   };
 
   const onPointerDown = (e: PointerEvent<HTMLElement>) => {
@@ -48,6 +56,7 @@ export const useDraggable = (
         pointer: { x: press.x, y: press.y },
         onSuccessDrop,
       });
+      if (shouldHideSelf) setHideComponent(true);
     }
 
     moveDrag(e.clientX, e.clientY);
@@ -76,7 +85,7 @@ export const useDraggable = (
     e.preventDefault();
   };
 
-  return {
+  const draggableProps = {
     onPointerDown,
     onPointerMove,
     onPointerUp,
@@ -85,4 +94,10 @@ export const useDraggable = (
     onClickCapture,
     style: { touchAction: "none" } as const,
   };
+
+  // Only present when requested, so callers that spread the result onto a DOM node
+  // (e.g. Source, which never hides) don't leak a stray prop onto the element.
+  return (
+    shouldHideSelf ? { ...draggableProps, hideComponent } : draggableProps
+  ) as typeof draggableProps & { hideComponent?: boolean };
 };
