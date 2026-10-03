@@ -106,6 +106,7 @@ const ExerciseFormatsDragAndDrop = ({
           <TestShowGhost onDataCreated={handleElementChange} />
           <VerticalStackedContainer
             dropElements={value}
+            getKey={(element) => element.id}
             renderContent={handleContentRender}
           />
         </Box>
