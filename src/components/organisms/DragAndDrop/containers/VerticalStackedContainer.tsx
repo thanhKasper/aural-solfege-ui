@@ -1,6 +1,6 @@
 import { useEventBus } from "@/hooks/useEventBus";
 import { Box } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import { type DropEventPayload } from "../events";
 import checkCollision from "../utils/checkCollision";
@@ -120,17 +120,19 @@ const VerticalStackedContainer = <T,>({
 
           const elementKey = getKey?.(element) ?? String(idx);
 
+          // The placeholder comes first so that Relocatable keeps the same slot
+          // (and is not remounted mid-drag) when the placeholder appears.
           return (
-            <Relocatable
-              key={elementKey}
-              elementKey={elementKey}
-              position={idx}
-              showPlaceholder={idx === dropIndex}
-              placeholderHeight={draggedHeight}
-              value={element}
-            >
-              {(actions) => <RelocatableContent {...actions} />}
-            </Relocatable>
+            <Fragment key={elementKey}>
+              {idx === dropIndex && <Placeholder height={draggedHeight} />}
+              <Relocatable
+                elementKey={elementKey}
+                position={idx}
+                value={element}
+              >
+                {(actions) => <RelocatableContent {...actions} />}
+              </Relocatable>
+            </Fragment>
           );
         })}
         {dropIndex === dropElements.length && (

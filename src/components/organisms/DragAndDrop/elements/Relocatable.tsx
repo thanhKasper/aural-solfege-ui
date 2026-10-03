@@ -2,7 +2,6 @@ import { useLayoutEffect, useRef } from "react";
 import type { RelocatableContentRenderer } from "./types";
 import { useDraggable } from "../hooks/useDraggable";
 import { useContainerContext } from "../containers/useContainerContext";
-import Placeholder from "./Placeholder";
 
 interface RelocatableProps {
   children: RelocatableContentRenderer;
@@ -12,8 +11,6 @@ interface RelocatableProps {
   value: unknown;
   elementKey: string;
   position: number;
-  showPlaceholder?: boolean;
-  placeholderHeight?: number;
 }
 
 const Relocatable = ({
@@ -24,8 +21,6 @@ const Relocatable = ({
   value,
   elementKey,
   position,
-  showPlaceholder = false,
-  placeholderHeight,
 }: RelocatableProps) => {
   const { hideComponent, ...draggable } = useDraggable({
     shouldHideSelf: true,
@@ -45,19 +40,16 @@ const Relocatable = ({
     moveUp: onMoveUp,
   });
   return (
-    <>
-      {showPlaceholder && <Placeholder height={placeholderHeight} />}
-      <div
-        ref={elementRef}
-        {...draggable}
-        style={{
-          ...draggable.style,
-          display: hideComponent ? "none" : undefined,
-        }}
-      >
-        {renderedComponent}
-      </div>
-    </>
+    <div
+      ref={elementRef}
+      {...draggable}
+      style={{
+        ...draggable.style,
+        display: hideComponent ? "none" : undefined,
+      }}
+    >
+      {renderedComponent}
+    </div>
   );
 };
 
