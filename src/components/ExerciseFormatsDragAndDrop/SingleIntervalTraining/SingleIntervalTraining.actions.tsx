@@ -17,6 +17,8 @@ const configurationRef: RefObject<SingleIntervalConfiguration | null> = {
 
 export const singleIntervalTrainingActions: ExerciseFormatActions<TSingleIntervalTraining> =
   {
+    label: "Single Interval Training",
+
     renderRelocatable: ({ remove, value }) => (
       <SingleIntervalRelocatableContent
         value={value as TSingleIntervalTraining}

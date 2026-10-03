@@ -13,6 +13,8 @@ const configurationRef: RefObject<IntervalPitchComparisonConfiguration | null> =
 };
 
 export const intervalPitchComparisonActions: ExerciseFormatActions<TIntervalPitchComparison> = {
+  label: "Interval Pitch Comparison",
+
   renderRelocatable: ({ value, remove }) => (
     <IntervalPitchComparisonRelocatableElement
       value={value as TIntervalPitchComparison}

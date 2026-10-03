@@ -6,7 +6,10 @@ import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.type
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
 import Source from "../organisms/DragAndDrop/elements/Source";
-import type { TExerciseFormat } from "./ExerciseFormat.types";
+import type {
+  ExerciseFormatActions,
+  TExerciseFormat,
+} from "./ExerciseFormat.types";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import { exerciseFormatActionsMap } from "./exerciseFormatActions";
@@ -102,8 +105,19 @@ const ExerciseFormatsDragAndDrop = ({
         </Stack>
       </DragAndDropProvider>
       <DragAndDrop>
-        <Box sx={{ display: "flex" }}>
-          <TestShowGhost onDataCreated={handleElementChange} />
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Stack sx={{ minWidth: "15%" }} spacing={1}>
+            {Object.entries(exerciseFormatActionsMap).map(
+              ([format, actions]) =>
+                actions && (
+                  <ExerciseFormatSource
+                    key={format}
+                    actions={actions}
+                    onDataCreated={handleElementChange}
+                  />
+                ),
+            )}
+          </Stack>
           <VerticalStackedContainer
             dropElements={value}
             getKey={(element) => element.id}
@@ -115,12 +129,19 @@ const ExerciseFormatsDragAndDrop = ({
   );
 };
 
-const TestShowGhost = ({ onDataCreated }: { onDataCreated: any }) => {
-  const singleIntervalActions = exerciseFormatActionsMap["SINGLE_INTERVAL"];
+// A draggable source for one exercise format: dropping it opens that format's
+// create dialog at the drop position.
+const ExerciseFormatSource = ({
+  actions,
+  onDataCreated,
+}: {
+  actions: ExerciseFormatActions<TExerciseFormat>;
+  onDataCreated: (data: TExerciseFormat) => void;
+}) => {
   return (
-    <Source
+    <Source<TExerciseFormat>
       onBeforeRelocatableCreated={(position, next) => {
-        singleIntervalActions?.openCreateDialog({
+        actions.openCreateDialog({
           position,
           onCreated: (data) => {
             onDataCreated(data);
@@ -139,7 +160,7 @@ const TestShowGhost = ({ onDataCreated }: { onDataCreated: any }) => {
           borderColor: "canvas.300",
         }}
       >
-        <Typography>Single Interval Training</Typography>
+        <Typography>{actions.label}</Typography>
       </Box>
     </Source>
   );

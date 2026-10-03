@@ -23,6 +23,9 @@ export interface IExerciseFormatSourceElement {
 }
 
 export interface ExerciseFormatActions<TPayload> {
+  // Shown on the draggable source element for this format.
+  label: string;
+
   renderRelocatable: RelocatableContentRenderer;
 
   openCreateDialog: (deps: {
