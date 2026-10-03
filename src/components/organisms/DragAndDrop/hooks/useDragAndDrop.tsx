@@ -22,6 +22,8 @@ export const useDragAndDrop = () => {
       sessionRef.current = {
         offset: { x: pointer.x - rect.left, y: pointer.y - rect.top },
         position: { x: rect.left, y: rect.top },
+        // Measured here, before the dragged element hides itself and collapses.
+        size: { width: rect.width, height: rect.height },
         onSuccessDrop,
       };
       setDraggedElement(element);

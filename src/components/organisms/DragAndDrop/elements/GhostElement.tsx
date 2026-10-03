@@ -12,9 +12,8 @@ export const GhostElement = ({ element }: { element: HTMLElement }) => {
     if (!ghost || !session) return;
 
     const preview = getPreviewNode(element);
-    const rect = preview.getBoundingClientRect();
-    ghost.style.width = `${rect.width}px`;
-    ghost.style.height = `${rect.height}px`;
+    ghost.style.width = `${session.size.width}px`;
+    ghost.style.height = `${session.size.height}px`;
     ghost.style.transform = `translate(${session.position.x}px, ${session.position.y}px)`;
 
     const clone = preview.cloneNode(true) as HTMLElement;
