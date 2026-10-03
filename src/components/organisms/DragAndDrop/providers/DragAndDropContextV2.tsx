@@ -16,7 +16,6 @@ interface DragAndDropContextProps {
   sessionRef: RefObject<DragSession | null>;
   ghostRef: RefObject<HTMLDivElement | null>;
   setDraggedElement: Dispatch<SetStateAction<HTMLElement | null>>;
-  containersRef?: RefObject<Map<string, any[]>>;
 }
 
 export const DragAndDropContext =

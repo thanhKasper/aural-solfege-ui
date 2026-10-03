@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import { type DropEventPayload } from "../events";
 import checkCollision from "../utils/checkCollision";
-import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import Relocatable from "../elements/Relocatable";
 import Placeholder from "../elements/Placeholder";
 import { ContainerProvider, type DragMoveHandler } from "./ContainerContext";
@@ -38,7 +37,6 @@ const VerticalStackedContainer = <T,>({
   const [dropIndex, setDropIndex] = useState<number | null>(null);
   const [draggedHeight, setDraggedHeight] = useState<number>();
   const { register } = useEventBus();
-  const { addContainer } = useDragAndDrop();
 
   // The drop listener is registered once, so it reads these through refs.
   const dropIndexRef = useRef<number | null>(null);
@@ -73,10 +71,6 @@ const VerticalStackedContainer = <T,>({
     );
     updateDropIndex(hit ? hit.position : elementCountRef.current);
   };
-
-  useEffect(() => {
-    addContainer(containerIdRef.current);
-  }, [addContainer]);
 
   useEffect(() => {
     register<DropEventPayload>(

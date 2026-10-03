@@ -139,15 +139,9 @@ const ExerciseFormatSource = ({
   onDataCreated: (data: TExerciseFormat) => void;
 }) => {
   return (
-    <Source<TExerciseFormat>
-      onBeforeRelocatableCreated={(position, next) => {
-        actions.openCreateDialog({
-          position,
-          onCreated: (data) => {
-            onDataCreated(data);
-            next(data);
-          },
-        });
+    <Source
+      onBeforeRelocatableCreated={(position) => {
+        actions.openCreateDialog({ position, onCreated: onDataCreated });
       }}
     >
       <Box

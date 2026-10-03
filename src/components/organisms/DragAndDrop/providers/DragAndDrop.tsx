@@ -9,14 +9,12 @@ const DragAndDrop = ({ children }: PropsWithChildren) => {
   );
   const sessionRef = useRef<DragSession | null>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
-  const containersMap = useRef<Map<string, any[]>>(new Map());
 
   const value = useMemo(
     () => ({
       sessionRef,
       ghostRef,
       setDraggedElement,
-      containersRef: containersMap,
     }),
     [],
   );

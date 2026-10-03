@@ -11,8 +11,7 @@ export type DragStart = {
 };
 
 export const useDragAndDrop = () => {
-  const { sessionRef, ghostRef, setDraggedElement, containersRef } =
-    useDragAndDropContext();
+  const { sessionRef, ghostRef, setDraggedElement } = useDragAndDropContext();
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
 
   const startDrag = useCallback(
@@ -70,30 +69,10 @@ export const useDragAndDrop = () => {
   );
   const cancelDrag = useCallback(() => finishDrag(), [finishDrag]);
 
-  const addContainer = (containerId: string) => {
-    if (!containersRef) return;
-
-    const containers = containersRef.current;
-
-    if (containers.has(containerId)) return;
-
-    containers.set(containerId, []);
-  };
-
-  const addElement = <T,>(containerId: string, element: T) => {
-    const elements = containersRef?.current?.get(containerId) as T[] | undefined;
-
-    if (!elements) return;
-
-    elements.push(element);
-  };
-
   return {
     startDrag,
     moveDrag,
     endDrag,
     cancelDrag,
-    addContainer,
-    addElement,
   };
 };
