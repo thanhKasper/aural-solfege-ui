@@ -54,7 +54,6 @@ export const useDraggable = ({
       startDrag({
         element: press.element,
         pointer: { x: press.x, y: press.y },
-        onSuccessDrop,
       });
       if (shouldHideSelf) setHideComponent(true);
     }
@@ -66,7 +65,7 @@ export const useDraggable = ({
     if (e.pointerId !== pressRef.current?.pointerId) return;
     if (draggingRef.current) {
       justDraggedRef.current = true;
-      endDrag();
+      endDrag(onSuccessDrop);
     }
     reset();
   };

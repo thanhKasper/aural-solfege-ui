@@ -8,7 +8,6 @@ import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
 export type DragStart = {
   element: HTMLElement;
   pointer: { x: number; y: number };
-  onSuccessDrop?: DropEventPayload["dropCallback"];
 };
 
 export const useDragAndDrop = () => {
@@ -17,14 +16,13 @@ export const useDragAndDrop = () => {
   const { dispatch } = useEventBus<DRAG_AND_DROP_EVENT>();
 
   const startDrag = useCallback(
-    ({ element, pointer, onSuccessDrop }: DragStart) => {
+    ({ element, pointer }: DragStart) => {
       const rect = getPreviewNode(element).getBoundingClientRect();
       sessionRef.current = {
         offset: { x: pointer.x - rect.left, y: pointer.y - rect.top },
         position: { x: rect.left, y: rect.top },
         // Measured here, before the dragged element hides itself and collapses.
         size: { width: rect.width, height: rect.height },
-        onSuccessDrop,
       };
       setDraggedElement(element);
     },
@@ -49,13 +47,13 @@ export const useDragAndDrop = () => {
   );
 
   const finishDrag = useCallback(
-    (accepted: boolean) => {
+    (dropCallback?: DropEventPayload["dropCallback"]) => {
       const session = sessionRef.current;
       const ghost = ghostRef.current;
       if (session && ghost) {
         dispatch<DropEventPayload>(DRAG_AND_DROP_EVENT.ELEMENT_DROP, {
           // A cancel still dispatches, without a callback, so containers clear their highlight.
-          dropCallback: accepted ? session.onSuccessDrop : undefined,
+          dropCallback,
           componentDomRect: ghost.getBoundingClientRect(),
         });
       }
@@ -65,8 +63,12 @@ export const useDragAndDrop = () => {
     [sessionRef, ghostRef, setDraggedElement, dispatch],
   );
 
-  const endDrag = useCallback(() => finishDrag(true), [finishDrag]);
-  const cancelDrag = useCallback(() => finishDrag(false), [finishDrag]);
+  const endDrag = useCallback(
+    (onSuccessDrop?: DropEventPayload["dropCallback"]) =>
+      finishDrag(onSuccessDrop),
+    [finishDrag],
+  );
+  const cancelDrag = useCallback(() => finishDrag(), [finishDrag]);
 
   const addContainer = (containerId: string) => {
     if (!containersRef) return;

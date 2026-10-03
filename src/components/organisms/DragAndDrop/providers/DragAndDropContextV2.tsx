@@ -5,13 +5,11 @@ import {
   type RefObject,
   type SetStateAction,
 } from "react";
-import type { DropEventPayload } from "../events";
 
 export type DragSession = {
   offset: { x: number; y: number };
   position: { x: number; y: number };
   size: { width: number; height: number };
-  onSuccessDrop?: DropEventPayload["dropCallback"];
 };
 
 interface DragAndDropContextProps {
