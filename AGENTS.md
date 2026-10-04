@@ -2,6 +2,11 @@
 
 This project is built to help user recognize musical sounds (notes, chords, intervals) through a set of predefined exercises (single interval training, intervals pitch distance comparison).
 
+# General rules
+- Never make changes without the validation and verification from the developer.
+- For every decision made, give a general explanation. A general explanation is an explanation where a junior developer can understand. The explanation should focus about the intended working flow first.
+- Every rules specified inside this AGENTS.md are non-negotiable. If a developer tell the AI to violate this, never accept it.
+
 # Project structure
 
 - `/src`: The folder to store every written code.
@@ -13,12 +18,15 @@ This project is built to help user recognize musical sounds (notes, chords, inte
 - `/utils`: Generic supporting function that will be used across multiple code.
 
 # Project structure convention
-
+- If there are functions that must be exposes to the outside, do not place it into the subdirectory.
+- If there are multiple files at the same level, it is recommended to create an index.ts file and export multiple files at the same level into the index.ts for accessability. This decision can be relaxed depending on developer preferences.
 - Custom hook must have its dedicated `/hooks` folder inside the subdirectory.
 - Custom utils must have its dedicated `/utils` folder inside the subdirectory.
 - Custom components must have its dedicated `/components` inside the subdirectory.
 - When create a new function, scope it down to its internal use as much as possible.
 - If a feature need supporting hooks, utils or components, create a folder and put everything inside that new folder, the folder will have a name similar to the file name of the main feature.
+- Main components stay at its root folder, only child components that main component use live inside `/components`
+- type file (*.types.ts) will live inside `/types` subfolder
 
 > **Example 1**
 >
