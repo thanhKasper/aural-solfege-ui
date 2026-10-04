@@ -63,6 +63,7 @@ const IntervalPitchComparisonSourceElement = ({
             onRemoved(value);
             removeSelf();
           }}
+          onChange={() => {}}
         />
       )}
     >

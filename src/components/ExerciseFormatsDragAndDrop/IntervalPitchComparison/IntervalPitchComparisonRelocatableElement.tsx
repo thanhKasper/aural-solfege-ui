@@ -8,13 +8,15 @@ import type { MUSICAL_INTERVAL } from "@/constants";
 interface IIntervalPitchComparisonProps {
   value: TIntervalPitchComparison;
   onRemove: () => void;
+  onChange: (value: TIntervalPitchComparison) => void;
 }
 
 const IntervalPitchComparisonRelocatableElement = ({
   value,
   onRemove,
+  onChange,
 }: IIntervalPitchComparisonProps) => {
-  const handleDataChange = () => {};
+  const handleDataChange = () => onChange(value);
 
   return (
     value && (
