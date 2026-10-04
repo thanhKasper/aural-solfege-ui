@@ -12,6 +12,7 @@ import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleInte
 import { exerciseFormatActionsMap } from "./exerciseFormatActions";
 import { moveExerciseFormat } from "./utils/moveExerciseFormat";
 import { placeExerciseFormat } from "./utils/placeExerciseFormat";
+import { removeExerciseFormat } from "./utils/removeExerciseFormat";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -33,6 +34,15 @@ const ExerciseFormatsDragAndDrop = ({
   const handleReorder = (fromIndex: number, dropIndex: number) => {
     const current = exerciseFormatsRef.current;
     const finalArray = moveExerciseFormat(current, fromIndex, dropIndex);
+    if (finalArray === current) return;
+
+    onExerciseFormatsChange?.(finalArray);
+    exerciseFormatsRef.current = finalArray;
+  };
+
+  const handleRemove = (index: number) => {
+    const current = exerciseFormatsRef.current;
+    const finalArray = removeExerciseFormat(current, index);
     if (finalArray === current) return;
 
     onExerciseFormatsChange?.(finalArray);
@@ -121,6 +131,7 @@ const ExerciseFormatsDragAndDrop = ({
             dropElements={value}
             getKey={(element) => element.id}
             onReorder={handleReorder}
+            onRemove={handleRemove}
             renderContent={handleContentRender}
           />
         </Box>

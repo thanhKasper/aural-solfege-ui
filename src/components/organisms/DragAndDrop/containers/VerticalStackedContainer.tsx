@@ -19,6 +19,8 @@ interface VerticalStackedContainerProps<T = unknown> {
   // when `dropIndex > fromIndex` the final index is `dropIndex - 1`, and dropping on
   // `fromIndex` or `fromIndex + 1` leaves the order unchanged.
   onReorder?: (fromIndex: number, dropIndex: number) => void;
+  // Called with the index of the element whose remove action was triggered.
+  onRemove?: (index: number) => void;
   renderContent: (element: T) => RelocatableContentRenderer | undefined;
 }
 
@@ -34,6 +36,7 @@ const VerticalStackedContainer = <T,>({
   dropElements = [],
   getKey,
   onReorder,
+  onRemove,
   renderContent,
 }: VerticalStackedContainerProps<T>) => {
   const containerIdRef = useRef<string>(`container-${crypto.randomUUID()}`);
@@ -135,6 +138,7 @@ const VerticalStackedContainer = <T,>({
                 elementKey={elementKey}
                 position={idx}
                 value={element}
+                onRemove={() => onRemove?.(idx)}
                 // Every container hears about a drop it collides with, so ignore
                 // drops that landed in a different container.
                 onSuccessDrop={(dropIndex, containerId) => {
