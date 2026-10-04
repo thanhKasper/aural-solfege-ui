@@ -5,7 +5,7 @@ import InputLabel from "@/components/atoms/InputLabel";
 import type {
   SingleIntervalConfiguration,
   TSingleIntervalTraining,
-} from "../SingleIntervalTraining.types";
+} from "../types/SingleIntervalTraining.types";
 import { intervalMap } from "@/utils/retrieveMusicalInterval";
 import {
   getIntervalTextureName,

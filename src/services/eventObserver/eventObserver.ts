@@ -21,7 +21,7 @@ export class EventObserver extends EventTarget {
     return new EventObserver();
   }
 
-  public subscribe<T>(eventName: string, handler: EventHandler<T>): string {
+  public subscribe<T>(eventName: string, handler: EventHandler<T>): ListenerId {
     const listenerId = crypto.randomUUID();
     const listener: IEventListener<T> = {
       id: listenerId,
@@ -59,3 +59,5 @@ export class EventObserver extends EventTarget {
     this.dispatchEvent(new CustomEvent(eventName, { detail: payload }));
   }
 }
+
+export const eventBus = EventObserver.init();

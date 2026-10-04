@@ -4,51 +4,13 @@ import { getIntervalName } from "@/utils/retrieveMusicalInterval";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import type {
-  SingleIntervalConfiguration,
-  ISingleIntervalRelocatableContent,
-} from "./SingleIntervalTraining.types";
-import useDialog from "@/hooks/useDialog";
-import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
-import { useRef } from "react";
+import type { ISingleIntervalRelocatableContent } from "./types/SingleIntervalTraining.types";
 
 export const SingleIntervalRelocatableContent = ({
   onRemove,
   onChange,
   value,
 }: ISingleIntervalRelocatableContent) => {
-  const { open } = useDialog();
-  const formRef = useRef<SingleIntervalConfiguration>(null);
-
-  const handleDataChange = () => {
-    const close = open({
-      title: "Update data",
-      content: (
-        <SingleIntervalConfigurationContent
-          defaultValue={value}
-          formRef={formRef}
-        />
-      ),
-      buttons: [
-        {
-          label: "Cancel",
-          onClick: () => {
-            close();
-          },
-        },
-        {
-          label: "Update",
-          onClick: () => {
-            formRef?.current?.handleSubmit((data) => {
-              onChange?.(data);
-            })();
-            close();
-          },
-        },
-      ],
-    });
-  };
-
   return (
     value && (
       <Stack
@@ -81,7 +43,7 @@ export const SingleIntervalRelocatableContent = ({
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton onClick={handleDataChange}>
+          <IconButton onClick={() => onChange?.(value)}>
             <EditIcon />
           </IconButton>
         </Box>
