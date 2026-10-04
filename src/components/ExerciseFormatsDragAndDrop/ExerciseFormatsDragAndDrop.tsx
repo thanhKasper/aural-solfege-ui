@@ -13,6 +13,8 @@ import type {
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import { exerciseFormatActionsMap } from "./exerciseFormatActions";
+import { moveExerciseFormat } from "./moveExerciseFormat";
+import { placeExerciseFormat } from "./placeExerciseFormat";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -26,19 +28,16 @@ const ExerciseFormatsDragAndDrop = ({
   const exerciseFormatsRef = useRef(value);
 
   const handleElementChange = (data: TExerciseFormat) => {
-    const value = exerciseFormatsRef.current;
-    const matchedExerciseFormat = value.find(
-      (exerciseFormat) => exerciseFormat.id === data.id,
-    );
-    let finalArray = [];
-    if (!matchedExerciseFormat) {
-      finalArray = [...value, data];
-    } else {
-      finalArray = [
-        ...value.filter((exerciseFormat) => exerciseFormat.id !== data.id),
-        data,
-      ];
-    }
+    const finalArray = placeExerciseFormat(exerciseFormatsRef.current, data);
+    onExerciseFormatsChange?.(finalArray);
+    exerciseFormatsRef.current = finalArray;
+  };
+
+  const handleReorder = (fromIndex: number, dropIndex: number) => {
+    const current = exerciseFormatsRef.current;
+    const finalArray = moveExerciseFormat(current, fromIndex, dropIndex);
+    if (finalArray === current) return;
+
     onExerciseFormatsChange?.(finalArray);
     exerciseFormatsRef.current = finalArray;
   };
@@ -121,6 +120,7 @@ const ExerciseFormatsDragAndDrop = ({
           <VerticalStackedContainer
             dropElements={value}
             getKey={(element) => element.id}
+            onReorder={handleReorder}
             renderContent={handleContentRender}
           />
         </Box>
