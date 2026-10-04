@@ -1,14 +1,14 @@
-import Icon from "@/components/atoms/Icon";
 import MultiValueTextContent from "@/components/atoms/MultiValueTextContent";
 import type { StepperContent } from "@/components/organisms/Stepper/Stepper";
+import { EXERCISE_FORMAT } from "@/constants";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
+import { formatTimeText } from "@/utils/formatTime";
 import { Stack } from "@mui/material";
 
 export const buildExerciseSessionStep = (
   exercise?: ExerciseDTO,
 ): StepperContent[] => {
-  const hasLoop = exercise?.loop ?? false;
   const oneRoundSession: StepperContent[] = (
     exercise?.exerciseActivities ?? []
   ).map((activity) => {
@@ -16,31 +16,25 @@ export const buildExerciseSessionStep = (
       title: activity.type,
       content: (
         <Stack>
-          <MultiValueTextContent
-            multiValueText={activity.intervals.map((interval) =>
-              getIntervalNotation(interval),
-            )}
-          />
+          {activity.type !== EXERCISE_FORMAT.COOL_DOWN ? (
+            <MultiValueTextContent
+              multiValueText={activity.intervals.map((interval) =>
+                getIntervalNotation(interval),
+              )}
+            />
+          ) : (
+            `Rest for ${formatTimeText(activity.restTime)}`
+          )}
         </Stack>
       ),
     };
   });
-  const oneRoundSessionWithRest: StepperContent[] = [
-    ...oneRoundSession,
-    {
-      icon: <Icon icon="quarter-rest" />,
-      title: "Rest",
-      content: `Rest for ${exercise?.rest}`,
-    },
+
+  return [
+    ...Array.from({
+      length: exercise?.reps ?? 1,
+    }).flatMap(() => {
+      return oneRoundSession;
+    }),
   ];
-  return hasLoop
-    ? oneRoundSessionWithRest
-    : [
-        ...Array.from({
-          length: (exercise?.exerciseActivities?.length ?? 1) - 1,
-        }).flatMap(() => {
-          return oneRoundSessionWithRest;
-        }),
-        ...oneRoundSession,
-      ];
 };

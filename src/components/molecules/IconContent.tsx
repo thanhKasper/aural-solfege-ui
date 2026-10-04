@@ -1,10 +1,10 @@
 import { Stack } from "@mui/material";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import MultiValueTextContent from "../atoms/MultiValueTextContent";
 
 interface IconContentProps {
   icon: ReactElement;
-  content?: string[];
+  content?: ReactNode[];
 }
 
 const IconContent = ({ icon, content }: IconContentProps) => {

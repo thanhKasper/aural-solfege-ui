@@ -1,4 +1,4 @@
-import { colors, createTheme } from "@mui/material";
+import { createTheme } from "@mui/material";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -118,10 +118,53 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: () => ({
           textTransform: "none",
+          borderRadius: 0,
+          boxShadow: "none",
+          ":hover": {
+            boxShadow: "none",
+          },
+        }),
+        sizeMedium: {
+          padding: "0.75rem 1.5rem",
         },
       },
+      defaultProps: {
+        variant: "contained",
+      },
+      variants: [
+        {
+          props: { variant: "contained" },
+          style: ({ theme }) => ({
+            backgroundColor: theme.palette.accent[300],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[400],
+            },
+          }),
+        },
+        {
+          props: { variant: "outlined" },
+          style: ({ theme }) => ({
+            backgroundColor: "transparent",
+            borderColor: theme.palette.accent[300],
+            color: theme.palette.accent[300],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[50],
+            },
+          }),
+        },
+        {
+          props: { variant: "text" },
+          style: ({ theme }) => ({
+            backgroundColor: "transparent",
+            color: theme.palette.accent[400],
+            "&:hover": {
+              backgroundColor: theme.palette.accent[50],
+            },
+          }),
+        },
+      ],
     },
     MuiTextField: {
       defaultProps: {
@@ -137,12 +180,20 @@ const theme = createTheme({
             backgroundColor: theme.palette.grey[100],
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.main,
+            borderColor: theme.palette.canvas[300],
             borderWidth: 1.5,
             borderRadius: 0,
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.dark,
+            borderColor: theme.palette.canvas[400],
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.canvas[400],
+          },
+
+          "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.canvas[400],
+            backgroundColor: theme.palette.canvas[200],
           },
         }),
       },
@@ -150,7 +201,10 @@ const theme = createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.secondary.main,
+          color: theme.palette.canvas[300],
+          "&.Mui-checked": {
+            color: theme.palette.canvas[400],
+          },
         }),
       },
       defaultProps: {

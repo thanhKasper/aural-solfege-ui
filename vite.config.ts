@@ -8,12 +8,18 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   base: "/aural-solfege",
   server: {
+    host: "0.0.0.0",
     port: 3000,
     proxy: {
       "/aural-solfege/api": {
         target: "http://localhost:8080/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/aural-solfege\/api/, ""),
+      },
+      "/sound-repo/api": {
+        target: "http://localhost:8080/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sound-repo\/api/, ""),
       },
     },
   },

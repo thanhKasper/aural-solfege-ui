@@ -8,7 +8,13 @@ import { Provider } from "react-redux";
 import Dialog from "./components/organisms/Dialog/Dialog.tsx";
 import { store } from "@/store";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
