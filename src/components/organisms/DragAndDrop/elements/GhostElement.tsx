@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
+import { useDragAndDropContext } from "../providers/DragAndDropContext";
 import { getPreviewNode } from "../utils/getPreviewNode";
 
 export const GhostElement = ({ element }: { element: HTMLElement }) => {

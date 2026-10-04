@@ -3,7 +3,7 @@ import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import type { DropEventPayload, MoveEventPayload } from "../events";
 import { getPreviewNode } from "../utils/getPreviewNode";
-import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
+import { useDragAndDropContext } from "../providers/DragAndDropContext";
 
 export type DragStart = {
   element: HTMLElement;

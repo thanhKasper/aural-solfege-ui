@@ -10,7 +10,7 @@ import {
 import { useEventBus } from "@/hooks/useEventBus";
 import { DRAG_AND_DROP_EVENT } from "../constants";
 import type { MoveEventPayload } from "../events";
-import { useDragAndDropContext } from "../providers/DragAndDropContextV2";
+import { useDragAndDropContext } from "../providers/DragAndDropContext";
 import { ContainerContext, type ElementRect } from "./useContainerContext";
 
 export type DragMoveHandler = (

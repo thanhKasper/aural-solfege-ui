@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, type PropsWithChildren } from "react";
 import { Box } from "@mui/material";
 import { GhostElement } from "../elements/GhostElement";
-import { DragAndDropContext, type DragSession } from "./DragAndDropContextV2";
+import { DragAndDropContext, type DragSession } from "./DragAndDropContext";
 
 const DragAndDrop = ({ children }: PropsWithChildren) => {
   const [draggedElement, setDraggedElement] = useState<HTMLElement | null>(
