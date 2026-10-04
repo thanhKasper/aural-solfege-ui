@@ -5,7 +5,7 @@ import InputLabel from "@/components/atoms/InputLabel";
 import type {
   IntervalPitchComparisonConfiguration,
   TIntervalPitchComparison,
-} from "../IntervalPitchComparison.types";
+} from "../types/IntervalPitchComparison.types";
 import { intervalMap } from "@/utils/retrieveMusicalInterval";
 import {
   getIntervalTextureName,

@@ -1,7 +1,7 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import type { TIntervalPitchComparison } from "./IntervalPitchComparison.types";
+import type { TIntervalPitchComparison } from "./types/IntervalPitchComparison.types";
 import { getIntervalName } from "@/utils/retrieveMusicalInterval";
 import type { MUSICAL_INTERVAL } from "@/constants";
 

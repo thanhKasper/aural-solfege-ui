@@ -7,7 +7,7 @@ import { Box, IconButton, Stack, Typography } from "@mui/material";
 import type {
   SingleIntervalConfiguration,
   ISingleIntervalRelocatableContent,
-} from "./SingleIntervalTraining.types";
+} from "./types/SingleIntervalTraining.types";
 import useDialog from "@/hooks/useDialog";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";

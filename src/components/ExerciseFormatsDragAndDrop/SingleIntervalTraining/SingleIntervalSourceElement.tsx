@@ -4,11 +4,11 @@ import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableCon
 import {
   EXERCISE_FORMAT,
   type IExerciseFormatSourceElement,
-} from "../ExerciseFormat.types";
+} from "../types/ExerciseFormat.types";
 import type {
   SingleIntervalConfiguration,
   TSingleIntervalTraining,
-} from "./SingleIntervalTraining.types";
+} from "./types/SingleIntervalTraining.types";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { useRef } from "react";
 import useDialog from "@/hooks/useDialog";

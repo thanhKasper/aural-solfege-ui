@@ -3,13 +3,13 @@ import dialogService from "@/services/dialog/Dialog";
 import {
   EXERCISE_FORMAT,
   type ExerciseFormatActions,
-} from "../ExerciseFormat.types";
+} from "../types/ExerciseFormat.types";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableContent";
 import type {
   SingleIntervalConfiguration,
   TSingleIntervalTraining,
-} from "./SingleIntervalTraining.types";
+} from "./types/SingleIntervalTraining.types";
 
 const configurationRef: RefObject<SingleIntervalConfiguration | null> = {
   current: null,

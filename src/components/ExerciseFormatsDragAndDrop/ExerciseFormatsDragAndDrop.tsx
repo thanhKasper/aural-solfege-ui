@@ -1,20 +1,17 @@
 import DragAndDropProvider from "@/components/organisms/DragAndDrop/DragAndDropProvider";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useCallback, useRef } from "react";
 import DragAndDrop from "../organisms/DragAndDrop/providers/DragAndDrop";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
-import Source from "../organisms/DragAndDrop/elements/Source";
-import type {
-  ExerciseFormatActions,
-  TExerciseFormat,
-} from "./ExerciseFormat.types";
+import type { TExerciseFormat } from "./types/ExerciseFormat.types";
+import ExerciseFormatSource from "./components/ExerciseFormatSource";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";
 import { exerciseFormatActionsMap } from "./exerciseFormatActions";
-import { moveExerciseFormat } from "./moveExerciseFormat";
-import { placeExerciseFormat } from "./placeExerciseFormat";
+import { moveExerciseFormat } from "./utils/moveExerciseFormat";
+import { placeExerciseFormat } from "./utils/placeExerciseFormat";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -126,37 +123,6 @@ const ExerciseFormatsDragAndDrop = ({
         </Box>
       </DragAndDrop>
     </>
-  );
-};
-
-// A draggable source for one exercise format: dropping it opens that format's
-// create dialog at the drop position.
-const ExerciseFormatSource = ({
-  actions,
-  onDataCreated,
-}: {
-  actions: ExerciseFormatActions<TExerciseFormat>;
-  onDataCreated: (data: TExerciseFormat) => void;
-}) => {
-  return (
-    <Source
-      onBeforeRelocatableCreated={(position) => {
-        actions.openCreateDialog({ position, onCreated: onDataCreated });
-      }}
-    >
-      <Box
-        sx={{
-          padding: 2,
-          borderWidth: 1,
-          borderLeftWidth: 5,
-          borderStyle: "solid",
-          backgroundColor: "canvas.100",
-          borderColor: "canvas.300",
-        }}
-      >
-        <Typography>{actions.label}</Typography>
-      </Box>
-    </Source>
   );
 };
 

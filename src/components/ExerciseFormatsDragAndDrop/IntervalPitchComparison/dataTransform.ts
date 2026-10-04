@@ -1,9 +1,9 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
-import type { TIntervalPitchComparison } from "../IntervalPitchComparison.types";
+import type { TIntervalPitchComparison } from "./types/IntervalPitchComparison.types";
 import {
   EXERCISE_FORMAT,
   type TExerciseFormat,
-} from "../../ExerciseFormat.types";
+} from "../types/ExerciseFormat.types";
 import type { MUSICAL_INTERVAL } from "@/constants";
 
 export const transformIntervalPitchComparison: (

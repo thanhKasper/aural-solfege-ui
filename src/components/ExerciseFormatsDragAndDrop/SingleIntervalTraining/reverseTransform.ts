@@ -2,7 +2,7 @@ import type {
   ExerciseActivity,
   TSingleIntervalFormatDTO,
 } from "@/providers/auralSolfege/apis.type";
-import type { TSingleIntervalTraining } from "../SingleIntervalTraining.types";
+import type { TSingleIntervalTraining } from "./types/SingleIntervalTraining.types";
 
 export const inverseTransformSingleIntervalTraining: (
   data: ExerciseActivity,

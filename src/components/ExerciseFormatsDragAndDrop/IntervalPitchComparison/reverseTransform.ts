@@ -2,7 +2,7 @@ import type {
   ExerciseActivity,
   TIntervalPitchComparisonFormatDTO,
 } from "@/providers/auralSolfege/apis.type";
-import type { TIntervalPitchComparison } from "../IntervalPitchComparison.types";
+import type { TIntervalPitchComparison } from "./types/IntervalPitchComparison.types";
 
 export const inverseTransformIntervalPitchComparison: (
   data: ExerciseActivity,

@@ -1,4 +1,4 @@
-import type { TExerciseFormat } from "./ExerciseFormat.types";
+import type { TExerciseFormat } from "../types/ExerciseFormat.types";
 import { renumberExerciseFormats } from "./placeExerciseFormat";
 
 // Moves the element at `fromIndex` to where it was dropped. `dropIndex` is an insertion

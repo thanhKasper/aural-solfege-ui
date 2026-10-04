@@ -1,7 +1,7 @@
 import { EXERCISE_FORMAT } from "@/constants";
-import type { TSingleIntervalTraining } from "./SingleIntervalTraining/SingleIntervalTraining.types";
-import type { TIntervalPitchComparison } from "./IntervalPitchComparison/IntervalPitchComparison.types";
-import type { RelocatableContentRenderer } from "../organisms/DragAndDrop/elements/types";
+import type { TSingleIntervalTraining } from "../SingleIntervalTraining/types/SingleIntervalTraining.types";
+import type { TIntervalPitchComparison } from "../IntervalPitchComparison/types/IntervalPitchComparison.types";
+import type { RelocatableContentRenderer } from "../../organisms/DragAndDrop/elements/types";
 
 export { EXERCISE_FORMAT } from "@/constants";
 
