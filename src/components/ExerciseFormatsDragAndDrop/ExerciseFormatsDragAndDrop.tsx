@@ -69,7 +69,10 @@ const ExerciseFormatsDragAndDrop = ({
   );
 
   const handleContentRender = (element: TExerciseFormat) => {
-    return exerciseFormatActionsMap[element.type]?.renderRelocatable;
+    const actions = exerciseFormatActionsMap[element.type];
+    return actions?.renderRelocatable((value) =>
+      actions.openEditDialog({ value, onChange: handleElementChange }),
+    );
   };
 
   return (

@@ -25,7 +25,10 @@ export interface ExerciseFormatActions<TPayload> {
   // Shown on the draggable source element for this format.
   label: string;
 
-  renderRelocatable: RelocatableContentRenderer;
+  // `onEdit` is called with the element's current value when its edit button is pressed.
+  renderRelocatable: (
+    onEdit: (value: TPayload) => void,
+  ) => RelocatableContentRenderer;
 
   openCreateDialog: (deps: {
     position: number;

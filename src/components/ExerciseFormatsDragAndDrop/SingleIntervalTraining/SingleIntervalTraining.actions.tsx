@@ -19,14 +19,15 @@ export const singleIntervalTrainingActions: ExerciseFormatActions<TSingleInterva
   {
     label: "Single Interval Training",
 
-    renderRelocatable: ({ remove, value }) => (
-      <SingleIntervalRelocatableContent
-        value={value as TSingleIntervalTraining}
-        onRemove={remove}
-        // onChange={updateData}
-        // onRemove={onRemove}
-      />
-    ),
+    renderRelocatable:
+      (onEdit) =>
+      ({ remove, value }) => (
+        <SingleIntervalRelocatableContent
+          value={value as TSingleIntervalTraining}
+          onRemove={remove}
+          onChange={onEdit}
+        />
+      ),
 
     openCreateDialog: ({ position, onCreated }) => {
       const close = dialogService.open({

@@ -15,12 +15,15 @@ const configurationRef: RefObject<IntervalPitchComparisonConfiguration | null> =
 export const intervalPitchComparisonActions: ExerciseFormatActions<TIntervalPitchComparison> = {
   label: "Interval Pitch Comparison",
 
-  renderRelocatable: ({ value, remove }) => (
-    <IntervalPitchComparisonRelocatableElement
-      value={value as TIntervalPitchComparison}
-      onRemove={remove}
-    />
-  ),
+  // Its edit button is not wired yet, so `onEdit` is not used.
+  renderRelocatable:
+    () =>
+    ({ value, remove }) => (
+      <IntervalPitchComparisonRelocatableElement
+        value={value as TIntervalPitchComparison}
+        onRemove={remove}
+      />
+    ),
 
   openCreateDialog: ({ position, onCreated }) => {
     const close = dialogService.open({
