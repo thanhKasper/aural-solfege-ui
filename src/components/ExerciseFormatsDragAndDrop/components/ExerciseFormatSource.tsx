@@ -3,7 +3,7 @@ import Source from "../../organisms/DragAndDrop/elements/Source";
 import type {
   ExerciseFormatActions,
   TExerciseFormat,
-} from "../types/ExerciseFormat.types";
+} from "../ExerciseFormat.types";
 
 interface ExerciseFormatSourceProps {
   actions: ExerciseFormatActions<TExerciseFormat>;

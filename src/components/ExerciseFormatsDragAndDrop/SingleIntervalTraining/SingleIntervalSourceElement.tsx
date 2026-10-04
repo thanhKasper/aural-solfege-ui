@@ -4,7 +4,7 @@ import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableCon
 import {
   EXERCISE_FORMAT,
   type IExerciseFormatSourceElement,
-} from "../types/ExerciseFormat.types";
+} from "../ExerciseFormat.types";
 import type {
   SingleIntervalConfiguration,
   TSingleIntervalTraining,

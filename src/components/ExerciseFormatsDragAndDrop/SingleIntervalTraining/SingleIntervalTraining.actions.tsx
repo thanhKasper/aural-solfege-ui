@@ -3,7 +3,7 @@ import dialogService from "@/services/dialog/Dialog";
 import {
   EXERCISE_FORMAT,
   type ExerciseFormatActions,
-} from "../types/ExerciseFormat.types";
+} from "../ExerciseFormat.types";
 import { SingleIntervalConfigurationContent } from "./components/SingleIntervalConfigurationContent";
 import { SingleIntervalRelocatableContent } from "./SingleIntervalRelocatableContent";
 import type {

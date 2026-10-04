@@ -1,10 +1,7 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
 import { transformSingleIntervalTraining } from "./SingleIntervalTraining/dataTransform";
 import { transformIntervalPitchComparison } from "./IntervalPitchComparison/dataTransform";
-import {
-  EXERCISE_FORMAT,
-  type TExerciseFormat,
-} from "./types/ExerciseFormat.types";
+import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
 
 export const transformDataMap: Record<
   string,

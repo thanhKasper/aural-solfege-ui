@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 import dialogService from "@/services/dialog/Dialog";
-import { EXERCISE_FORMAT, type ExerciseFormatActions } from "../types/ExerciseFormat.types";
+import { EXERCISE_FORMAT, type ExerciseFormatActions } from "../ExerciseFormat.types";
 import IntervalPitchComparisonConfigurationContent from "./components/IntervalPitchComparisonConfigurationContent";
 import IntervalPitchComparisonRelocatableElement from "./IntervalPitchComparisonRelocatableElement";
 import type {

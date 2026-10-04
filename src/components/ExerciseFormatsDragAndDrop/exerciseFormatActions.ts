@@ -1,5 +1,5 @@
 import { EXERCISE_FORMAT } from "@/constants";
-import type { ExerciseFormatActions } from "./types/ExerciseFormat.types";
+import type { ExerciseFormatActions } from "./ExerciseFormat.types";
 import { intervalPitchComparisonActions } from "./IntervalPitchComparison/IntervalPitchComparison.actions";
 import { singleIntervalTrainingActions } from "./SingleIntervalTraining/SingleIntervalTraining.actions";
 

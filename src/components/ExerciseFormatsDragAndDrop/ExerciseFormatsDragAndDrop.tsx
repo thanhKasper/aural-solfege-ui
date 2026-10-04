@@ -5,7 +5,7 @@ import DragAndDrop from "../organisms/DragAndDrop/providers/DragAndDrop";
 import type { TElementPosition } from "../organisms/DragAndDrop/DragAndDrop.types";
 import DropContainer from "../organisms/DragAndDrop/containers/DropContainer";
 import VerticalStackedContainer from "../organisms/DragAndDrop/containers/VerticalStackedContainer";
-import type { TExerciseFormat } from "./types/ExerciseFormat.types";
+import type { TExerciseFormat } from "./ExerciseFormat.types";
 import ExerciseFormatSource from "./components/ExerciseFormatSource";
 import IntervalPitchComparisonSourceElement from "./IntervalPitchComparison/IntervalPitchComparisonSourceElement";
 import { SingleIntervalSourceElement } from "./SingleIntervalTraining/SingleIntervalSourceElement";

@@ -1,9 +1,6 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
 import type { TSingleIntervalTraining } from "./types/SingleIntervalTraining.types";
-import {
-  EXERCISE_FORMAT,
-  type TExerciseFormat,
-} from "../types/ExerciseFormat.types";
+import { EXERCISE_FORMAT, type TExerciseFormat } from "../ExerciseFormat.types";
 import { MUSICAL_INTERVAL } from "@/constants";
 
 export const transformSingleIntervalTraining: (

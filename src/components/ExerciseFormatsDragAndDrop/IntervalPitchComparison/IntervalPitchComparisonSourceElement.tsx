@@ -1,5 +1,5 @@
 import SourceElement from "@/components/organisms/DragAndDrop/elements/SourceElement";
-import type { IExerciseFormatSourceElement } from "../types/ExerciseFormat.types";
+import type { IExerciseFormatSourceElement } from "../ExerciseFormat.types";
 import IntervalPitchComparisonRelocatableElement from "./IntervalPitchComparisonRelocatableElement";
 import type {
   IntervalPitchComparisonConfiguration,
@@ -9,7 +9,7 @@ import IntervalPitchComparisonConfigurationContent from "./components/IntervalPi
 import { Box, Typography } from "@mui/material";
 import { useRef } from "react";
 import useDialog from "@/hooks/useDialog";
-import { EXERCISE_FORMAT } from "../types/ExerciseFormat.types";
+import { EXERCISE_FORMAT } from "../ExerciseFormat.types";
 
 const IntervalPitchComparisonSourceElement = ({
   onCreated,

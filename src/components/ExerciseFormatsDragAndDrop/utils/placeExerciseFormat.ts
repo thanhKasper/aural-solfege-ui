@@ -1,4 +1,4 @@
-import type { TExerciseFormat } from "../types/ExerciseFormat.types";
+import type { TExerciseFormat } from "../ExerciseFormat.types";
 
 // Puts `data` at `data.position` in the list, replacing the element with the same id
 // if there is one, then renumbers every position to its index so that positions stay

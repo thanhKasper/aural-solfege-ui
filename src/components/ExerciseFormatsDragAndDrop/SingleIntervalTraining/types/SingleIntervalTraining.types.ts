@@ -1,5 +1,5 @@
 import type { UseFormReturn } from "react-hook-form";
-import type { TBaseExerciseFormat } from "../../types/ExerciseFormat.types";
+import type { TBaseExerciseFormat } from "../../ExerciseFormat.types";
 
 export type TSingleIntervalTraining = TBaseExerciseFormat<{
   interval: string;

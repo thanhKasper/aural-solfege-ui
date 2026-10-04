@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { EXERCISE_FORMAT } from "@/constants";
-import type { TExerciseFormat } from "../types/ExerciseFormat.types";
+import type { TExerciseFormat } from "../ExerciseFormat.types";
 import { placeExerciseFormat } from "./placeExerciseFormat";
 
 const format = (id: string, position: number) =>

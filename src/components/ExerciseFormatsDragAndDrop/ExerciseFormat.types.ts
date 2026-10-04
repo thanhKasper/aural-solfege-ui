@@ -1,7 +1,7 @@
 import { EXERCISE_FORMAT } from "@/constants";
-import type { TSingleIntervalTraining } from "../SingleIntervalTraining/types/SingleIntervalTraining.types";
-import type { TIntervalPitchComparison } from "../IntervalPitchComparison/types/IntervalPitchComparison.types";
-import type { RelocatableContentRenderer } from "../../organisms/DragAndDrop/elements/types";
+import type { TSingleIntervalTraining } from "./SingleIntervalTraining/types/SingleIntervalTraining.types";
+import type { TIntervalPitchComparison } from "./IntervalPitchComparison/types/IntervalPitchComparison.types";
+import type { RelocatableContentRenderer } from "../organisms/DragAndDrop/elements/types";
 
 export { EXERCISE_FORMAT } from "@/constants";
 
@@ -13,8 +13,7 @@ export type TBaseExerciseFormat<T> = {
 
 // @TODO: Add more new exercise activity type in the future.
 export type TExerciseFormat =
-  | TSingleIntervalTraining
-  | TIntervalPitchComparison;
+  TSingleIntervalTraining | TIntervalPitchComparison;
 
 export interface IExerciseFormatSourceElement {
   onCreated: (data: TExerciseFormat) => void;

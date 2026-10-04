@@ -1,5 +1,5 @@
 import type { ExerciseActivity } from "@/providers/auralSolfege/apis.type";
-import { EXERCISE_FORMAT, type TExerciseFormat } from "./types/ExerciseFormat.types";
+import { EXERCISE_FORMAT, type TExerciseFormat } from "./ExerciseFormat.types";
 import { inverseTransformSingleIntervalTraining } from "./SingleIntervalTraining/reverseTransform";
 import { inverseTransformIntervalPitchComparison } from "./IntervalPitchComparison/reverseTransform";
 

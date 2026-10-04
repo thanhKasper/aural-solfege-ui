@@ -1,4 +1,4 @@
-import type { TExerciseFormat } from "@/components/ExerciseFormatsDragAndDrop/types/ExerciseFormat.types";
+import type { TExerciseFormat } from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormat.types";
 import ExerciseFormatsDragAndDrop from "@/components/ExerciseFormatsDragAndDrop/ExerciseFormatsDragAndDrop";
 import { transformDataMap } from "@/components/ExerciseFormatsDragAndDrop/dataTransform";
 import InputLabel from "@/components/atoms/InputLabel";
