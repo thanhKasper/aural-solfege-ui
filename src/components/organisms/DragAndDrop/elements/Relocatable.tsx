@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import type { RelocatableContentRenderer } from "./types";
+import type { DropEventPayload } from "../events";
 import { useDraggable } from "../hooks/useDraggable";
 import { useContainerContext } from "../containers/useContainerContext";
 
@@ -11,6 +12,7 @@ interface RelocatableProps {
   value: unknown;
   elementKey: string;
   position: number;
+  onSuccessDrop?: DropEventPayload["dropCallback"];
 }
 
 const Relocatable = ({
@@ -21,9 +23,11 @@ const Relocatable = ({
   value,
   elementKey,
   position,
+  onSuccessDrop,
 }: RelocatableProps) => {
   const { hideComponent, ...draggable } = useDraggable({
     shouldHideSelf: true,
+    onSuccessDrop,
   });
   const container = useContainerContext();
   const elementRef = useRef<HTMLDivElement>(null);

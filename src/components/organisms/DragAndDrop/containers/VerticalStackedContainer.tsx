@@ -14,6 +14,11 @@ interface VerticalStackedContainerProps<T = unknown> {
   dropElements?: T[];
   // Stable identity for an element; falls back to its index.
   getKey?: (element: T) => string;
+  // Called when an element of this container is dropped back into it.
+  // `dropIndex` is an insertion index into the list as it was before the drag, so
+  // when `dropIndex > fromIndex` the final index is `dropIndex - 1`, and dropping on
+  // `fromIndex` or `fromIndex + 1` leaves the order unchanged.
+  onReorder?: (fromIndex: number, dropIndex: number) => void;
   renderContent: (element: T) => RelocatableContentRenderer | undefined;
 }
 
@@ -28,6 +33,7 @@ function isCollidingWithContainer(
 const VerticalStackedContainer = <T,>({
   dropElements = [],
   getKey,
+  onReorder,
   renderContent,
 }: VerticalStackedContainerProps<T>) => {
   const containerIdRef = useRef<string>(`container-${crypto.randomUUID()}`);
@@ -129,6 +135,13 @@ const VerticalStackedContainer = <T,>({
                 elementKey={elementKey}
                 position={idx}
                 value={element}
+                // Every container hears about a drop it collides with, so ignore
+                // drops that landed in a different container.
+                onSuccessDrop={(dropIndex, containerId) => {
+                  if (containerId === containerIdRef.current) {
+                    onReorder?.(idx, dropIndex);
+                  }
+                }}
               >
                 {(actions) => <RelocatableContent {...actions} />}
               </Relocatable>
