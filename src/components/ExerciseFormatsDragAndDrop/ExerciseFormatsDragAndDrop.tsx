@@ -8,6 +8,7 @@ import { exerciseFormatActionsMap } from "./exerciseFormatActions";
 import { moveExerciseFormat } from "./utils/moveExerciseFormat";
 import { placeExerciseFormat } from "./utils/placeExerciseFormat";
 import { removeExerciseFormat } from "./utils/removeExerciseFormat";
+import ErrorBoundary from "@/layouts/ErrorBoundary";
 
 interface IExerciseFormatDragAndDrop {
   value?: TExerciseFormat[];
@@ -52,29 +53,31 @@ const ExerciseFormatsDragAndDrop = ({
   };
 
   return (
-    <DragAndDrop>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Stack sx={{ minWidth: "15%" }} spacing={1}>
-          {Object.entries(exerciseFormatActionsMap).map(
-            ([format, actions]) =>
-              actions && (
-                <ExerciseFormatSource
-                  key={format}
-                  actions={actions}
-                  onDataCreated={handleElementChange}
-                />
-              ),
-          )}
-        </Stack>
-        <VerticalStackedContainer
-          dropElements={value}
-          getKey={(element) => element.id}
-          onReorder={handleReorder}
-          onRemove={handleRemove}
-          renderContent={handleContentRender}
-        />
-      </Box>
-    </DragAndDrop>
+    <ErrorBoundary fallback={<div>Some thing went wrong</div>}>
+      <DragAndDrop>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Stack sx={{ minWidth: "15%" }} spacing={1}>
+            {Object.entries(exerciseFormatActionsMap).map(
+              ([format, actions]) =>
+                actions && (
+                  <ExerciseFormatSource
+                    key={format}
+                    actions={actions}
+                    onDataCreated={handleElementChange}
+                  />
+                ),
+            )}
+          </Stack>
+          <VerticalStackedContainer
+            dropElements={value}
+            getKey={(element) => element.id}
+            onReorder={handleReorder}
+            onRemove={handleRemove}
+            renderContent={handleContentRender}
+          />
+        </Box>
+      </DragAndDrop>
+    </ErrorBoundary>
   );
 };
 
