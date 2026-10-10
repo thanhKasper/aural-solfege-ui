@@ -6,7 +6,7 @@ import ExerciseRepetitionInput from "@/components/molecules/ExerciseRepetitionIn
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import { createNewExercise } from "@/providers/auralSolfege/apis";
 import type { ExerciseDTO } from "@/providers/auralSolfege/apis.type";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Controller, Form, useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ const ExerciseCreationPage = () => {
   }, [isSuccess, navigate]);
 
   return (
-    <Container>
+    <>
       <Typography variant="h1">Create new exercise</Typography>
       <Form control={control}>
         <Grid container sx={{ paddingTop: 4 }} spacing={4}>
@@ -184,7 +184,7 @@ const ExerciseCreationPage = () => {
           </Grid>
         </Grid>
       </Form>
-    </Container>
+    </>
   );
 };
 

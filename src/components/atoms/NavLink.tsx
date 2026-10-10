@@ -9,12 +9,12 @@ export const NavLink = styled(Link)<NavLinkProps>(({ theme, isActive }) => ({
   ...theme.typography.overline,
   display: "flex",
   alignItems: "center",
-  // color: isActive ? "#fff" : "#000",
   textDecoration: "none",
   paddingLeft: 16,
   paddingRight: 16,
+  paddingTop: 8,
+  paddingBottom: 8,
   cursor: "pointer",
-  // backgroundColor: isActive ? theme.palette.structure[300] : "inherit",
   position: "relative",
 
   ":hover": {

@@ -41,7 +41,6 @@ const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
     zIndex: 1,
   },
   [`.${cardHeaderClasses.action}`]: {
-    position: "relative",
     "&::after": {
       transition: "all",
       transitionDuration: "500ms",
@@ -49,10 +48,8 @@ const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
       backgroundColor: theme.palette.sage[100],
       position: "absolute",
       right: 0,
-      height: "100%",
+      height: "4rem",
       width: "10rem",
-      top: "50%",
-      transform: "translateY(-50%)",
     },
     "& *": {
       zIndex: 1,
