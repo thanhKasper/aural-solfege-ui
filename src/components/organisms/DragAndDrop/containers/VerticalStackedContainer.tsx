@@ -82,7 +82,7 @@ const VerticalStackedContainer = <T,>({
   };
 
   useEffect(() => {
-    register<DropEventPayload>(
+    return register<DropEventPayload>(
       DRAG_AND_DROP_EVENT.ELEMENT_DROP,
       ({ componentDomRect, dropCallback }) => {
         if (
