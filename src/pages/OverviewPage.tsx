@@ -1,7 +1,5 @@
-import { Container } from "@mui/material";
-
 const OverviewPage = () => {
-  return <Container>OverviewPage</Container>;
+  return <>OverviewPage</>;
 };
 
 export default OverviewPage;
