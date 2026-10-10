@@ -120,7 +120,7 @@ export const ContainerProvider = ({
   }, [containerRef, measureAll]);
 
   useEffect(() => {
-    listen<MoveEventPayload>(
+    const unsubscribeMove = listen<MoveEventPayload>(
       DRAG_AND_DROP_EVENT.ELEMENT_MOVE,
       ({ element }) => {
         onDragMoveRef.current(toContainerRect(element), rectsRef.current);
@@ -129,9 +129,14 @@ export const ContainerProvider = ({
     // After a drop the dragged item is shown again and the consumer may reorder the
     // list. The session is only cleared right after this event is dispatched, and
     // `measure` ignores calls while it exists, so wait a frame before re-measuring.
-    listen(DRAG_AND_DROP_EVENT.ELEMENT_DROP, () => {
+    const unsubscribeDrop = listen(DRAG_AND_DROP_EVENT.ELEMENT_DROP, () => {
       requestAnimationFrame(measureAll);
     });
+
+    return () => {
+      unsubscribeMove();
+      unsubscribeDrop();
+    };
   }, [listen, toContainerRect, rectsRef, measureAll]);
 
   const value = useMemo(() => ({ register }), [register]);
