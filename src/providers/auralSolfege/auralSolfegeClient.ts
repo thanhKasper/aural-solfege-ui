@@ -1,7 +1,5 @@
-import axios from "axios";
+import { createAuthenticatedClient } from "../client";
 
-const auralSolfegeClient = axios.create({
-  baseURL: "/aural-solfege/api",
-});
+const auralSolfegeClient = createAuthenticatedClient("/aural-solfege/api");
 
 export default auralSolfegeClient;
