@@ -1,14 +1,20 @@
 import LogoWithBrandName from "@/components/molecules/LogoWithBrandName";
-import { AppBar, Box, Container, Stack } from "@mui/material";
+import { AppBar, Box, Button, Container, Stack } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useLocation } from "react-router";
 import { NavLink } from "../atoms/NavLink";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
+import { authenticationService } from "@/services/authentication";
 
 export const Header = () => {
   const location = useLocation();
 
   const isPathActive = (selectedPath: string): boolean => {
     return (location.pathname + "/").includes(selectedPath + "/");
+  };
+
+  const handleLogout = () => {
+    authenticationService.logout({ redirectUri: window.location.origin + import.meta.env.BASE_URL });
   };
 
   return (
@@ -47,10 +53,19 @@ export const Header = () => {
               Exercises
             </NavLink>
           </Stack>
-          <Stack direction={"row"}>
+          <Stack direction={"row"} sx={{ alignItems: "center", gap: 2 }}>
             <NavLink isActive={false} to="#">
               Sound Configuration
             </NavLink>
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="small"
+              startIcon={<LogoutIcon />}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
           </Stack>
         </Stack>
       </Container>
