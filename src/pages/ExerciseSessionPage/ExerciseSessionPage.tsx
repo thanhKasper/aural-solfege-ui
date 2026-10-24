@@ -4,11 +4,12 @@ import {
   getExercise,
   getExerciseSession,
   getNextExerciseSession,
+  resumeExerciseSession,
 } from "@/providers/auralSolfege/apis";
 import type { SessionResultDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
 import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepRenderer";
 import { ExerciseSessionProvider } from "@/components/common/practiceStep/ExerciseSessionProvider";
@@ -19,6 +20,8 @@ import { useEffect, useState } from "react";
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const existingSessionId = searchParams.get("sessionId");
   const { data: exercise } = useQuery({
     queryKey: ["exercise"],
     queryFn: async () => await getExercise(exerciseId),
@@ -37,8 +40,11 @@ const ExerciseSessionPage = () => {
     },
   );
   const { data: currentExerciseStep, refetch } = useQuery({
-    queryKey: ["exerciseSession", exerciseId],
-    queryFn: async () => await getExerciseSession(exerciseId),
+    queryKey: ["exerciseSession", exerciseId, existingSessionId],
+    queryFn: async () =>
+      existingSessionId
+        ? await resumeExerciseSession(existingSessionId)
+        : await getExerciseSession(exerciseId),
   });
   const [sessionResult, setSessionResult] = useState<SessionResultDTO | null>(
     null,

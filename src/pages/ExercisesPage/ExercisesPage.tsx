@@ -1,5 +1,6 @@
 import { ExerciseCard } from "@/components/organisms/ExerciseCard";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
+import { useStartExercise } from "./hooks/useStartExercise";
 import { getAllExercises } from "@/providers/auralSolfege/apis";
 import { Button, Grid, Input, Pagination } from "@mui/material";
 import { usePaginatedQuery } from "@/hooks/usePaginatedQuery";
@@ -17,6 +18,7 @@ const ExercisesPage = () => {
     queryFn: getAllExercises,
   });
   const navigate = useNavigate();
+  const { startExercise, isChecking } = useStartExercise();
 
   return (
     <Grid container>
@@ -49,10 +51,9 @@ const ExercisesPage = () => {
                   >
                     <ExerciseCard
                       exercise={exercise}
+                      disabled={isChecking}
                       onExerciseStart={() => {
-                        navigate(
-                          `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exercise.exerciseId}`,
-                        );
+                        startExercise(exercise.exerciseId);
                       }}
                     />
                   </Grid>

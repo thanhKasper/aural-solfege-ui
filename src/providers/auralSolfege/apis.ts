@@ -3,6 +3,7 @@ import type {
   PracticeStepResponse,
   Page,
   PagingParameters,
+  SessionDTO,
   SessionResultDTO,
 } from "./apis.type";
 import auralSolfegeClient from "./auralSolfegeClient";
@@ -54,4 +55,23 @@ export async function concludeExerciseSession(
   return auralSolfegeClient
     .post("/sessions/" + sessionId + "/conclude")
     .then((response) => response.data);
+}
+
+export async function getAvailableSessions(
+  exerciseId: string,
+): Promise<SessionDTO[]> {
+  return auralSolfegeClient
+    .get("/exercises/" + exerciseId + "/sessions")
+    .then((response) => response.data);
+}
+
+export async function deleteSession(sessionId: string): Promise<void> {
+  await auralSolfegeClient.delete("/sessions/" + sessionId);
+}
+
+export async function resumeExerciseSession(
+  sessionId: string,
+): Promise<PracticeStepResponse<any>> {
+  // TODO: replace with the real call once the backend exposes the resume endpoint.
+  throw new Error(`Resuming session ${sessionId} is not supported yet`);
 }

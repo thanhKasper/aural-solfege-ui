@@ -90,6 +90,13 @@ export type PracticeStepResponse<T> = {
   apiCall: ApiCallInfo;
 };
 
+export type SessionDTO = {
+  sessionId: string;
+  totalSteps: number;
+  completedSteps: number;
+  createdAt: string; // ISO-8601 instant
+};
+
 export type SessionResultDTO = {
   totalSteps: number;
   completedSteps: number;
