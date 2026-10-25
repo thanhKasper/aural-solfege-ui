@@ -1,67 +1,76 @@
 import {
   deleteSession,
   getAvailableSessions,
+  createExerciseSession,
 } from "@/providers/auralSolfege/apis";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import useDialog from "@/hooks/useDialog";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { ExistingSessionDialogContent } from "../components/ExistingSessionDialogContent";
-import { getLatestSession } from "../utils/getLatestSession";
 
 export const useStartExercise = () => {
   const navigate = useNavigate();
   const dialog = useDialog();
 
-  const sessionPath = (exerciseId: string) =>
-    `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}`;
+  const sessionPath = (exerciseId: string, sessionId: string) =>
+    `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${sessionId}`;
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: createSession, isPending: isCreating } = useMutation({
+    mutationFn: async ({
+      exerciseId,
+      staleSessionId,
+    }: {
+      exerciseId: string;
+      staleSessionId?: string;
+    }) => {
+      if (staleSessionId) await deleteSession(staleSessionId);
+      return createExerciseSession(exerciseId);
+    },
+    onSuccess: ({ metadata }, { exerciseId }) =>
+      navigate(sessionPath(exerciseId, metadata.sessionId)),
+  });
+
+  const { mutate: checkSessions, isPending: isChecking } = useMutation({
     mutationFn: async (exerciseId: string) => ({
       exerciseId,
       sessions: await getAvailableSessions(exerciseId),
     }),
     onSuccess: ({ exerciseId, sessions }) => {
-      const latest = getLatestSession(sessions);
-      if (!latest) {
-        navigate(sessionPath(exerciseId));
+      const [existing] = sessions;
+      if (!existing) {
+        createSession({ exerciseId });
         return;
       }
 
       const close = dialog.open({
         title: "Unfinished session found",
-        content: <ExistingSessionDialogContent session={latest} />,
+        content: <ExistingSessionDialogContent session={existing} />,
         buttons: [
           {
             label: "Continue",
             onClick: () => {
               close();
-              navigate(
-                `${sessionPath(exerciseId)}?sessionId=${latest.sessionId}`,
-              );
+              navigate(sessionPath(exerciseId, existing.sessionId));
             },
           },
           {
             label: "Start new",
-            onClick: async () => {
+            onClick: () => {
               close();
-              await Promise.all(
-                sessions.map((session) => deleteSession(session.sessionId)),
-              );
-              navigate(sessionPath(exerciseId));
+              createSession({
+                exerciseId,
+                staleSessionId: existing.sessionId,
+              });
             },
           },
         ],
       });
     },
-    onError: () => {
-      const close = dialog.open({
-        title: "Could not check your sessions",
-        content: "Something went wrong. Please try again.",
-        buttons: [{ label: "OK", onClick: () => close() }],
-      });
-    },
   });
 
-  return { startExercise: mutate, isChecking: isPending };
+  return {
+    startExercise: checkSessions,
+    isChecking: isChecking || isCreating,
+  };
 };

@@ -2,9 +2,9 @@ import Stepper from "@/components/organisms/Stepper/Stepper";
 import {
   concludeExerciseSession,
   getExercise,
-  getExerciseSession,
+  createExerciseSession,
   getNextExerciseSession,
-  resumeExerciseSession,
+  getSession,
 } from "@/providers/auralSolfege/apis";
 import type { SessionResultDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Stack, Typography } from "@mui/material";
@@ -21,9 +21,12 @@ const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const existingSessionId = searchParams.get("sessionId");
+  const sessionId = searchParams.get("sessionId");
+  if (!sessionId) {
+    throw new Error("ExerciseSessionPage requires a sessionId query param");
+  }
   const { data: exercise } = useQuery({
-    queryKey: ["exercise"],
+    queryKey: ["exercise", exerciseId],
     queryFn: async () => await getExercise(exerciseId),
   });
   const {
@@ -40,11 +43,17 @@ const ExerciseSessionPage = () => {
     },
   );
   const { data: currentExerciseStep, refetch } = useQuery({
-    queryKey: ["exerciseSession", exerciseId, existingSessionId],
-    queryFn: async () =>
-      existingSessionId
-        ? await resumeExerciseSession(existingSessionId)
-        : await getExerciseSession(exerciseId),
+    queryKey: ["exerciseSession", exerciseId, sessionId],
+    queryFn: async () => await getSession(sessionId),
+  });
+  const { mutate: startNewSession } = useMutation({
+    mutationFn: createExerciseSession,
+    onSuccess: ({ metadata }) => {
+      setSessionResult(null);
+      navigate(
+        `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${metadata.sessionId}`,
+      );
+    },
   });
   const [sessionResult, setSessionResult] = useState<SessionResultDTO | null>(
     null,
@@ -76,8 +85,7 @@ const ExerciseSessionPage = () => {
   };
 
   const practiceAgain = () => {
-    setSessionResult(null);
-    refetch();
+    startNewSession(exerciseId);
   };
 
   const backToExercises = () => {

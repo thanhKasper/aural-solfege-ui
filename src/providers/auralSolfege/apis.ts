@@ -33,7 +33,7 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
     .then((res) => res);
 }
 
-export async function getExerciseSession(
+export async function createExerciseSession(
   exerciseId: string,
 ): Promise<PracticeStepResponse<any>> {
   return auralSolfegeClient
@@ -69,9 +69,10 @@ export async function deleteSession(sessionId: string): Promise<void> {
   await auralSolfegeClient.delete("/sessions/" + sessionId);
 }
 
-export async function resumeExerciseSession(
+export async function getSession(
   sessionId: string,
 ): Promise<PracticeStepResponse<any>> {
-  // TODO: replace with the real call once the backend exposes the resume endpoint.
-  throw new Error(`Resuming session ${sessionId} is not supported yet`);
+  return auralSolfegeClient
+    .get("/sessions/" + sessionId)
+    .then((response) => response.data);
 }
