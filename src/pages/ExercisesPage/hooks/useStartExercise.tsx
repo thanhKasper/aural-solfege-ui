@@ -27,8 +27,8 @@ export const useStartExercise = () => {
       if (staleSessionId) await deleteSession(staleSessionId);
       return createExerciseSession(exerciseId);
     },
-    onSuccess: ({ metadata }, { exerciseId }) =>
-      navigate(sessionPath(exerciseId, metadata.sessionId)),
+    onSuccess: ({ sessionId }, { exerciseId }) =>
+      navigate(sessionPath(exerciseId, sessionId)),
   });
 
   const { mutate: checkSessions, isPending: isChecking } = useMutation({

@@ -48,10 +48,10 @@ const ExerciseSessionPage = () => {
   });
   const { mutate: startNewSession } = useMutation({
     mutationFn: createExerciseSession,
-    onSuccess: ({ metadata }) => {
+    onSuccess: ({ sessionId }) => {
       setSessionResult(null);
       navigate(
-        `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${metadata.sessionId}`,
+        `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${sessionId}`,
       );
     },
   });

@@ -35,7 +35,7 @@ export async function createNewExercise(newExercise: ExerciseDTO) {
 
 export async function createExerciseSession(
   exerciseId: string,
-): Promise<PracticeStepResponse<any>> {
+): Promise<SessionDTO> {
   return auralSolfegeClient
     .post("/exercises/" + exerciseId + "/sessions")
     .then((response) => response.data);
