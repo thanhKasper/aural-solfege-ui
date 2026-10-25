@@ -7,5 +7,6 @@ export const reverseTransformMap: Partial<
   Record<EXERCISE_FORMAT, (data: ExerciseActivity) => TExerciseFormat>
 > = {
   [EXERCISE_FORMAT.SINGLE_INTERVAL]: inverseTransformSingleIntervalTraining,
-  [EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON]: inverseTransformIntervalPitchComparison,
+  [EXERCISE_FORMAT.INTERVAL_PITCH_COMPARISON]:
+    inverseTransformIntervalPitchComparison,
 };

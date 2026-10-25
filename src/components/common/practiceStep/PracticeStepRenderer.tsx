@@ -11,7 +11,9 @@ const PracticeStepRenderer: FC<{
   if (!Component) {
     return <Typography>Type {practiceType} to be implemented</Typography>;
   }
-  return <Component key={practiceStep.metadata.currentStepIndex} {...practiceStep} />;
+  return (
+    <Component key={practiceStep.metadata.currentStepIndex} {...practiceStep} />
+  );
 };
 
 export default PracticeStepRenderer;

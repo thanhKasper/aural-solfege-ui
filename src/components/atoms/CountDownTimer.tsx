@@ -12,7 +12,8 @@ const CountDownTimer = ({
   onCountDownEnd,
 }: CountDownTimerProps) => {
   const [remaining, setRemaining] = useState(timeInSecond);
-  const [previousTimeInSecond, setPreviousTimeInSecond] = useState(timeInSecond);
+  const [previousTimeInSecond, setPreviousTimeInSecond] =
+    useState(timeInSecond);
 
   if (timeInSecond !== previousTimeInSecond) {
     setPreviousTimeInSecond(timeInSecond);

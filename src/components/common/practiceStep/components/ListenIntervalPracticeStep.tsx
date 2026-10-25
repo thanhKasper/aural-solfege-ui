@@ -1,6 +1,4 @@
-import type {
-  IntervalPracticeStep
-} from "@/providers/auralSolfege/apis.type";
+import type { IntervalPracticeStep } from "@/providers/auralSolfege/apis.type";
 import { getIntervalSound } from "@/providers/musicAudio/apis";
 import { getIntervalNotation } from "@/utils/retrieveMusicalInterval";
 import { Button } from "@mui/material";
