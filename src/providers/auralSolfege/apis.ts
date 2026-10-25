@@ -41,12 +41,8 @@ export async function createExerciseSession(
     .then((response) => response.data);
 }
 
-export async function getNextExerciseSession(
-  sessionId: string,
-): Promise<PracticeStepResponse<any>> {
-  return auralSolfegeClient
-    .post("/sessions/" + sessionId + "/advance")
-    .then((response) => response.data);
+export async function advanceExerciseSession(sessionId: string): Promise<void> {
+  await auralSolfegeClient.post("/sessions/" + sessionId + "/advance");
 }
 
 export async function concludeExerciseSession(

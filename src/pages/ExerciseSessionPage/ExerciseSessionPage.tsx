@@ -3,7 +3,7 @@ import {
   concludeExerciseSession,
   getExercise,
   createExerciseSession,
-  getNextExerciseSession,
+  advanceExerciseSession,
   getSession,
 } from "@/providers/auralSolfege/apis";
 import type { SessionResultDTO } from "@/providers/auralSolfege/apis.type";
@@ -15,7 +15,7 @@ import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepR
 import { ExerciseSessionProvider } from "@/components/common/practiceStep/ExerciseSessionProvider";
 import SessionResult from "./components/SessionResult";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
@@ -29,12 +29,13 @@ const ExerciseSessionPage = () => {
     queryKey: ["exercise", exerciseId],
     queryFn: async () => await getExercise(exerciseId),
   });
-  const {
-    isSuccess: successFetchNextStep,
-    isPending: fetchingNextSessionStep,
-    mutate: getNextSessionStep,
-  } = useMutation({
-    mutationFn: getNextExerciseSession,
+  const { data: currentExerciseStep, refetch } = useQuery({
+    queryKey: ["exerciseSession", exerciseId, sessionId],
+    queryFn: async () => await getSession(sessionId),
+  });
+  const { isPending: advancingSession, mutate: advanceSession } = useMutation({
+    mutationFn: advanceExerciseSession,
+    onSuccess: () => refetch(),
   });
   const { isPending: concludingSession, mutate: concludeSession } = useMutation(
     {
@@ -42,16 +43,12 @@ const ExerciseSessionPage = () => {
       onSuccess: (result) => setSessionResult(result),
     },
   );
-  const { data: currentExerciseStep, refetch } = useQuery({
-    queryKey: ["exerciseSession", exerciseId, sessionId],
-    queryFn: async () => await getSession(sessionId),
-  });
   const { mutate: startNewSession } = useMutation({
     mutationFn: createExerciseSession,
     onSuccess: ({ sessionId }) => {
       setSessionResult(null);
       navigate(
-        `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${sessionId}`,
+        `${URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}/${exerciseId}?sessionId=${sessionId}`,
       );
     },
   });
@@ -65,18 +62,12 @@ const ExerciseSessionPage = () => {
   const currentRepetition = Math.floor(currentIndex / stepsPerRepetition);
   const totalUniqueActivities = exercise?.exerciseActivities.length ?? 0;
 
-  useEffect(() => {
-    if (successFetchNextStep) {
-      refetch();
-    }
-  }, [successFetchNextStep, refetch]);
-
   const goNext = () => {
-    if (!currentExerciseStep?.metadata.sessionId) return;
+    if (!currentExerciseStep) return;
     if (currentExerciseStep.metadata.hasNext) {
-      getNextSessionStep(currentExerciseStep.metadata.sessionId);
+      advanceSession(sessionId);
     } else {
-      concludeSession(currentExerciseStep.metadata.sessionId);
+      concludeSession(sessionId);
     }
   };
 
@@ -132,12 +123,15 @@ const ExerciseSessionPage = () => {
             </ExerciseSessionProvider>
           )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-            <Button onClick={goPrevious} variant="outlined">
+            <Button
+              onClick={() => concludeSession(sessionId)}
+              variant="outlined"
+            >
               Conclude
             </Button>
             <Button
               onClick={goNext}
-              disabled={fetchingNextSessionStep || concludingSession}
+              disabled={advancingSession || concludingSession}
             >
               Next
             </Button>
