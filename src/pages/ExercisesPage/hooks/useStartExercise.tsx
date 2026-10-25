@@ -14,7 +14,7 @@ export const useStartExercise = () => {
   const dialog = useDialog();
 
   const sessionPath = (exerciseId: string, sessionId: string) =>
-    `${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/${exerciseId}?sessionId=${sessionId}`;
+    `${URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}/${exerciseId}?sessionId=${sessionId}`;
 
   const { mutate: createSession, isPending: isCreating } = useMutation({
     mutationFn: async ({

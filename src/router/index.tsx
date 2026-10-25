@@ -25,7 +25,7 @@ const router = createBrowserRouter(
           element: <ExerciseCreationPage />,
         },
         {
-          path: `/${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/:id`,
+          path: `/${URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}/:id`,
           element: <ExerciseSessionPage />,
         },
       ],
