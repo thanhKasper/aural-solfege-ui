@@ -30,28 +30,27 @@ export type ExerciseDTO = {
   exerciseActivities: ExerciseActivity[];
 };
 
-type StepStatus = "ACTIVE" | "COMPLETED" | "PENDING";
 export enum StepType {
   LISTEN_INTERVAL = "LISTEN_INTERVAL",
   COOL_DOWN = "COOL_DOWN",
   INTERVAL_SOUND_COMPARISON = "INTERVAL_SOUND_COMPARISON",
 }
 type Direction = "UP" | "DOWN";
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export type SessionMetadata = {
   sessionId: string;
+  exerciseId: string;
   totalSteps: number;
   currentStepIndex: number;
   repetitions: number;
-  stepsPerRepetition: number;
+  currentRepetition: number;
+  groupsPerRepetition: number;
+  currentGroupPosition: number;
   hasNext: boolean;
 };
 
 export type PracticeStep<T> = {
   type: StepType;
-  activityPosition: number;
-  status: StepStatus;
 } & T;
 
 export type IntervalPracticeStep = PracticeStep<{
@@ -73,21 +72,9 @@ export type IntervalDistanceComparisonPracticeStep = PracticeStep<{
   currentQuestionNumber: number;
 }>;
 
-export type ApiCallInfo = {
-  method: HttpMethod;
-  url: string;
-  query: {
-    direction: Direction;
-    interval: MUSICAL_INTERVAL;
-    texture: string;
-  };
-  body: null | Record<string, unknown>;
-};
-
 export type PracticeStepResponse<T> = {
   metadata: SessionMetadata;
   currentStep: PracticeStep<T>;
-  apiCall: ApiCallInfo;
 };
 
 export type SessionDTO = {

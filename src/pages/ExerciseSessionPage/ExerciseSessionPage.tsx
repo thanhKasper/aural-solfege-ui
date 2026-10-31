@@ -55,12 +55,12 @@ const ExerciseSessionPage = () => {
   const [sessionResult, setSessionResult] = useState<SessionResultDTO | null>(
     null,
   );
-  const stepsPerRepetition =
-    currentExerciseStep?.metadata.stepsPerRepetition ?? 1;
-  const currentIndex = currentExerciseStep?.metadata.currentStepIndex ?? 0;
-  const activityPosition = currentExerciseStep?.currentStep.activityPosition;
-  const currentRepetition = Math.floor(currentIndex / stepsPerRepetition);
-  const totalUniqueActivities = exercise?.exerciseActivities.length ?? 0;
+  const currentRepetition =
+    currentExerciseStep?.metadata.currentRepetition ?? 0;
+  const groupsPerRepetition =
+    currentExerciseStep?.metadata.groupsPerRepetition ?? 0;
+  const currentGroupPosition =
+    currentExerciseStep?.metadata.currentGroupPosition ?? 0;
 
   const goNext = () => {
     if (!currentExerciseStep) return;
@@ -108,7 +108,7 @@ const ExerciseSessionPage = () => {
         <Stepper
           orientation="vertical"
           activeStep={
-            currentRepetition * totalUniqueActivities + activityPosition
+            currentRepetition * (groupsPerRepetition + 1) + currentGroupPosition
           }
           steps={buildExerciseSessionStep(exercise)}
         />
