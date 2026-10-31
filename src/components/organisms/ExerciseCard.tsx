@@ -60,18 +60,23 @@ const ExerciseCardHeader = styled(CardHeader)(({ theme }) => ({
 interface ExerciseCardProps {
   exercise: ExerciseDTO;
   onExerciseStart?: (exercise: ExerciseDTO) => void;
+  disabled?: boolean;
 }
 
 export const ExerciseCard = ({
   exercise,
   onExerciseStart,
+  disabled,
 }: ExerciseCardProps) => {
   return (
     <ExerciseCardContainer>
       <ExerciseCardHeader
         title={exercise.title}
         action={
-          <IconButton onClick={() => onExerciseStart?.(exercise)}>
+          <IconButton
+            disabled={disabled}
+            onClick={() => onExerciseStart?.(exercise)}
+          >
             <PlayArrowIcon />
           </IconButton>
         }

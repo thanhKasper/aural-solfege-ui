@@ -18,8 +18,9 @@ interface DragAndDropContextProps {
   setDraggedElement: Dispatch<SetStateAction<HTMLElement | null>>;
 }
 
-export const DragAndDropContext =
-  createContext<DragAndDropContextProps | null>(null);
+export const DragAndDropContext = createContext<DragAndDropContextProps | null>(
+  null,
+);
 
 export const useDragAndDropContext = () => {
   const ctx = useContext(DragAndDropContext);

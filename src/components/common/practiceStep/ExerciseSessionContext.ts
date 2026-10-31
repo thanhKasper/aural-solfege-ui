@@ -5,8 +5,9 @@ export interface ExerciseSessionContextValue {
   goPrevious: () => void;
 }
 
-export const ExerciseSessionContext =
-  createContext<ExerciseSessionContextValue | undefined>(undefined);
+export const ExerciseSessionContext = createContext<
+  ExerciseSessionContextValue | undefined
+>(undefined);
 
 export const useExerciseSession = (): ExerciseSessionContextValue => {
   const context = useContext(ExerciseSessionContext);

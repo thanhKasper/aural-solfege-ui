@@ -49,9 +49,7 @@ const IntervalPitchComparisonStep: StepComponent<
   },
 }) => {
   const { data: firstIntervalSound } = useQuery({
-    queryKey: [
-      `${getIntervalNotation(firstInterval)}:${texture}:first`,
-    ],
+    queryKey: [`${getIntervalNotation(firstInterval)}:${texture}:first`],
     queryFn: async () =>
       await getRandomIntervalSound({
         interval: getIntervalNotation(firstInterval),
@@ -59,9 +57,7 @@ const IntervalPitchComparisonStep: StepComponent<
       }),
   });
   const { data: secondIntervalSound } = useQuery({
-    queryKey: [
-      `${getIntervalNotation(secondInterval)}:${texture}:second`,
-    ],
+    queryKey: [`${getIntervalNotation(secondInterval)}:${texture}:second`],
     queryFn: async () =>
       await getRandomIntervalSound({
         interval: getIntervalNotation(secondInterval),

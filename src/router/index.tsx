@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Layout from "@/layouts/Layout";
-import ExercisesPage from "@/pages/ExercisesPage";
+import ExercisesPage from "@/pages/ExercisesPage/ExercisesPage";
 import OverviewPage from "@/pages/OverviewPage";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
 import ExerciseCreationPage from "@/pages/ExerciseCreationPage";
@@ -25,7 +25,7 @@ const router = createBrowserRouter(
           element: <ExerciseCreationPage />,
         },
         {
-          path: `/${URL_PATH[NAVIGATION_ENDPOINT.SESSION]}/:id`,
+          path: `/${URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}/:id`,
           element: <ExerciseSessionPage />,
         },
       ],

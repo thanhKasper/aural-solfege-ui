@@ -14,12 +14,14 @@ export const Header = () => {
   };
 
   const handleLogout = () => {
-    authenticationService.logout({ redirectUri: window.location.origin + import.meta.env.BASE_URL });
+    authenticationService.logout({
+      redirectUri: window.location.origin + import.meta.env.BASE_URL,
+    });
   };
 
   return (
     <AppBar color="secondary" position="static">
-      <Container >
+      <Container>
         <Stack
           direction={"row"}
           sx={{

@@ -31,7 +31,7 @@ const modalSlice = createSlice({
       state.isOpen = true;
       state.title = payload.title;
       state.content = payload.content;
-      state.buttons = payload.buttons
+      state.buttons = payload.buttons;
     },
     closeModal: (state) => {
       state.isOpen = false;

@@ -2,33 +2,40 @@ import Stepper from "@/components/organisms/Stepper/Stepper";
 import {
   concludeExerciseSession,
   getExercise,
-  getExerciseSession,
-  getNextExerciseSession,
+  createExerciseSession,
+  advanceExerciseSession,
+  getSession,
 } from "@/providers/auralSolfege/apis";
 import type { SessionResultDTO } from "@/providers/auralSolfege/apis.type";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { buildExerciseSessionStep } from "./utils/buildExerciseSessionSteps";
 import PracticeStepRenderer from "@/components/common/practiceStep/PracticeStepRenderer";
 import { ExerciseSessionProvider } from "@/components/common/practiceStep/ExerciseSessionProvider";
 import SessionResult from "./components/SessionResult";
 import { NAVIGATION_ENDPOINT, URL_PATH } from "@/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const ExerciseSessionPage = () => {
   const { id: exerciseId = "" } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("sessionId");
+  if (!sessionId) {
+    throw new Error("ExerciseSessionPage requires a sessionId query param");
+  }
   const { data: exercise } = useQuery({
-    queryKey: ["exercise"],
+    queryKey: ["exercise", exerciseId],
     queryFn: async () => await getExercise(exerciseId),
   });
-  const {
-    isSuccess: successFetchNextStep,
-    isPending: fetchingNextSessionStep,
-    mutate: getNextSessionStep,
-  } = useMutation({
-    mutationFn: getNextExerciseSession,
+  const { data: currentExerciseStep, refetch } = useQuery({
+    queryKey: ["exerciseSession", exerciseId, sessionId],
+    queryFn: async () => await getSession(sessionId),
+  });
+  const { isPending: advancingSession, mutate: advanceSession } = useMutation({
+    mutationFn: advanceExerciseSession,
+    onSuccess: () => refetch(),
   });
   const { isPending: concludingSession, mutate: concludeSession } = useMutation(
     {
@@ -36,32 +43,31 @@ const ExerciseSessionPage = () => {
       onSuccess: (result) => setSessionResult(result),
     },
   );
-  const { data: currentExerciseStep, refetch } = useQuery({
-    queryKey: ["exerciseSession", exerciseId],
-    queryFn: async () => await getExerciseSession(exerciseId),
+  const { mutate: startNewSession } = useMutation({
+    mutationFn: createExerciseSession,
+    onSuccess: ({ sessionId }) => {
+      setSessionResult(null);
+      navigate(
+        `${URL_PATH[NAVIGATION_ENDPOINT.EXERCISES]}/${exerciseId}?sessionId=${sessionId}`,
+      );
+    },
   });
   const [sessionResult, setSessionResult] = useState<SessionResultDTO | null>(
     null,
   );
-  const stepsPerRepetition =
-    currentExerciseStep?.metadata.stepsPerRepetition ?? 1;
-  const currentIndex = currentExerciseStep?.metadata.currentStepIndex ?? 0;
-  const activityPosition = currentExerciseStep?.currentStep.activityPosition;
-  const currentRepetition = Math.floor(currentIndex / stepsPerRepetition);
-  const totalUniqueActivities = exercise?.exerciseActivities.length ?? 0;
-
-  useEffect(() => {
-    if (successFetchNextStep) {
-      refetch();
-    }
-  }, [successFetchNextStep, refetch]);
+  const currentRepetition =
+    currentExerciseStep?.metadata.currentRepetition ?? 0;
+  const groupsPerRepetition =
+    currentExerciseStep?.metadata.groupsPerRepetition ?? 0;
+  const currentGroupPosition =
+    currentExerciseStep?.metadata.currentGroupPosition ?? 0;
 
   const goNext = () => {
-    if (!currentExerciseStep?.metadata.sessionId) return;
+    if (!currentExerciseStep) return;
     if (currentExerciseStep.metadata.hasNext) {
-      getNextSessionStep(currentExerciseStep.metadata.sessionId);
+      advanceSession(sessionId);
     } else {
-      concludeSession(currentExerciseStep.metadata.sessionId);
+      concludeSession(sessionId);
     }
   };
 
@@ -70,8 +76,7 @@ const ExerciseSessionPage = () => {
   };
 
   const practiceAgain = () => {
-    setSessionResult(null);
-    refetch();
+    startNewSession(exerciseId);
   };
 
   const backToExercises = () => {
@@ -103,7 +108,7 @@ const ExerciseSessionPage = () => {
         <Stepper
           orientation="vertical"
           activeStep={
-            currentRepetition * totalUniqueActivities + activityPosition
+            currentRepetition * (groupsPerRepetition + 1) + currentGroupPosition
           }
           steps={buildExerciseSessionStep(exercise)}
         />
@@ -118,12 +123,15 @@ const ExerciseSessionPage = () => {
             </ExerciseSessionProvider>
           )}
           <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-            <Button onClick={goPrevious} variant="outlined">
+            <Button
+              onClick={() => concludeSession(sessionId)}
+              variant="outlined"
+            >
               Conclude
             </Button>
             <Button
               onClick={goNext}
-              disabled={fetchingNextSessionStep || concludingSession}
+              disabled={advancingSession || concludingSession}
             >
               Next
             </Button>
